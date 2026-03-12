@@ -16,8 +16,8 @@ async function bootstrap() {
     // Enable CORS
     app.enableCors({
         origin: [
-            'https://carevourvip.com',
-            'https://carevour.vip',
+            'https://carrefourvip.org',
+            'https://kkkk.carrefourvip.org',
             'http://localhost:5173',
             'http://127.0.0.1:5173',
             'http://localhost:5174',

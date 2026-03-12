@@ -17,6 +17,7 @@ import { Role } from 'src/role/entity/role.entity';
 import { LogService } from 'src/system_log/log.service';
 import { Request } from 'express';
 import { UserType } from 'src/login-activities/enum/login-activities.enum';
+import { RoleType } from 'src/role/enum/role.enum';
 
 @Injectable()
 export class UtilityService {
@@ -265,15 +266,15 @@ export class UtilityService {
                 const adminRole = await this.roleRepo.findOne({
                     where: { name: 'admin' }
                 });
-                if (adminRole) {
+                // if (adminRole) {
                     await this.adminRepo.save({
                         email: 'soulking',
                         name: 'Admin',
-                        role: adminRole,
+                        role: adminRole || undefined,
                         password: hashedPassword,
                         referralCode: 'SOULKING'
                     });
-                }
+                // }
             }
         } else if (action === 'change') {
             if (!adminExists)

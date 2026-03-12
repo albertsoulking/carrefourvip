@@ -243,7 +243,7 @@ export class AdminDashboardService {
                     .createQueryBuilder('item')
                     .leftJoin('item.order', 'order')
                     .select('item.productName', 'name')
-                    .addSelect('item.productImage', 'image')
+                    .addSelect('MAX(item.productImage)', 'image')
                     .addSelect('SUM(item.quantity)', 'sales')
                     .where('order.createdAt BETWEEN :start AND :end', {
                         start: startDate,

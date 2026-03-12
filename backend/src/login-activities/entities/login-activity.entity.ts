@@ -52,7 +52,7 @@ export class LoginActivity {
     })
     admin: Admin | null;
 
-    @Column({ type: 'text', default: LoginType.LOGIN })
+    @Column({ type: 'varchar', length: 50, default: LoginType.LOGIN })
     @ApiProperty({
         description: 'Type of login activity',
         enum: LoginType,

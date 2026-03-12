@@ -17,7 +17,7 @@ export class Coupon {
   name: string;
 
   @ApiProperty({ description: 'Unique coupon code' })
-  @Column({ type: 'text', unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   code: string;
 
   @ApiProperty({

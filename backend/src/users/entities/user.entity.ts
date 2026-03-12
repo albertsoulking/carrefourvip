@@ -38,7 +38,7 @@ export class User {
         example: 'John Doe',
         maxLength: 100
     })
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar', length: 100 })
     name: string;
 
     @ApiProperty({
@@ -46,7 +46,7 @@ export class User {
         example: 'john_doe',
         maxLength: 100
     })
-    @Column({ type: 'text', unique: true })
+    @Column({ type: 'varchar', length: 100, unique: true })
     username: string;
 
     @ApiProperty({
@@ -63,7 +63,7 @@ export class User {
         example: 'john@example.com',
         maxLength: 150
     })
-    @Column({ type: 'text', unique: true })
+    @Column({ type: 'varchar', length: 150, unique: true })
     email: string;
 
     @ApiProperty({
@@ -71,7 +71,7 @@ export class User {
         example: '+1234567890',
         maxLength: 20
     })
-    @Column({ type: 'text', unique: true })
+    @Column({ type: 'varchar', length: 20, unique: true })
     phone: string;
 
     @ApiProperty({
@@ -79,7 +79,7 @@ export class User {
         example: '$2b$10$xyz...',
         writeOnly: true
     })
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar', length: 100 })
     password: string;
 
     @ApiProperty({
