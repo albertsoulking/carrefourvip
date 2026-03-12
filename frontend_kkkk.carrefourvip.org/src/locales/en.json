@@ -1,0 +1,230 @@
+{
+    "name": "CarreFour VIP Admin",
+    "nav": {
+        "default": "Admin Panel",
+        "home": "Home",
+        "customer": {
+            "home": "Customers",
+            "list": "Customer List",
+            "login": "Customer Activity",
+            "delete": "Customer Recycle Bin"
+        },
+        "product": {
+            "home": "Products",
+            "list": "Product List",
+            "category": "Category",
+            "delete": "Product Recycle Bin",
+            "categoryDelete": "Category Recycle Bin"
+        },
+        "order": {
+            "home": "Orders",
+            "list": "Order List",
+            "delete": "Order Recycle Bin",
+            "log": "Order Log"
+        },
+        "marketing": {
+            "home": "Marketing",
+            "event": "Events",
+            "wheel": "Lucky Wheels"
+        },
+        "vat": "VAT Settings",
+        "favorite": "Favorites",
+        "message": {
+            "list": "User Messages",
+            "delete": "Message Recycle Bin"
+        },
+        "setting": {
+            "home": "Panel Settings",
+            "site": "Site",
+            "delivery": "Delivery",
+            "payment": "Payment",
+            "maintenance": "System Maintenance",
+            "integrations": "Integrations",
+            "log": "System Logs",
+            "role": "Role Permissions"
+        },
+        "admin": {
+            "home": "Admins",
+            "list": "Admin List",
+            "login": "Admin Activity",
+            "delete": "Admin Recycle Bin"
+        },
+        "finance": {
+            "home": "Finance Reports",
+            "order": "Transaction List",
+            "deposit": "Deposit List"
+        }
+    },
+    "dashboard": {
+        "overview": {
+            "totalRevenue": "Total Revenue This Month",
+            "balance": "Outstanding Balance",
+            "newCustomers": "New Customers",
+            "completedOrders": "Completed Orders",
+            "processingOrders": "Processing Orders",
+            "cancelledOrders": "Cancelled Orders"
+        },
+        "lineChart": {
+            "sale": "Sales Volume",
+            "people": "People",
+            "date": "{{ day }}",
+            "revenueDaily": "Revenue Trends (Last 30 Days)",
+            "countryDistribution": "Customer Country Distribution",
+            "userDailyGrowth": "New Customer Growth (Last 30 Days)",
+            "topProducts": "Hot-Selling Product Rankings"
+        }
+    },
+    "actionBar": {
+        "search": "Search",
+        "refresh": "Refresh",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "recycle": "Recycle Bin",
+        "all": "All",
+        "orderId": "Order ID"
+    },
+    "user": {
+        "id": "User ID",
+        "email": "Login Email"
+    },
+    "parent": {
+        "name": "Superior",
+        "team": "Superior (Team)",
+        "head": "Superior (Head)",
+        "agent": "Superior (Agent)",
+        "admin": "Superior (Admin)"
+    },
+    "table": {
+        "id": "ID",
+        "orderId": "Order ID",
+        "userId": "User ID",
+        "logId": "Log ID",
+        "avatar": "Avatar",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "mode": "Account Type",
+        "amount": "Balance (€)",
+        "remark": "Remark",
+        "loginIp": "Login IP",
+        "registerIp": "Register IP",
+        "lastLogin": "Last Login",
+        "country": "Country",
+        "actions": "Actions",
+        "paidAt": "Paid Time",
+        "imageUrl": "Order Image",
+        "quantity": "Quantity",
+        "subtotal": "Subtotal",
+        "payAmount": "Actual Payment (€)",
+        "deliveryMethod": "Delivery Method",
+        "payMethod": "Payment Method",
+        "paymentStatus": "Payment Status",
+        "paymentLink": "Payment Link",
+        "shareLink": "Share Link",
+        "clickToCopy": "Click Copy Link",
+        "status": {
+            "order": "Order Status",
+            "user": "Status"
+        },
+        "createdAt": {
+            "order": "Order Time",
+            "user": "Registration Time",
+            "log": "Operation Time"
+        },
+        "view": "View",
+        "restore": "Restore",
+        "delete": "Delete",
+        "live": "Live",
+        "test": "Test",
+        "standard": "Standard",
+        "express": "Express",
+        "stripe": "Stripe",
+        "paypal": "PayPal",
+        "balance": "Balance",
+        "hybrid": "Hybrid",
+        "card": "Bank Card",
+        "pay2s": "Pay2s",
+        "lemon": "Lemon Squeezy",
+        "behalf": "Behalf",
+        "starpay": "Star Pay",
+        "faf": "Friends & Family",
+        "pending": "Pending",
+        "processing": "Processing",
+        "shipped": "Delivering",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded",
+        "paid": "Paid",
+        "carrefour": "CarreFour",
+        "userMode": "Account",
+        "balanceLessThan": "Balance < (€)",
+        "balanceGreaterThan": "Balance > (€)",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "loginType": "Login Type",
+        "login": "Login",
+        "logout": "Logout",
+        "deletedAt": "Deleted Time",
+        "operator": "Operator",
+        "action": "Action",
+        "targetType": "Target Type",
+        "targetId": "Target ID",
+        "description": "Description",
+        "logIp": "Log IP",
+        "city": "City",
+        "region": "Region",
+        "zipCode": "Zip Code",
+        "state": "State",
+        "update": "Update",
+        "edit": "Edit",
+        "point": "Point",
+        "wise": "Wise"
+    },
+    "order": {
+        "overview": {
+            "totalOrders": "Total Orders",
+            "monthlyOrders": "Monthly Orders",
+            "pendingOrders": "Pending Orders",
+            "totalRevenue": "Total Revenue (Paid Orders)"
+        }
+    },
+    "acc": {
+        "accSetting": "Account Setting",
+        "accInfo": "Account Information",
+        "adminAcc": "Admin Account",
+        "securitySetting": "Security Setting",
+        "2faGoogle": "Google Authenticator (2FA)",
+        "2faGoogleDesc": "Use the Authenticator to get verification codes for better security.",
+        "pass": "Password",
+        "passDesc": "Set a unique password for better protection!",
+        "setPass": "Set Password",
+        "cancel": "Cancel",
+        "changePass": "Change Password",
+        "email": "Email",
+        "submit": "Submit",
+        "add2fa": "Add Two Factor",
+        "remove2fa": "Remove Two Factor",
+        "scan": "Scan QR Code",
+        "googleAuth": "Google Authenticator",
+        "googleAuth1": "You will need a ",
+        "googleAuth2": " to complete this process.",
+        "scanApp": "Scan the QR Code into your app.",
+        "qrcode": "2FA QR Code",
+        "enterCode": "Enter the 6-digit authentication code generated by your app:"
+    },
+    "site": {
+        "preview_vat": "VAT Switch",
+        "preview_delivery_fee": "Delivery Fee Switch",
+        "preview_address": "Delivery Address Switch",
+        "payment_balance": "Balance Payment",
+        "payment_paypal": "PayPal",
+        "payment_stripe": "Stripe",
+        "payment_card": "Bank Card",
+        "payment_pay2s": "Pay2s",
+        "payment_lemon": "Lemon Squeezy",
+        "payment_behalf": "Behalf",
+        "payment_starpay": "Star Pay",
+        "payment_faf": "Friends & Family",
+        "payment_wise": "Wise"
+    }
+}

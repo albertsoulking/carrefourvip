@@ -1,0 +1,230 @@
+{
+    "name": "家乐福VIP后台",
+    "nav": {
+        "default": "后台管理",
+        "home": "首页",
+        "customer": {
+            "home": "会员管理",
+            "list": "会员列表",
+            "login": "会员日志",
+            "delete": "会员回收站"
+        },
+        "product": {
+            "home": "商品管理",
+            "list": "商品列表",
+            "category": "商品分类",
+            "delete": "商品回收站",
+            "categoryDelete": "分类回收站"
+        },
+        "order": {
+            "home": "订单管理",
+            "list": "订单列表",
+            "delete": "订单回收站",
+            "log": "订单日志"
+        },
+        "marketing": {
+            "home": "营销管理",
+            "event": "活动管理",
+            "wheel": "幸运大转盘"
+        },
+        "vat": "增值税设置",
+        "favorite": "收藏清单",
+        "message": {
+            "list": "会员消息",
+            "delete": "消息回收站"
+        },
+        "setting": {
+            "home": "后台设置",
+            "site": "网站",
+            "delivery": "配送",
+            "payment": "支付",
+            "maintenance": "系统维护",
+            "integrations": "第三方集成",
+            "log": "日志系统",
+            "role": "角色权限"
+        },
+        "admin": {
+            "home": "管理员管理",
+            "list": "管理员列表",
+            "login": "管理员日志",
+            "delete": "管理员回收站"
+        },
+        "finance": {
+            "home": "财务对账",
+            "order": "交易账单",
+            "deposit": "充值账单"
+        }
+    },
+    "dashboard": {
+        "overview": {
+            "totalRevenue": "本月总收入",
+            "balance": "应付余额",
+            "newCustomers": "新增客户",
+            "completedOrders": "已完成订单",
+            "processingOrders": "处理中订单",
+            "cancelledOrders": "已取消订单"
+        },
+        "lineChart": {
+            "sale": "销量",
+            "people": "人",
+            "date": "{{ day }} 号",
+            "revenueDaily": "收入趋势 (最近30天)",
+            "countryDistribution": "客户国家分布",
+            "userDailyGrowth": "新客户增长 (最近30天)",
+            "topProducts": "热销产品排行"
+        }
+    },
+    "actionBar": {
+        "search": "搜索",
+        "refresh": "刷新",
+        "collapse": "收起",
+        "expand": "展开",
+        "recycle": "回收站",
+        "all": "全部",
+        "orderId": "订单 ID"
+    },
+    "user": {
+        "id": "会员ID",
+        "email": "登录邮箱"
+    },
+    "parent": {
+        "name": "上级",
+        "team": "上级（组员）",
+        "head": "上级（团长）",
+        "agent": "上级（代理）",
+        "admin": "上级（管理员）"
+    },
+    "table": {
+        "id": "ID",
+        "orderId": "订单 ID",
+        "userId": "会员 ID",
+        "logId": "日志 ID",
+        "avatar": "头像",
+        "name": "姓名",
+        "email": "邮箱",
+        "phone": "电话",
+        "mode":"账号类型",
+        "amount": "余额 (€)",
+        "remark": "备注",
+        "loginIp": "登录 IP",
+        "registerIp": "注册 IP",
+        "lastLogin": "最后登录",
+        "country": "国家",
+        "actions": "操作",
+        "paidAt": "支付时间",
+        "imageUrl": "图片",
+        "quantity": "数量",
+        "subtotal": "小计",
+        "payAmount": "实际支付 (€)",
+        "deliveryMethod": "配送方式",
+        "payMethod": "支付方式",
+        "paymentStatus": "支付状态",
+        "paymentLink": "支付链接",
+        "shareLink": "分享连接",
+        "clickToCopy": "点击复制链接",
+        "status": {
+            "order": "订单状态",
+            "user": "状态"
+        },
+        "createdAt": {
+            "order": "下单时间",
+            "user": "注册时间",
+            "log": "操作时间"
+        },
+        "view": "查看",
+        "restore": "恢复",
+        "delete": "删除",
+        "live": "正式",
+        "test": "试玩",
+        "standard": "标准配送",
+        "express": "快速配送",
+        "stripe": "Stripe支付",
+        "paypal": "贝宝支付",
+        "balance": "余额支付",
+        "hybrid": "混合支付",
+        "card": "银行卡支付",
+        "pay2s": "Pay2s支付",
+        "lemon": "Lemon支付",
+        "behalf": "代付款",
+        "faf": "亲友付",
+        "starpay": "Star支付",
+        "pending": "待付款",
+        "processing": "备货中",
+        "shipped": "已发货",
+        "delivered": "已送达",
+        "cancelled": "已取消",
+        "refunded": "已退款",
+        "paid": "已付款",
+        "carrefour": "家乐福",
+        "userMode": "账号",
+        "balanceLessThan": "余额小于 (€)",
+        "balanceGreaterThan": "余额大于 (€)",
+        "startDate": "开始日期",
+        "endDate": "结束日期",
+        "loginType": "登录类型",
+        "login": "登录",
+        "logout": "登出",
+        "deletedAt": "删除时间",
+        "operator": "操作者",
+        "action": "动作",
+        "targetType": "目标类型",
+        "targetId": "目标 ID",
+        "description": "描述",
+        "logIp": "操作 IP",
+        "city": "城市",
+        "region": "地区",
+        "zipCode": "邮编",
+        "state": "州/省",
+        "update": "更新",
+        "edit": "编辑",
+        "point": "积分",
+        "wise": "Wise支付"
+    },
+    "order": {
+        "overview": {
+            "totalOrders": "总订单数",
+            "monthlyOrders": "本月订单数",
+            "pendingOrders": "待处理订单",
+            "totalRevenue": "总收入 (支付成功的订单)"
+        }
+    },
+    "acc": {
+        "accSetting": "账户设置",
+        "accInfo": "账户信息",
+        "adminAcc": "管理员账号",
+        "securitySetting": "安全设置",
+        "2faGoogle": "Google 身份验证器 (2FA)",
+        "2faGoogleDesc": "使用身份验证器获取验证码以获得更好的安全性。",
+        "pass": "密码",
+        "passDesc": "设置独特的密码以获得更好的保护！",
+        "setPass": "设置密码",
+        "cancel": "取消",
+        "changePass": "更改密码",
+        "email": "邮箱",
+        "submit": "提交",
+        "add2fa": "添加两步验证器",
+        "remove2fa": "移除两步验证器",
+        "scan": "扫描二维码",
+        "googleAuth": "Google 身份验证器",
+        "googleAuth1": "您将需要一个 ",
+        "googleAuth2": " 来完成此过程。",
+        "scanApp": "扫描二维码到您的应用中。",
+        "qrcode": "2FA二维码",
+        "enterCode": "输入您的应用程序生成的6位数验证码: "
+    },
+    "site":{
+        "preview_vat": "增值税开关",
+        "preview_delivery_fee": "配送费开关",
+        "preview_address": "配送地址开关",
+        "payment_balance": "余额支付",
+        "payment_paypal": "贝宝支付",
+        "payment_stripe": "Stripe支付",
+        "payment_card": "银行卡支付",
+        "payment_pay2s": "Pay2s支付",
+        "payment_lemon": "Lemon Squeezy支付",
+        "payment_behalf": "代付款",
+        "payment_starpay": "Star支付",
+        "payment_faf": "亲友付",
+        "payment_wise": "Wise支付"
+    }
+}

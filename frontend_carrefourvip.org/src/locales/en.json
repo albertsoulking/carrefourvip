@@ -1,0 +1,12 @@
+{
+  "home": {
+    "bannerOne": {
+        "welcome": "Welcome to Carrefour!"
+    },
+    "bannerTwo": {
+        "start": "Start Shopping",
+        "btn": "Shopping",
+        "desc": "Delivered within 1 hour! A wide range of food and daily necessities are waiting for you to choose!"
+    }
+  }
+}
