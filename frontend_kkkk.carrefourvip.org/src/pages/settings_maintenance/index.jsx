@@ -107,7 +107,7 @@ const SettingMaintenancePage = () => {
                     setCount(0);
 
                     while (nextPage) {
-                        const res = await api.utility.genrateThumbnail({
+                        const res = await api.utilities.genrateThumbnail({
                             adminId: user?.id,
                             page
                         });

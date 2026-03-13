@@ -17,7 +17,7 @@ import { Role } from 'src/role/entity/role.entity';
 import { LogService } from 'src/system_log/log.service';
 import { Request } from 'express';
 import { UserType } from 'src/login-activities/enum/login-activities.enum';
-import { RoleType } from 'src/role/enum/role.enum';
+import { RoleMenuService } from 'src/role/role_menu.service';
 
 @Injectable()
 export class UtilityService {
@@ -26,7 +26,8 @@ export class UtilityService {
         private readonly adminRepo: Repository<Admin>,
         @InjectRepository(Role)
         private readonly roleRepo: Repository<Role>,
-        private readonly logService: LogService
+        private readonly logService: LogService,
+        private readonly roleMenuService: RoleMenuService
     ) {}
 
     private readonly saltRounds = 10;
@@ -257,24 +258,24 @@ export class UtilityService {
 
     async createOrUpdateAdminAccount(action: 'create' | 'change') {
         const adminExists = await this.adminRepo.findOneBy({
-            email: 'soulking'
+            email: 'admin'
         });
-        const hashedPassword = await this.hashPassword('aa362400');
+        const hashedPassword = await this.hashPassword('admin123');
 
         if (action === 'create') {
             if (!adminExists) {
                 const adminRole = await this.roleRepo.findOne({
                     where: { name: 'admin' }
                 });
-                // if (adminRole) {
+                if (adminRole) {
                     await this.adminRepo.save({
-                        email: 'soulking',
+                        email: 'admin',
                         name: 'Admin',
-                        role: adminRole || undefined,
+                        role: adminRole,
                         password: hashedPassword,
-                        referralCode: 'SOULKING'
+                        referralCode: 'ADMIN'
                     });
-                // }
+                }
             }
         } else if (action === 'change') {
             if (!adminExists)
@@ -284,5 +285,20 @@ export class UtilityService {
         } else {
             throw new BadRequestException('Invalid action.');
         }
+    }
+
+    async initWebsite() {
+        // 1. 检查角色权限数据是否存在，不存在就创建
+        await this.roleMenuService.reset();
+
+        // 2. 检查 admin 账号是否存在，不存在就创建
+        await this.createOrUpdateAdminAccount('create');
+
+        return { message: 'Website initialized successfully' };
+    }
+
+    async ping() {
+        const adminCount = await this.adminRepo.count();
+        return { message: 'pong', init: adminCount === 0, timestamp: new Date() };
     }
 }

@@ -72,11 +72,6 @@ const user = {
     restore: (payload) => route.post('/admin/users/restore-user', payload)
 };
 
-const utility = {
-    genrateThumbnail: (payload) =>
-        route.post('/utility/generate/thumbnail', payload)
-};
-
 const roleMenu = {
     getRoles: (payload) => route.post('/admin/role-menus/get-roles', payload),
     getMenusByPermission: (payload) =>
@@ -139,7 +134,11 @@ const utilities = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        })
+        }),
+        genrateThumbnail: (payload) =>
+        route.post('/utility/generate/thumbnail', payload),
+    init: (payload) => route.post('/utility/init-website', payload),
+    ping: (payload) => route.get('/utility/ping', payload)
 };
 
 const orders = {
@@ -256,7 +255,6 @@ const api = {
     auth,
     dashbaord,
     user,
-    utility,
     roleMenu,
     agent,
     product,

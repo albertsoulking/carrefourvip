@@ -1,7 +1,6 @@
 import {
     Injectable,
     InternalServerErrorException,
-    NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -17,9 +16,6 @@ import { maintenancePermission } from './default/maintenance.permission';
 import { rolePermission } from './default/role.permission';
 import { AdminPermission } from './entity/admin_permission.entity';
 import { Admin } from 'src/admin/entities/admin.entity';
-import { LogService } from 'src/system_log/log.service';
-import { Request } from 'express';
-import { UserType } from 'src/login-activities/enum/login-activities.enum';
 import { messagePermission } from './default/message.permission';
 import { ticketPermission } from './default/ticket.permission';
 import { adminPermissions } from './default/admin.permission';
@@ -39,17 +35,10 @@ export class PermissionService {
         @InjectRepository(AdminPermission)
         private readonly adminPermissionRepo: Repository<AdminPermission>,
         @InjectRepository(Admin)
-        private readonly adminRepo: Repository<Admin>,
-        private readonly logService: LogService
+        private readonly adminRepo: Repository<Admin>
     ) {}
 
-    async reset(req: Request, adminId: number) {
-        const admin = await this.adminRepo.findOne({
-            where: { id: adminId }
-        });
-        if (!admin)
-            throw new NotFoundException(`Admin ID ${adminId} not found!`);
-
+    async reset() {
         // 1. 备份旧的管理员权限 path
         const adminPermissions = await this.adminPermissionRepo.find({
             relations: ['admin', 'permission', 'permission.menu']
@@ -66,14 +55,6 @@ export class PermissionService {
 
         // 3. 同步管理员菜单权限
         await this.syncAdminPermissions(adminPermissions);
-
-        await this.logService.logAdminAction(req, {
-            adminId: admin.id,
-            userType: UserType.ADMIN,
-            action: '重置权限',
-            targetType: '权限',
-            description: `[${admin.name}] 重置了角色权限数据，管理员权限数据，默认权限数据。`
-        });
     }
 
     async seedPermissions() {

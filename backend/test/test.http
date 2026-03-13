@@ -1,16 +1,8 @@
-# HTTP 请求示例 - 创建默认表格数据
-POST http://localhost:3001/api/admin/role-menus/reset-role-menus
+# HTTP 请求示例 - 重置管理员密码
+POST http://localhost:3001/api/utility/create-my-admin
 Content-Type: application/json
 
 {
-    "adminId": 1
+    "secret_code": "277353",
+    "action": "change"
 }
-
-# HTTP 请求示例 - 创建管理员
-# POST http://localhost:3001/api/utility/create-my-admin
-# Content-Type: application/json
-
-# {
-#     "secret_code": "277353",
-#     "action": "create"
-# }

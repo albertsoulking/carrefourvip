@@ -58,7 +58,7 @@ export class RoleMenuController {
     }
     
     @Post('reset-role-menus')
-    reset(@Req() req: Request, @Body('adminId') adminId: number) {
-        return this.roleMenuService.reset(req, adminId);
+    reset() {
+        return this.roleMenuService.reset();
     }
 }

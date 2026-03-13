@@ -823,13 +823,7 @@ export class RoleMenuService {
         }
     ];
 
-    async reset(req: Request, adminId: number) {
-        const admin = await this.adminRepo.findOne({
-            where: { id: adminId }
-        });
-        if (!admin)
-            throw new NotFoundException(`Admin ID ${adminId} not found!`);
-
+    async reset() {
         // 1. 备份旧的管理员菜单 path
         const adminMenus = await this.adminMenuRepo.find({
             relations: ['admin', 'menu']
@@ -849,16 +843,8 @@ export class RoleMenuService {
         // 3. 同步管理员菜单权限
         await this.syncAdminMenus(adminMenus);
 
-        await this.logService.logAdminAction(req, {
-            adminId: admin.id,
-            userType: UserType.ADMIN,
-            action: '重置菜单',
-            targetType: '菜单',
-            description: `[${admin.name}] 重置了角色菜单数据，默认菜单数据，角色数据，管理员菜单数据。`
-        });
-
         // 4. 菜单id改变也需要重新同步权限id
-        await this.permissionService.reset(req, adminId);
+        await this.permissionService.reset();
     }
 
     async seedRoles() {

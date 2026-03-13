@@ -5,7 +5,8 @@ import {
     UseInterceptors,
     Body,
     BadRequestException,
-    Req
+    Req,
+    Get
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UtilityService } from './utility.service';
@@ -72,5 +73,15 @@ export class UtilityController {
             throw new BadRequestException('Not Allow');
 
         return this.utilityService.createOrUpdateAdminAccount(action);
+    }
+
+    @Get('ping')
+    ping() {
+        return this.utilityService.ping();
+    }
+
+    @Post('init-website')
+    initWebsite() {
+        return this.utilityService.initWebsite();
     }
 }
