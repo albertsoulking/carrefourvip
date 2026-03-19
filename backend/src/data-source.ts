@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 
-const debug = true;
+const debug = true; // 切换到生产环境时改为 false
 dotenv.config({ path: debug ? '.env.dev' : '.env' });
 
 export const AppDataSource = new DataSource({
