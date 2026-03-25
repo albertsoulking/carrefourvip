@@ -247,7 +247,9 @@ const gateway = {
 
 const provider = {
     getAll: (payload) =>
-        route.post('admin/payment-providers/get-all-providers', payload)
+        route.post('admin/payment-providers/get-all-providers', payload),
+    reset: (payload) =>
+        route.post('admin/payment-providers/reset-providers', payload)
 };
 
 const api = {

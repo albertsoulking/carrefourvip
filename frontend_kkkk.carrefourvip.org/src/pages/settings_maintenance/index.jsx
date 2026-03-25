@@ -149,6 +149,19 @@ const SettingMaintenancePage = () => {
                     () => api.roleMenu.resetRoleMneu({ adminId: user?.id }),
                     index
                 )
+        },
+        {
+            visible: permissions.includes('maintenance.resetPaymentProviders'),
+            title: '重置支付网关',
+            desc: '恢复默认支付网关 - 不包括已设置的个人支付网关配置。',
+            btnTxt: '重置',
+            btnIcon: <RestartAltRounded fontSize={'inherit'} />,
+            helperText: '',
+            onClick: (index) =>
+                handleAction(
+                    () => api.provider.reset(),
+                    index
+                )
         }
     ];
 
