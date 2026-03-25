@@ -103,7 +103,7 @@ async function bootstrap() {
     // ========================
 
     // Start server
-    await app.listen(process.env.PORT ?? 3001);
+    await app.listen(process.env.PORT ?? 3000);
     console.log(`🚀 Application is running on: ${await app.getUrl()}`);
     console.log(`📘 Swagger available at: ${await app.getUrl()}/api`);
     console.log(

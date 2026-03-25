@@ -19,5 +19,12 @@ export const maintenancePermission = [
         description: '重置角色菜单，不包括个人菜单',
         menu: 'setting.maintenance',
         roles: ['admin']
+    },
+    {
+        key: 'maintenance.resetPaymentProviders',
+        name: '重置支付网关',
+        description: '恢复默认支付网关，不包括个人支付网关配置',
+        menu: 'setting.maintenance',
+        roles: ['admin']
     }
 ];

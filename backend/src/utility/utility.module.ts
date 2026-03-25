@@ -5,13 +5,15 @@ import { AdminModule } from 'src/admin/admin.module';
 import { RoleMenuModule } from 'src/role/role_menu.module';
 import { SettingModule } from 'src/settings/setting.module';
 import { LogModule } from 'src/system_log/log.module';
+import { PaymentGatewaysModule } from 'src/payment-gateways/payment-gateways.module';
 
 @Module({
     imports: [
         forwardRef(() => AdminModule),
         RoleMenuModule,
         SettingModule,
-        LogModule
+        LogModule,
+        forwardRef(() => PaymentGatewaysModule)
     ],
     controllers: [UtilityController],
     providers: [UtilityService],

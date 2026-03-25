@@ -18,6 +18,7 @@ import { LogService } from 'src/system_log/log.service';
 import { Request } from 'express';
 import { UserType } from 'src/login-activities/enum/login-activities.enum';
 import { RoleMenuService } from 'src/role/role_menu.service';
+import { PaymentProviderAdminService } from 'src/payment-gateways/payment-provider.admin.service';
 
 @Injectable()
 export class UtilityService {
@@ -27,7 +28,8 @@ export class UtilityService {
         @InjectRepository(Role)
         private readonly roleRepo: Repository<Role>,
         private readonly logService: LogService,
-        private readonly roleMenuService: RoleMenuService
+        private readonly roleMenuService: RoleMenuService,
+        private readonly paymentProviderAdminService: PaymentProviderAdminService
     ) {}
 
     private readonly saltRounds = 10;
@@ -293,6 +295,9 @@ export class UtilityService {
 
         // 2. 检查 admin 账号是否存在，不存在就创建
         await this.createOrUpdateAdminAccount('create');
+
+        // 3. 检查支付网关数据是否存在，不存在就创建
+        await this.paymentProviderAdminService.reset();
 
         return { message: 'Website initialized successfully' };
     }

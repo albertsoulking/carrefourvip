@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentGatewayAdminService } from './payment-gateways.admin.service';
 import { PaymentGatewayAdminController } from './payment-gateways.admin.controller';
@@ -22,7 +22,7 @@ import { PaymentProviderAdminController } from './payment-provider.admin.control
             PaymentProvider
         ]),
         LogModule,
-        AdminModule
+        forwardRef(() => AdminModule)
     ],
     controllers: [
         PaymentGatewayAdminController,

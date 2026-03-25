@@ -17,4 +17,9 @@ export class PaymentProviderAdminController {
         const adminId = (req as any)?.user.id;
         return this.providerService.getAll(adminId);
     }
+
+    @Post('reset-providers')
+    reset() {
+        return this.providerService.reset();
+    }
 }
