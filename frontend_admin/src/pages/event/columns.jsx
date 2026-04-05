@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import RowActions from './RowActions';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import usePermissionStore from '../../hooks/usePermissionStore';
 
 const getColumns = () => {

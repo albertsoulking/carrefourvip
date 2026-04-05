@@ -13,10 +13,10 @@ import {
 } from '@mui/material';
 import { MenuRounded, NotificationsRounded } from '@mui/icons-material';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import MenuAccountSettings from './MenuAccountSettings';
 import MenuNotificationCenter from './MenuNotificationCenter';
 import logo from '../assets/logo.png';
-import i18n from '../config/i18n';
 import ModalProfile from './ModalProfile';
 
 export default function HeadBar({
@@ -26,10 +26,12 @@ export default function HeadBar({
     setOpenAccount
 }) {
     const theme = useTheme();
+    const { i18n } = useTranslation();
     const user = JSON.parse(localStorage.getItem('user'));
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
     const [accountAnchorEl, setAccountAnchorEl] = useState(null);
     const [openProfile, setOpenProfile] = useState(false);
+    const currentLanguage = i18n.resolvedLanguage || i18n.language || 'en';
 
     return (
         <AppBar
@@ -102,17 +104,17 @@ export default function HeadBar({
                     }}>
                     {/** Languages */}
                     <Select
-                        value={i18n.language}
+                        value={currentLanguage.startsWith('zh') ? 'zh' : 'en'}
                         size={'small'}
                         sx={{ fontSize: 12 }}
                         onChange={(e) => i18n.changeLanguage(e.target.value)}>
                         <MenuItem
-                            value={'zh-CN'}
+                            value={'zh'}
                             sx={{ fontSize: 12 }}>
                             简体中文
                         </MenuItem>
                         <MenuItem
-                            value={'en-US'}
+                            value={'en'}
                             sx={{ fontSize: 12 }}>
                             English
                         </MenuItem>

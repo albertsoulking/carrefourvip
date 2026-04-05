@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material';
 import ModalEditConfig from './ModalEditConfig';
 import { useState } from 'react';
 
-const RowConfig = ({ data, permissions, id }) => {
+const RowConfig = ({ data, permissions, id, gatewayName }) => {
     const [openConfig, setOpenConfig] = useState(false);
 
     return (
@@ -18,6 +18,7 @@ const RowConfig = ({ data, permissions, id }) => {
                 setOpen={setOpenConfig}
                 data={data}
                 id={id}
+                gatewayName={gatewayName}
             />
         </Box>
     );

@@ -5,7 +5,7 @@ import {
 import { Chip, Box, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import usePermissionStore from '../../hooks/usePermissionStore';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const OPTIONS = [
     {

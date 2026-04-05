@@ -15,7 +15,7 @@ import {
     MenuItem
 } from '@mui/material';
 import { useState } from 'react';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import ButtonRecycle from './ButtonRecycle';
 import usePermissionStore from '../../hooks/usePermissionStore';
 import ButtonAdd from './ButtonAdd';

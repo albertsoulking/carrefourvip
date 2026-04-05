@@ -16,7 +16,7 @@ import { PersonRounded } from '@mui/icons-material';
 import api from '../../routes/api';
 import { DatePicker } from '@mui/x-date-pickers';
 import { enqueueSnackbar } from 'notistack';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function ModalCreate({
     open,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ModalRecycle from './ModalRecycle';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import { DeleteRounded } from '@mui/icons-material';
 import { Button } from '@mui/material';
 

@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import usePermissionStore from '../../hooks/usePermissionStore';
 import ModalViewOrderDetail from './ModalViewOrderDetail';
 import ModalDeleteOrder from './ModalDeleteOrder';

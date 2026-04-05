@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material';
 import { TextField, Button, Grid, Paper, Box } from '@mui/material';
 import { useState } from 'react';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import ButtonAdd from './ButtonAdd';
 
 const ActionBarCollapse = ({

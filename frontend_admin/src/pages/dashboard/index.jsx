@@ -6,7 +6,7 @@ import LineCharts from './LineCharts';
 import { DataGrid } from '@mui/x-data-grid';
 import { motion } from 'framer-motion';
 import getColumns from './columns';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import useNotificationSocket from '../../hooks/useNotificationSocket';
 
 const DashboardPage = () => {

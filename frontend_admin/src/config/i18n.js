@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { initReactI18next } from '../../node_modules/react-i18next';
+import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector/cjs';
 
 import en from '../locales/en.json';
@@ -12,6 +12,10 @@ i18n.use(LanguageDetector) // 自动检测用户语言
             en: { translation: en },
             zh: { translation: zh }
         },
+        supportedLngs: ['en', 'zh'],
+        nonExplicitSupportedLngs: true,
+        load: 'languageOnly',
+        cleanCode: true,
         fallbackLng: 'en', // 默认语言
         interpolation: {
             escapeValue: false

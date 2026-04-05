@@ -19,7 +19,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import web from '../../routes/web';
 import useSmartNavigate from '../../hooks/useSmartNavigate';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import ButtonRecycle from './ButtonRecycle';
 
 const ActionBarExpand = ({

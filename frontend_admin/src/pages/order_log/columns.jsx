@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const getColumns = () => {
     const { t } = useTranslation();

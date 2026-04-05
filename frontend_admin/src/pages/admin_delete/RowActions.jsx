@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import usePermissionStore from '../../hooks/usePermissionStore';
 import api from '../../routes/api';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const RowActions = ({ data }) => {
     const permissions = usePermissionStore((state) => state.permissions);

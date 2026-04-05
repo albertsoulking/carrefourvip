@@ -6,7 +6,7 @@ import {
     VerifiedUserRounded
 } from '@mui/icons-material';
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function Overview({ data, onSearch, setPaginationModel }) {
     const { t } = useTranslation();

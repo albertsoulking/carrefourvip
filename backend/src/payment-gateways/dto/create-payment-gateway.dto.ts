@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePaymentGatewayDto {
     @IsString()
@@ -8,4 +8,8 @@ export class CreatePaymentGatewayDto {
     @IsNumber()
     @IsNotEmpty()
     providerId: number;
+
+    @IsString()
+    @IsOptional()
+    config?: string;
 }

@@ -79,6 +79,25 @@ const SideBar = ({
         }
     };
 
+    const getNavLabel = (item, parentName = null) => {
+        const candidates = [];
+
+        if (parentName && item?.name) {
+            candidates.push(`nav.${parentName}.${item.name}`);
+        }
+
+        if (item?.children?.length > 0 && item?.name) {
+            candidates.push(`nav.${item.name}.home`);
+        }
+
+        if (item?.name) {
+            candidates.push(`nav.${item.name}`);
+        }
+
+        const matchedKey = candidates.find((key) => t(key) !== key);
+        return matchedKey ? t(matchedKey) : item?.label || item?.title || item?.name;
+    };
+
     return (
         <Drawer
             variant={isMobile ? 'temporary' : 'permanent'}
@@ -163,7 +182,7 @@ const SideBar = ({
                                                             ? '#fff'
                                                             : ''
                                                     }}>
-                                                    {t(`nav.${item.name}`)}
+                                                    {getNavLabel(item)}
                                                 </Typography>
                                             }
                                             sx={{ ml: -3 }}
@@ -276,8 +295,9 @@ const SideBar = ({
                                                                                 ? '#fff'
                                                                                 : ''
                                                                         }}>
-                                                                        {t(
-                                                                            `nav.${child.name}`
+                                                                        {getNavLabel(
+                                                                            child,
+                                                                            item.name
                                                                         )}
                                                                     </Typography>
                                                                 }

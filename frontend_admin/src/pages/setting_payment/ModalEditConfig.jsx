@@ -1,38 +1,472 @@
+import { useEffect, useMemo, useState } from 'react';
 import {
+    Alert,
+    Box,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle
+    DialogTitle,
+    Divider,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    Tab,
+    Tabs,
+    TextField,
+    Tooltip,
+    Typography
 } from '@mui/material';
-import Editor from '@monaco-editor/react';
-import { useEffect, useState } from 'react';
+import {
+    ContentCopyRounded,
+    RefreshRounded,
+    VisibilityOffRounded,
+    VisibilityRounded
+} from '@mui/icons-material';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
 
-export default function ModalEditConfig({ open, data, setOpen, id }) {
-    const [jsonValue, setJsonValue] = useState('');
+const TAB_KEYS = ['frontend', 'backend'];
+const SECTION_KEYS = ['general', 'test', 'live'];
+const CURRENCY_OPTIONS = ['USD', 'EUR', 'MMK'];
+
+const SECTION_META = {
+    general: {
+        title: 'General Config',
+        description: 'Shared values used by both environments.'
+    },
+    test: {
+        title: 'Test Config',
+        description: 'Sandbox or test credentials.'
+    },
+    live: {
+        title: 'Live Config',
+        description: 'Production credentials.'
+    }
+};
+
+const normalizeScope = (value) =>
+    value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+
+const createEmptyConfig = () => ({
+    frontend: {},
+    backend: {}
+});
+
+const parseConfigValue = (value) => {
+    if (!value) {
+        return {
+            parsed: createEmptyConfig(),
+            raw: JSON.stringify(createEmptyConfig(), null, 2),
+            error: ''
+        };
+    }
+
+    if (typeof value === 'object') {
+        const normalized = {
+            frontend: normalizeScope(value.frontend),
+            backend: normalizeScope(value.backend)
+        };
+
+        return {
+            parsed: normalized,
+            raw: JSON.stringify(normalized, null, 2),
+            error: ''
+        };
+    }
+
+    try {
+        const parsed = JSON.parse(value);
+        const normalized = {
+            frontend: normalizeScope(parsed.frontend),
+            backend: normalizeScope(parsed.backend)
+        };
+
+        return {
+            parsed: normalized,
+            raw: JSON.stringify(normalized, null, 2),
+            error: ''
+        };
+    } catch (error) {
+        return {
+            parsed: null,
+            raw: String(value),
+            error: error.message || 'Invalid JSON'
+        };
+    }
+};
+
+const getGatewayOverrides = (gatewayName = '') => {
+    const normalized = gatewayName.toLowerCase();
+
+    return {
+        resolveType: (key, defaultType) => {
+            if (
+                normalized.includes('paypal') &&
+                key.toLowerCase().includes('client_id')
+            ) {
+                return 'text';
+            }
+
+            if (
+                normalized.includes('stripe') &&
+                key.toLowerCase().includes('publishable')
+            ) {
+                return 'text';
+            }
+
+            return defaultType;
+        }
+    };
+};
+
+const getSectionKey = (key) => {
+    if (key.endsWith('_test')) return 'test';
+    if (key.endsWith('_live')) return 'live';
+    return 'general';
+};
+
+const stripEnvironmentSuffix = (key) =>
+    key.replace(/_(test|live)$/i, '');
+
+const formatFieldLabel = (key, sectionKey) => {
+    const cleanKey = stripEnvironmentSuffix(key);
+    const baseLabel = cleanKey
+        .split('_')
+        .filter(Boolean)
+        .map((part) => {
+            const upper = part.toUpperCase();
+
+            if (['ID', 'API', 'URL', 'IP'].includes(upper)) {
+                return upper;
+            }
+
+            return part.charAt(0).toUpperCase() + part.slice(1);
+        })
+        .join(' ');
+
+    if (sectionKey === 'test') return `${baseLabel} (Test)`;
+    if (sectionKey === 'live') return `${baseLabel} (Live)`;
+    return baseLabel;
+};
+
+const detectFieldType = (key, overrides) => {
+    const normalizedKey = key.toLowerCase();
+    let fieldType = 'text';
+
+    if (normalizedKey.includes('currency')) {
+        fieldType = 'currency';
+    } else if (
+        normalizedKey.includes('secret') ||
+        normalizedKey.includes('key')
+    ) {
+        fieldType = 'password';
+    } else if (
+        normalizedKey.includes('account') ||
+        normalizedKey.includes('number')
+    ) {
+        fieldType = 'text';
+    }
+
+    return overrides.resolveType(key, fieldType);
+};
+
+const groupConfigFields = (scopeConfig, gatewayName) => {
+    const overrides = getGatewayOverrides(gatewayName);
+    const grouped = {
+        general: [],
+        test: [],
+        live: []
+    };
+
+    Object.entries(normalizeScope(scopeConfig)).forEach(([key, value]) => {
+        const sectionKey = getSectionKey(key);
+
+        grouped[sectionKey].push({
+            key,
+            label: formatFieldLabel(key, sectionKey),
+            sectionKey,
+            type: detectFieldType(key, overrides),
+            value: value ?? ''
+        });
+    });
+
+    return grouped;
+};
+
+const validateConfig = (config) => {
+    const errors = {};
+
+    TAB_KEYS.forEach((scope) => {
+        Object.entries(normalizeScope(config?.[scope])).forEach(([key, value]) => {
+            if (String(value ?? '').trim() === '') {
+                errors[`${scope}.${key}`] = 'This field is required.';
+            }
+        });
+    });
+
+    return errors;
+};
+
+const ConfigSection = ({
+    sectionKey,
+    fields,
+    scope,
+    errors,
+    visiblePasswords,
+    onTogglePassword,
+    onCopy,
+    onChange
+}) => {
+    if (fields.length === 0) {
+        return null;
+    }
+
+    return (
+        <Box>
+            <Typography
+                variant={'subtitle1'}
+                sx={{ fontWeight: 700, mb: 0.5 }}>
+                {SECTION_META[sectionKey].title}
+            </Typography>
+            <Typography
+                variant={'body2'}
+                color={'text.secondary'}
+                sx={{ mb: 2 }}>
+                {SECTION_META[sectionKey].description}
+            </Typography>
+            <Stack spacing={2}>
+                {fields.map((field) => {
+                    const fieldId = `${scope}.${field.key}`;
+                    const isPasswordVisible = Boolean(visiblePasswords[fieldId]);
+                    const error = errors[fieldId];
+
+                    if (field.type === 'currency') {
+                        return (
+                            <FormControl
+                                key={fieldId}
+                                fullWidth
+                                error={Boolean(error)}>
+                                <InputLabel>{field.label}</InputLabel>
+                                <Select
+                                    label={field.label}
+                                    value={field.value}
+                                    onChange={(event) =>
+                                        onChange(
+                                            scope,
+                                            field.key,
+                                            event.target.value
+                                        )
+                                    }>
+                                    {CURRENCY_OPTIONS.map((currency) => (
+                                        <MenuItem
+                                            key={currency}
+                                            value={currency}>
+                                            {currency}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>
+                                    {error || 'Select the settlement currency.'}
+                                </FormHelperText>
+                            </FormControl>
+                        );
+                    }
+
+                    return (
+                        <TextField
+                            key={fieldId}
+                            fullWidth
+                            required
+                            label={field.label}
+                            type={
+                                field.type === 'password' && !isPasswordVisible
+                                    ? 'password'
+                                    : 'text'
+                            }
+                            value={field.value}
+                            error={Boolean(error)}
+                            helperText={
+                                error ||
+                                (field.type === 'password'
+                                    ? 'Sensitive value. You can copy or reveal it.'
+                                    : ' ')
+                            }
+                            onChange={(event) =>
+                                onChange(scope, field.key, event.target.value)
+                            }
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position={'end'}>
+                                        {field.type === 'password' && (
+                                            <Tooltip title={'Show / hide'}>
+                                                <IconButton
+                                                    edge={'end'}
+                                                    onClick={() =>
+                                                        onTogglePassword(fieldId)
+                                                    }>
+                                                    {isPasswordVisible ? (
+                                                        <VisibilityOffRounded />
+                                                    ) : (
+                                                        <VisibilityRounded />
+                                                    )}
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
+                                        <Tooltip title={'Copy value'}>
+                                            <IconButton
+                                                edge={'end'}
+                                                onClick={() =>
+                                                    onCopy(field.value, field.label)
+                                                }>
+                                                <ContentCopyRounded />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    );
+                })}
+            </Stack>
+        </Box>
+    );
+};
+
+export default function ModalEditConfig({
+    open,
+    data,
+    setOpen,
+    id,
+    gatewayName,
+    onSave
+}) {
+    const [activeTab, setActiveTab] = useState('frontend');
+    const [rawJson, setRawJson] = useState('');
+    const [jsonError, setJsonError] = useState('');
+    const [defaultConfig, setDefaultConfig] = useState(createEmptyConfig());
+    const [formConfig, setFormConfig] = useState(createEmptyConfig());
+    const [errors, setErrors] = useState({});
+    const [visiblePasswords, setVisiblePasswords] = useState({});
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (!open) return;
 
-        setJsonValue(data);
-    }, [open]);
+        const { parsed, raw, error } = parseConfigValue(data);
+
+        setRawJson(raw);
+        setJsonError(error);
+        setVisiblePasswords({});
+        setErrors({});
+        setActiveTab('frontend');
+
+        if (parsed) {
+            setDefaultConfig(parsed);
+            setFormConfig(parsed);
+        } else {
+            const emptyConfig = createEmptyConfig();
+            setDefaultConfig(emptyConfig);
+            setFormConfig(emptyConfig);
+        }
+    }, [open, data]);
+
+    const groupedFields = useMemo(
+        () => ({
+            frontend: groupConfigFields(formConfig.frontend, gatewayName),
+            backend: groupConfigFields(formConfig.backend, gatewayName)
+        }),
+        [formConfig, gatewayName]
+    );
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleFieldChange = (scope, key, value) => {
+        setFormConfig((prev) => ({
+            ...prev,
+            [scope]: {
+                ...prev[scope],
+                [key]: value
+            }
+        }));
+
+        setErrors((prev) => {
+            const next = { ...prev };
+            delete next[`${scope}.${key}`];
+            return next;
+        });
+    };
+
+    const handleTogglePassword = (fieldId) => {
+        setVisiblePasswords((prev) => ({
+            ...prev,
+            [fieldId]: !prev[fieldId]
+        }));
+    };
+
+    const handleCopy = async (value, label) => {
+        try {
+            await navigator.clipboard.writeText(String(value ?? ''));
+            enqueueSnackbar(`${label} copied.`, {
+                variant: 'success'
+            });
+        } catch (error) {
+            enqueueSnackbar('Unable to copy this value.', {
+                variant: 'error'
+            });
+        }
+    };
+
+    const handleReset = () => {
+        setFormConfig(defaultConfig);
+        setErrors({});
+        setVisiblePasswords({});
+        setJsonError('');
+    };
 
     const handleSave = async () => {
-        try {
-            const parsed = JSON.parse(jsonValue);
-            const formatted = JSON.stringify(parsed, null, 2);
+        if (jsonError) {
+            enqueueSnackbar('Current config JSON is invalid. Please reset first.', {
+                variant: 'error'
+            });
+            return;
+        }
 
-            const payload = {
-                id,
-                config: formatted
-            };
-            
-            await api.gateway.update(payload);
+        const nextErrors = validateConfig(formConfig);
+        setErrors(nextErrors);
+
+        if (Object.keys(nextErrors).length > 0) {
+            enqueueSnackbar('Please complete all required fields before saving.', {
+                variant: 'error'
+            });
+            return;
+        }
+
+        const formatted = JSON.stringify(formConfig, null, 2);
+
+        try {
+            setSaving(true);
+
+            if (typeof onSave === 'function') {
+                await onSave(formatted);
+            } else {
+                await api.gateway.update({
+                    id,
+                    config: formatted
+                });
+            }
+
             enqueueSnackbar('配置已更新!', {
                 variant: 'success'
             });
+            setOpen(false);
         } catch (error) {
             enqueueSnackbar(
                 Array.isArray(error.response?.data?.message)
@@ -42,45 +476,111 @@ export default function ModalEditConfig({ open, data, setOpen, id }) {
                     variant: 'error'
                 }
             );
+        } finally {
+            setSaving(false);
         }
     };
-    
+
+    const activeFields = groupedFields[activeTab];
+    const hasAnyFields = SECTION_KEYS.some(
+        (sectionKey) => activeFields[sectionKey].length > 0
+    );
+
     return (
         <Dialog
             open={open}
+            onClose={handleClose}
             fullWidth
             maxWidth={'md'}>
-            <DialogTitle>支付网关配置JSON格式</DialogTitle>
+            <DialogTitle>
+                {gatewayName ? `${gatewayName} Config` : 'Payment Gateway Config'}
+            </DialogTitle>
             <DialogContent dividers>
-                <Editor
-                    height={400}
-                    defaultLanguage={'json'}
-                    value={jsonValue}
-                    onChange={(value) => setJsonValue(value)}
-                    options={{
-                        automaticLayout: true,
-                        formatOnPaste: true,
-                        formatOnType: true,
-                        minimap: { enabled: false }
-                    }}
-                />
+                {jsonError && (
+                    <Alert
+                        severity={'warning'}
+                        sx={{ mb: 2 }}>
+                        Invalid config JSON detected. You can reset to the last
+                        parsable default structure before editing.
+                        <Box sx={{ mt: 1 }}>
+                            <Typography
+                                variant={'body2'}
+                                component={'pre'}
+                                sx={{
+                                    whiteSpace: 'pre-wrap',
+                                    mb: 0,
+                                    fontFamily: 'monospace'
+                                }}>
+                                {rawJson}
+                            </Typography>
+                        </Box>
+                    </Alert>
+                )}
+
+                <Tabs
+                    value={activeTab}
+                    onChange={(event, value) => setActiveTab(value)}
+                    sx={{ mb: 3 }}>
+                    <Tab
+                        value={'frontend'}
+                        label={'Frontend'}
+                    />
+                    <Tab
+                        value={'backend'}
+                        label={'Backend'}
+                    />
+                </Tabs>
+
+                {!hasAnyFields ? (
+                    <Alert severity={'info'}>
+                        No config fields were found for this tab.
+                    </Alert>
+                ) : (
+                    <Stack spacing={3}>
+                        {SECTION_KEYS.map((sectionKey, index) => {
+                            const fields = activeFields[sectionKey];
+
+                            if (fields.length === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <Box key={sectionKey}>
+                                    {index !== 0 && <Divider sx={{ mb: 3 }} />}
+                                    <ConfigSection
+                                        sectionKey={sectionKey}
+                                        fields={fields}
+                                        scope={activeTab}
+                                        errors={errors}
+                                        visiblePasswords={visiblePasswords}
+                                        onTogglePassword={handleTogglePassword}
+                                        onCopy={handleCopy}
+                                        onChange={handleFieldChange}
+                                    />
+                                </Box>
+                            );
+                        })}
+                    </Stack>
+                )}
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={{ px: 3, py: 2 }}>
                 <Button
-                    onClick={() => {
-                        setOpen(false);
-                    }}
-                    variant={'outlined'}
-                    color={'default'}
-                    sx={{ width: 100 }}>
-                    关闭
+                    startIcon={<RefreshRounded />}
+                    onClick={handleReset}
+                    variant={'outlined'}>
+                    Reset to Default
+                </Button>
+                <Box sx={{ flexGrow: 1 }} />
+                <Button
+                    onClick={handleClose}
+                    variant={'outlined'}>
+                    Close
                 </Button>
                 <Button
                     onClick={handleSave}
                     variant={'contained'}
-                    color={'primary'}
-                    sx={{ width: 100 }}>
-                    保存更改
+                    disabled={saving}>
+                    {saving ? 'Saving...' : 'Save'}
                 </Button>
             </DialogActions>
         </Dialog>

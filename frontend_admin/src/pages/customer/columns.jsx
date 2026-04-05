@@ -3,7 +3,7 @@ import RowActions from './RowActions';
 import RowParent from './RowParent';
 import RowMode from './RowMode';
 import usePermissionStore from '../../hooks/usePermissionStore';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import RowStatus from './RowStatus';
 
 const getColumns = () => {

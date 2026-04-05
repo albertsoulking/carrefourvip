@@ -8,7 +8,7 @@ import RowDeliveryMethod from './RowDeliveryMethod';
 import RowMode from './RowMode';
 import RowAvatar from './RowAvatar';
 import moment from 'moment';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import usePermissionStore from '../../hooks/usePermissionStore';
 
 const getColumns = ({

@@ -5,7 +5,7 @@ import RowPaymentStatus from './RowPaymentStatus';
 import RowPayMethod from './RowPayMethod';
 import RowDeliveryMethod from './RowDeliveryMethod';
 import RowAvatar from './RowAvatar';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const getColumns = () => {
     const { t } = useTranslation();

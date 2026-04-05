@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import usePermissionStore from '../../hooks/usePermissionStore';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 import { enqueueSnackbar } from 'notistack';
 import api from '../../routes/api';
 

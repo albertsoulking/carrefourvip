@@ -170,6 +170,42 @@ const DashboardLayout = () => {
         }
     };
 
+    const getNavLabel = (item, parentName = null) => {
+        const candidates = [];
+
+        if (parentName && item?.name) {
+            candidates.push(`nav.${parentName}.${item.name}`);
+        }
+
+        if (item?.children?.length > 0 && item?.name) {
+            candidates.push(`nav.${item.name}.home`);
+        }
+
+        if (item?.name) {
+            candidates.push(`nav.${item.name}`);
+        }
+
+        const matchedKey = candidates.find((key) => t(key) !== key);
+        return matchedKey ? t(matchedKey) : item?.label || item?.title || item?.name || '';
+    };
+
+    const getTabLabel = (path, fallbackLabel = '') => {
+        if (path === web.dashboard) {
+            return t('nav.home');
+        }
+
+        const matched = findMenuLabel(roleMenus, path);
+        if (!matched) {
+            return fallbackLabel;
+        }
+
+        const parent = roleMenus.find((menu) =>
+            menu.children?.some((child) => child.path === path)
+        );
+
+        return getNavLabel(matched, parent?.name);
+    };
+
     const fetchData = async () => {
         const res = await api.roleMenu.getMenus();
         setRoleMenus(res.data);
@@ -305,7 +341,7 @@ const DashboardLayout = () => {
                                                     : '#000',
                                             textTransform: 'capitalize'
                                         }}>
-                                        {tab.label}
+                                        {getTabLabel(tab.path, tab.label)}
                                     </span>
                                     {tab.path !== web.dashboard && (
                                         <Box

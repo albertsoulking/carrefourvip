@@ -153,6 +153,7 @@ const getColumns = ({
             <RowConfig
                 data={params.value}
                 id={params.id}
+                gatewayName={params.row.name}
             />
         )
     },

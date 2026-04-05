@@ -7,7 +7,7 @@ import { TextField, Button, Grid, Paper, Box } from '@mui/material';
 import { useState } from 'react';
 import ButtonRecycle from './ButtonRecycle';
 import ButtonAdd from './ButtonAdd';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ActionBarCollapse = ({
     onSearch,
