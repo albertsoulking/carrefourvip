@@ -16,8 +16,8 @@ async function bootstrap() {
     // Enable CORS
     app.enableCors({
         origin: [
-            'https://carrefourvip.org',
-            'https://kkkk.carrefourvip.org',
+            'https://giftmall.shop',
+            'https://kkkk.giftmall.shop',
             'http://localhost:5173',
             'http://127.0.0.1:5173',
             'http://localhost:5174',
