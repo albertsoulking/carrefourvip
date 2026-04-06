@@ -24,6 +24,7 @@ import { PaymentStatus } from 'src/orders/enums/order.enum';
 import { UserType } from 'src/login-activities/enum/login-activities.enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { NotificationType } from 'src/notification/enum/notification.enum';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Injectable()
 export class AdminUserService {
@@ -221,7 +222,6 @@ export class AdminUserService {
         const query = this.userRepo
             .createQueryBuilder('user')
             .leftJoin('user.parent', 'parent')
-            .leftJoin('user.orders', 'order')
             .select([
                 'user.id',
                 'user.avatar',
@@ -246,8 +246,7 @@ export class AdminUserService {
                 'user.point',
                 'parent.id',
                 'parent.name',
-                'parent.referralCode',
-                'order.id'
+                'parent.referralCode'
             ]);
 
         const direction = dto.orderBy.toUpperCase() as 'ASC' | 'DESC';
@@ -363,23 +362,43 @@ export class AdminUserService {
             });
         if (dto.toDate)
             query.andWhere('user.createdAt <= :toDate', { toDate: dto.toDate });
-        // 订单搜索
-        if (dto.hasOrder)
-            query.andWhere('order.createdAt >= :date', { date: dto.cusDate });
+
+        const orderExistsSubQuery = query
+            .subQuery()
+            .select('1')
+            .from(Order, 'order')
+            .where('order.userId = user.id');
+
+        if (dto.cusDate) {
+            orderExistsSubQuery.andWhere('order.createdAt >= :cusDate');
+        }
+
+        if (dto.hasOrder) {
+            query.andWhere(`EXISTS ${orderExistsSubQuery.getQuery()}`);
+        }
 
         if (dto.hasValue) {
-            query
-                .andWhere('order.createdAt >= :recentDate', {
-                    recentDate: dto.cusDate
-                })
-                .andWhere('order.paymentStatus = :status', {
-                    status: PaymentStatus.PAID
-                })
-                .groupBy('user.id')
+            const highValueSubQuery = query
+                .subQuery()
+                .select('1')
+                .from(Order, 'order')
+                .where('order.userId = user.id')
+                .andWhere('order.paymentStatus = :paidStatus');
+
+            if (dto.cusDate) {
+                highValueSubQuery.andWhere('order.createdAt >= :cusDate');
+            }
+
+            highValueSubQuery
+                .groupBy('order.userId')
                 .having(
-                    'SUM(CAST(order.payAmount AS DECIMAL(10,2))) >= :minSpend',
-                    { minSpend: 100 }
+                    'SUM(CAST(order.payAmount AS DECIMAL(10,2))) >= :minSpend'
                 );
+
+            query.andWhere(`EXISTS ${highValueSubQuery.getQuery()}`, {
+                paidStatus: PaymentStatus.PAID,
+                minSpend: 100
+            });
         }
 
         const sortFieldMap = {
@@ -394,14 +413,23 @@ export class AdminUserService {
         const [rawAndEntities, total] = await Promise.all([
             query
                 .addSelect(
-                    `COUNT(CASE WHEN order.paymentStatus = '${PaymentStatus.PAID}' THEN 1 END)`,
+                    `(
+                        SELECT COUNT(*)
+                        FROM orders order_stats
+                        WHERE order_stats.userId = user.id
+                        AND order_stats.paymentStatus = '${PaymentStatus.PAID}'
+                    )`,
                     'totalOrders'
                 )
                 .addSelect(
-                    `SUM(CASE WHEN order.paymentStatus = '${PaymentStatus.PAID}' THEN order.payAmount ELSE 0 END)`,
+                    `(
+                        SELECT COALESCE(SUM(CAST(order_stats.payAmount AS DECIMAL(10,2))), 0)
+                        FROM orders order_stats
+                        WHERE order_stats.userId = user.id
+                        AND order_stats.paymentStatus = '${PaymentStatus.PAID}'
+                    )`,
                     'totalRevenue'
                 )
-                .groupBy('user.id')
                 .skip(skip)
                 .take(dto.limit)
                 .orderBy(sortField, direction)

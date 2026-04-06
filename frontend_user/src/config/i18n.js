@@ -13,6 +13,10 @@ i18n.use(LanguageDetector) // 自动检测用户语言
             en: { translation: en },
             zh: { translation: zh }
         },
+        supportedLngs: ['en', 'zh'],
+        nonExplicitSupportedLngs: true,
+        load: 'languageOnly',
+        cleanCode: true,
         fallbackLng: 'en', // 默认语言
         interpolation: {
             escapeValue: false

@@ -2,7 +2,7 @@ import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import assets from '../../assets';
 import web from '../../routes/web';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const BannerTwo = () => {
     const navigate = useSmartNavigate();

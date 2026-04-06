@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import BannerTwo from './BannerTwo';
-import { useTranslation } from '../../../node_modules/react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const BannerOne = ({ banners }) => {
     const { t } = useTranslation();
