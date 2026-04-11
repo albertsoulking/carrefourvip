@@ -1,7 +1,4 @@
-import {
-    Injectable,
-    NotFoundException
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Setting } from './entity/setting.entity';
 import { Repository } from 'typeorm';
@@ -19,7 +16,9 @@ export class SettingService {
             where: dto
         });
         if (!setting) {
-            throw new NotFoundException(`Setting ${dto.key}-${dto.group} not found`);
+            throw new NotFoundException(
+                `Setting ${dto.key}-${dto.group} not found`
+            );
         }
 
         return setting.value;

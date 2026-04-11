@@ -193,7 +193,7 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                 setUserBalance(null);
                 setIsBalanceChecked(false);
                 setIsZero(false);
-                setPaymentType('');
+                // setPaymentType('');
                 setOpen({ open: false, data: null });
 
                 if (Number(res.data.payAmount) === 0) {

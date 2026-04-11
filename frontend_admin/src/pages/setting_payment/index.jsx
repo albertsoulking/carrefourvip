@@ -104,8 +104,8 @@ const PaymentListPage = () => {
             status: data.status,
             sortOrder: Number(data.sortOrder),
             discount: data.discount,
-            visible: data.visible
-            // isManual: data.isManual
+            visible: data.visible,
+            isManual: data.isManual
         };
 
         try {
@@ -148,7 +148,7 @@ const PaymentListPage = () => {
                 initial={'hidden'}
                 animate={'visible'}>
                 {/* Actions bar */}
-                <motion.div variants={itemVariants}>
+                {/* <motion.div variants={itemVariants}>
                     {isExpand ? (
                         <ActionBarExpand
                             setOpen={setOpenCreateModal}
@@ -168,7 +168,7 @@ const PaymentListPage = () => {
                             setIsExpand={setIsExpand}
                         />
                     )}
-                </motion.div>
+                </motion.div> */}
 
                 {/* Data grid */}
                 <motion.div variants={itemVariants}>

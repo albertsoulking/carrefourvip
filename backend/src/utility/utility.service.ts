@@ -1,8 +1,10 @@
 import {
     BadRequestException,
+    Inject,
     Injectable,
     InternalServerErrorException,
-    NotFoundException
+    NotFoundException,
+    forwardRef
 } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -19,6 +21,8 @@ import { Request } from 'express';
 import { UserType } from 'src/login-activities/enum/login-activities.enum';
 import { RoleMenuService } from 'src/role/role_menu.service';
 import { PaymentProviderAdminService } from 'src/payment-gateways/payment-provider.admin.service';
+import { PaymentGatewayAdminService } from 'src/payment-gateways/payment-gateways.admin.service';
+import { SettingAdminService } from 'src/settings/setting.admin.service';
 
 @Injectable()
 export class UtilityService {
@@ -29,7 +33,11 @@ export class UtilityService {
         private readonly roleRepo: Repository<Role>,
         private readonly logService: LogService,
         private readonly roleMenuService: RoleMenuService,
-        private readonly paymentProviderAdminService: PaymentProviderAdminService
+        @Inject(forwardRef(() => PaymentProviderAdminService))
+        private readonly paymentProviderAdminService: PaymentProviderAdminService,
+        @Inject(forwardRef(() => PaymentGatewayAdminService))
+        private readonly paymentGatewayAdminService: PaymentGatewayAdminService,
+        private readonly SettingAdminService: SettingAdminService
     ) {}
 
     private readonly saltRounds = 10;
@@ -298,6 +306,12 @@ export class UtilityService {
 
         // 3. 检查支付网关数据是否存在，不存在就创建
         await this.paymentProviderAdminService.reset();
+
+        // 4. 重置支付通道数据
+        await this.paymentGatewayAdminService.reset();
+
+        // 5. 重置配送数据和网站设置
+        await this.SettingAdminService.reset();
 
         return { message: 'Website initialized successfully' };
     }

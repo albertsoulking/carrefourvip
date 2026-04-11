@@ -8,6 +8,7 @@ import { useState } from 'react';
 import ButtonRecycle from './ButtonRecycle';
 import ButtonAdd from './ButtonAdd';
 import { useTranslation } from 'react-i18next';
+import { actionBarPaperSx } from '../_shared/actionBarStyles';
 
 const ActionBarCollapse = ({
     onSearch,
@@ -57,18 +58,7 @@ const ActionBarCollapse = ({
 
     return (
         <Paper
-            sx={{
-                p: { xs: 1, sm: 2 },
-                mb: 2,
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                borderRadius: 2,
-                gap: { xs: 2, sm: 0 }
-            }}>
+            sx={actionBarPaperSx}>
             <Grid
                 container
                 spacing={2}
@@ -98,10 +88,8 @@ const ActionBarCollapse = ({
                     </Grid>
                 ))}
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <Box
-                        display={'flex'}
-                        justifyContent={'space-between'}>
-                        <Box display={'flex'}>
+                    <Box className={'action-bar-actions-row'}>
+                        <Box className={'action-bar-actions-group'}>
                             <Button
                                 variant={'contained'}
                                 onClick={handleSearch}
@@ -143,7 +131,7 @@ const ActionBarCollapse = ({
                                 {t('actionBar.expand')}
                             </Button>
                         </Box>
-                        <Box display={'flex'}>
+                        <Box className={'action-bar-actions-group'}>
                             <ButtonRecycle />
                             <ButtonAdd />
                         </Box>

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
-import ModalReset from './ModalReset';
 import CardDeliveryRule from './CardDeliveryRule';
 import CardRestrictedCountries from './CardRestrictedCountries';
 import CardBusinessHours from './CardBusinessHours';
@@ -31,7 +30,6 @@ const itemVariants = {
 };
 
 const DeliverySettingPage = () => {
-    const [openReset, setOpenReset] = useState(false);
     const [deliveryData, setDeliveryData] = useState({});
 
     useEffect(() => {
@@ -65,16 +63,6 @@ const DeliverySettingPage = () => {
                 variants={containerVariants}
                 initial={'hidden'}
                 animate={'visible'}>
-                <motion.div variants={itemVariants}>
-                    <Box textAlign={'end'}>
-                        <Button
-                            variant={'contained'}
-                            sx={{ mb: 2 }}
-                            onClick={() => setOpenReset(true)}>
-                            重置
-                        </Button>
-                    </Box>
-                </motion.div>
                 {deliveryData && Object.keys(deliveryData).length > 0 && (
                     <>
                         <motion.div variants={itemVariants}>
@@ -98,11 +86,6 @@ const DeliverySettingPage = () => {
                     </>
                 )}
             </motion.div>
-            <ModalReset
-                open={openReset}
-                setOpen={setOpenReset}
-                loadData={loadData}
-            />
         </Box>
     );
 };

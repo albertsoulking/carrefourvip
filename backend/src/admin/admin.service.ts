@@ -5,7 +5,9 @@ import {
     BadRequestException,
     InternalServerErrorException,
     ForbiddenException,
-    UnauthorizedException
+    UnauthorizedException,
+    Inject,
+    forwardRef
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, DataSource, In, MoreThan, Repository } from 'typeorm';
@@ -36,6 +38,7 @@ export class AdminService {
         private readonly userRepo: Repository<User>,
         @InjectRepository(Order)
         private readonly orderRepo: Repository<Order>,
+        @Inject(forwardRef(() => UtilityService))
         private readonly utilityService: UtilityService,
         private readonly logService: LogService,
         private readonly dataSource: DataSource,

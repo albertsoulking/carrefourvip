@@ -9,7 +9,6 @@ import {
 import { useEffect, useState } from 'react';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
-import ModalReset from './ModalReset';
 import ModalBanner from './ModalBanner';
 import { motion } from 'framer-motion';
 
@@ -37,7 +36,6 @@ const itemVariants = {
 
 const SettingSitePage = () => {
     const [siteData, setSiteData] = useState({});
-    const [openReset, setOpenReset] = useState(false);
     const [openBanner, setOpenBanner] = useState(false);
 
     useEffect(() => {
@@ -124,16 +122,6 @@ const SettingSitePage = () => {
                 variants={containerVariants}
                 initial={'hidden'}
                 animate={'visible'}>
-                <motion.div variants={itemVariants}>
-                    <Box textAlign={'end'}>
-                        <Button
-                            variant={'contained'}
-                            sx={{ mb: 2 }}
-                            onClick={() => setOpenReset(true)}>
-                            重置
-                        </Button>
-                    </Box>
-                </motion.div>
                 <motion.div variants={itemVariants}>
                     {siteData && Object.keys(siteData).length > 0 && (
                         <Box
@@ -368,11 +356,6 @@ const SettingSitePage = () => {
                     )}
                 </motion.div>
             </motion.div>
-            <ModalReset
-                open={openReset}
-                setOpen={setOpenReset}
-                loadData={loadData}
-            />
             <ModalBanner
                 open={openBanner}
                 setOpen={setOpenBanner}

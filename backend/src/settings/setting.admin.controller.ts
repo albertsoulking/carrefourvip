@@ -14,9 +14,8 @@ export class AdminSettingController {
     constructor(private readonly settingAdminService: SettingAdminService) {}
 
     @Post('reset-setting')
-    reset(@Req() req: Request, @Body() dto: UpdateSettingDto) {
-        const adminId = (req as any)?.user.id;
-        return this.settingAdminService.reset(adminId, req, dto);
+    reset() {
+        return this.settingAdminService.reset();
     }
 
     @Post('update-setting')

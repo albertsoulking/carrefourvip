@@ -20,7 +20,7 @@ export default function RowManual({ status, permissions, onChange }) {
 
     const handleClick = (e) => {
         // if (permissions.includes('customer.changeUserMode'))
-        // setAnchorEl(e.currentTarget);
+        setAnchorEl(e.currentTarget);
     };
 
     const handleSelect = (newValue) => {
@@ -37,7 +37,7 @@ export default function RowManual({ status, permissions, onChange }) {
                 onClick={handleClick}
                 sx={{ cursor: 'pointer', fontSize: 12 }}
             />
-            {/* <Menu
+            <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}>
@@ -49,7 +49,7 @@ export default function RowManual({ status, permissions, onChange }) {
                         {s.label}
                     </MenuItem>
                 ))}
-            </Menu> */}
+            </Menu>
         </Box>
     );
 }

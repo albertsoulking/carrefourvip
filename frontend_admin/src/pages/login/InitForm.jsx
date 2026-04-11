@@ -34,11 +34,13 @@ const InitForm = ({ setIsInit }) => {
             if (step === 0) {
                 await api.utilities.init();
 
-                setTimeout(() => setStep(1), 2000);
-                setTimeout(() => setStep(2), 4000);
-                setTimeout(() => setStep(3), 6000);
-                setTimeout(() => setStep(4), 9000);
-                setTimeout(() => setStep(5), 12000);
+                setTimeout(() => setStep(1), 1000);
+                setTimeout(() => setStep(2), 3000);
+                setTimeout(() => setStep(3), 5000);
+                setTimeout(() => setStep(4), 7000);
+                setTimeout(() => setStep(5), 9000);
+                setTimeout(() => setStep(6), 11000);
+                setTimeout(() => setStep(7), 13000);
             } else {
                 setIsInit(false);
             }
@@ -47,8 +49,50 @@ const InitForm = ({ setIsInit }) => {
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            }, 13000);
+            }, 14000);
         }
+    };
+
+    const initSteps = [
+        { visibleAt: 1, activeAt: 1, label: '角色初始化…' },
+        { visibleAt: 2, activeAt: 2, label: '菜单初始化…' },
+        { visibleAt: 3, activeAt: 3, label: '权限初始化…' },
+        { visibleAt: 4, activeAt: 4, label: '支付网关初始化…' },
+        { visibleAt: 5, activeAt: 5, label: '配送信息初始化…' },
+        { visibleAt: 6, activeAt: 6, label: '管理员账号初始化…' }
+    ];
+
+    const renderStepItem = ({ visibleAt, activeAt, label }) => {
+        if (step < visibleAt) return null;
+
+        const isActive = step === activeAt;
+
+        return (
+            <Box
+                key={label}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                }}>
+                {isActive ? (
+                    <CircularProgress size={16} />
+                ) : (
+                    <CheckCircleOutlineRounded
+                        fontSize={'small'}
+                        color={'primary'}
+                    />
+                )}
+                <Typography
+                    variant='body2'
+                    sx={{
+                        ml: isActive ? 0.5 : 0,
+                        opacity: 0.85
+                    }}>
+                    {label}
+                </Typography>
+            </Box>
+        );
     };
 
     return (
@@ -124,111 +168,8 @@ const InitForm = ({ setIsInit }) => {
                                 初始化家乐福VIP网站
                             </Typography>
 
-                            {step >= 1 && (
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-
-                                        alignItems: 'center',
-                                        gap: 1
-                                    }}>
-                                    {step === 1 ? (
-                                        <CircularProgress size={16} />
-                                    ) : (
-                                        <CheckCircleOutlineRounded
-                                            fontSize={'small'}
-                                            color={'primary'}
-                                        />
-                                    )}
-                                    <Typography
-                                        variant='body2'
-                                        sx={{
-                                            ml: step === 1 ? 0.5 : 0,
-                                            opacity: 0.85
-                                        }}>
-                                        角色初始化…
-                                    </Typography>
-                                </Box>
-                            )}
-                            {step >= 2 && (
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-
-                                        alignItems: 'center',
-                                        gap: 1
-                                    }}>
-                                    {step === 2 ? (
-                                        <CircularProgress size={16} />
-                                    ) : (
-                                        <CheckCircleOutlineRounded
-                                            fontSize={'small'}
-                                            color={'primary'}
-                                        />
-                                    )}
-                                    <Typography
-                                        variant='body2'
-                                        sx={{
-                                            ml: step === 2 ? 0.5 : 0,
-                                            opacity: 0.85
-                                        }}>
-                                        菜单初始化…
-                                    </Typography>
-                                </Box>
-                            )}
-                            {step >= 3 && (
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-
-                                        alignItems: 'center',
-                                        gap: 1
-                                    }}>
-                                    {step === 3 ? (
-                                        <CircularProgress size={16} />
-                                    ) : (
-                                        <CheckCircleOutlineRounded
-                                            fontSize={'small'}
-                                            color={'primary'}
-                                        />
-                                    )}
-                                    <Typography
-                                        variant='body2'
-                                        sx={{
-                                            ml: step === 3 ? 0.5 : 0,
-                                            opacity: 0.85
-                                        }}>
-                                        权限初始化…
-                                    </Typography>
-                                </Box>
-                            )}
-                            {step >= 4 && (
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-
-                                        alignItems: 'center',
-                                        gap: 1
-                                    }}>
-                                    {step === 4 ? (
-                                        <CircularProgress size={16} />
-                                    ) : (
-                                        <CheckCircleOutlineRounded
-                                            fontSize={'small'}
-                                            color={'primary'}
-                                        />
-                                    )}
-                                    <Typography
-                                        variant='body2'
-                                        sx={{
-                                            ml: step === 4 ? 0.5 : 0,
-                                            opacity: 0.85
-                                        }}>
-                                        管理员账号初始化…
-                                    </Typography>
-                                </Box>
-                            )}
-                            {step === 5 && (
+                            {initSteps.map(renderStepItem)}
+                            {step === 7 && (
                                 <Box sx={{ mt: 2 }}>
                                     <Typography
                                         variant='body2'
@@ -274,7 +215,7 @@ const InitForm = ({ setIsInit }) => {
                                         size={24}
                                         color={'inherit'}
                                     />
-                                ) : step === 5 ? (
+                                ) : step === 7 ? (
                                     '下一步'
                                 ) : (
                                     '开始'
