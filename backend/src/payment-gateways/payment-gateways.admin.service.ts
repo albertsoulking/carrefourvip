@@ -17,7 +17,6 @@ import { Request } from 'express';
 import { SearchPaymentGatewayDto } from './dto/search-payment-gateway.dto';
 import { AdminService } from 'src/admin/admin.service';
 import { PaymentProvider } from './entities/payment-provider.entity';
-import { json } from 'stream/consumers';
 
 @Injectable()
 export class PaymentGatewayAdminService {
@@ -404,16 +403,16 @@ export class PaymentGatewayAdminService {
                 config: JSON.stringify({
                     frontend: {
                         client_id_test:
-                            'ATAsP6GzONDK24Kow8Vu9lkIajs5eVgdl6VdJORbF35JsPSzwFR4fTNg_97zhH2ES-6QosfkMgievHQF',
+                            process.env.PAYPAL_CLIENT_ID_TEST ?? '',
                         client_id_live:
-                            'AUpetB30aSspCl4on8p4csKF2HO9ggPhASuNwbpH2ktFUXqjLvemxC8PyrRhAf2Acba18-5lHSdifs7F',
+                            process.env.PAYPAL_CLIENT_ID_LIVE ?? '',
                         currency: 'EUR'
                     },
                     backend: {
                         secret_key_test:
-                            'EJ8C6ykNPqgdOT3sS-U6xpv_lWSJJFQxiQa9Y4s8E_Fgzoqub0lSpvZ_O_PQikgGdS-sepwCgZgnmJ5f',
+                            process.env.PAYPAL_SECRET_KEY_TEST ?? '',
                         secret_key_live:
-                            'EJXqm2IDDHG317LNpQVHT7hBmw3YJTNL7ARM3rHJ6YZs7xvoOH_CoiP3GzhpjSoX7lKAIL3bD7SebZpo',
+                            process.env.PAYPAL_SECRET_KEY_LIVE ?? '',
                         currency: 'EUR'
                     }
                 }),
@@ -441,16 +440,12 @@ export class PaymentGatewayAdminService {
                     '1757363598923-3k2517f9l.png,1757363605883-l5a5ysft4.png,1757363612133-obgu4glss.png,1757363619496-ozmnq0j8h.png,1757363627464-rqha2pzq1.png,1757363633768-9n3k79pyc.png',
                 config: JSON.stringify({
                     frontend: {
-                        pk_test:
-                            'pk_test_51RiGEJHVJoa047935tHwfZgsP32mZWcFbjNZ3N1cDmLt3qnjQ22ssn983bTgFxreae4KIr6hONExC5a5O170QT0a008bqW6aiu',
-                        pk_live:
-                            'pk_live_51RiGEJHVJoa047933bf0BU7CoLTiD0RBCGZdOde1GK6Y0KBcjiLdqvVXwZeEEDNSuFg7Ql6G5Fz9zT9GDHapsbKf000dePZfiV'
+                        pk_test: process.env.STRIPE_PK_TEST ?? '',
+                        pk_live: process.env.STRIPE_PK_LIVE ?? ''
                     },
                     backend: {
-                        sk_test:
-                            'sk_test_51RiGEJHVJoa04793otbBtosrWK9dEZQIpD2of5R3eUqv0zQViUyviKIQUHmxqXbwCwsDpHcIIpPvVt3RXwMEBzaQ00TQ1ljafL',
-                        sk_live:
-                            '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'
+                        sk_test: process.env.STRIPE_SK_TEST ?? '',
+                        sk_live: process.env.STRIPE_SK_LIVE ?? ''
                     }
                 })
             },
@@ -461,13 +456,15 @@ export class PaymentGatewayAdminService {
                 config: JSON.stringify({
                     frontend: {
                         api_key_pk_test:
-                            'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiIwMzU4NzNiYzkwZGNiZTM0NjI3ZTllMjBiZjA3ZDczMWNiMTFhNjczZThkMjMzOWExYjgxZDFmZGU5OWY4MjQ1YzY2MGUzZjQ3M2E1ZGNlOCIsImlhdCI6MTc0OTgzOTIyOS43ODc3OTMsIm5iZiI6MTc0OTgzOTIyOS43ODc3OTUsImV4cCI6MjA2NTM3MjAyOS43NDY4LCJzdWIiOiI1MDQyMjEzIiwic2NvcGVzIjpbXX0.cRgiavzjVkv_W76s3Y5X17gwo7rNl5sfJjOjES7ETnSBklEeOqvp4LlwZZUgDaetYNPWmDRowCTFZjsBDg0nhPr-kUwxIqfuq3bLi23E5njo8WItPr39eomfz5fGHraaPo_1esalhkrbkSyMC2qJhFupjrXRYFWchVvzUmC0h5m1kFk6fbO42n3i0kFyuF6EuUhDu0BImKnnECrkUJ-P1CdA8saZLMfVnRZrK3t8zMSUe-45XlOPpVbRK2NDKvDuRMH20g_WPrb-xKgA-YcSJ0hhcHCGA1WSRTeYy7y-rUS8oq-i6Blo_dMX20WQWpgyOvAkrQ-m9ZWt8SMVhFxMUA9l4BcWW6ZWvCjQybPVhcQoXKlPYLzCDlC7EIQlMbrcAEKLBz-FTZPDbeiGX1kKAI7ytnTyoH8cFj0CeEyt8fI8UfW54F2Oekq1bz4k5mjLjnvQ85NbmB37r8cSCGJsyDkiXazc7_2P_SkLL30l3CH8CtmhzIs0OsrX_EikHs7n',
-                        api_key_pk_live: ''
+                            process.env.LEMON_API_KEY_PK_TEST ?? '',
+                        api_key_pk_live:
+                            process.env.LEMON_API_KEY_PK_LIVE ?? ''
                     },
                     backend: {
                         api_key_sk_test:
-                            'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI0YjMwNzEwZmIxZjVhYmNhZGJiMzg4MDJiODQ2ZDZhNmYyNDNiYzExZDdlMGJmYWQzYjk0OWIxMzA0NWQzYzhiNDIzZDliYWUxYjA1MWM1YyIsImlhdCI6MTc0OTkwNjI2NS41NTcwMjYsIm5iZiI6MTc0OTkwNjI2NS41NTcwMjksImV4cCI6MjA2NTQzOTA2NS41MTcwNDIsInN1YiI6IjUwNDIyMTMiLCJzY29wZXMiOltdfQ.S6VqeIXQuKOcfUBTwevf9VAvuoPhGWdFg9UY2fd1hMwz7KdPcFUjHOwCnjuggon7_x1pROigb4xtepzjqrtUYVJ8u-bECajADFfswudgOb-OTrxCWJaR3iO6RN1rVsNoqSnAJt83H1W0u3kfpaMswh6oqL3z8sg3DozzqbPxOBIjIm1ccZfcCio1A32--BiNyeF1TgcNV1fy4r7dDY9qTSGZ5ZlK9auJw9mcNkIqny9L16Vm_NoY_qu0pOy4kUW8Mp4bUKwbaI-U9_yDqmSOF6ntkrhNY1vL-KuUZ-UB_E2lpyXwyb1MQ5zZQub37iuksXZfot7aBd8KJU6jZYQqznHqmR0Jb38xbUIDc5YWgzJLFkyw4I2i_8dm6UwMFWCtGsnv-OCAUbGkkPgU1KFDAtlRNM5qgBa_QgcsyShQstahiQDhDq5DWjfwvMtE0r5NBdns90YuVOrtYNzHb5zCjbBK-tav0-NqBwALlxalnfecx60qMYQdO0_jWZe4878d',
-                        api_key_sk_live: ''
+                            process.env.LEMON_API_KEY_SK_TEST ?? '',
+                        api_key_sk_live:
+                            process.env.LEMON_API_KEY_SK_LIVE ?? ''
                     }
                 })
             },
@@ -514,17 +511,17 @@ export class PaymentGatewayAdminService {
                 config: JSON.stringify({
                     frontend: {
                         access_key_test:
-                            '66e862c89d4d4d1f34063dc1967fbd64dece4da3cba90af65167fbb8503b2eb3',
+                            process.env.PAY2S_ACCESS_KEY_TEST ?? '',
                         access_key_live:
-                            'e18e8672ec808dd05ce371f095bac0bc839dc0e2f93ffe097d2706d77780bc10',
+                            process.env.PAY2S_ACCESS_KEY_LIVE ?? '',
                         partner_code_test: 'PAY2S7EPF0SB1ZP27W71',
                         bank_account_test: '99999999|acb'
                     },
                     backend: {
                         secret_key_test:
-                            '3cb0ba535605a7f1bad779d727bd234e8227073fc3f531b394524c2e4644ff97',
+                            process.env.PAY2S_SECRET_KEY_TEST ?? '',
                         secret_key_live:
-                            '59fe8c570f5406f8de92a8051497247415c2e047b5c2e7ac1e940f09849b40f4',
+                            process.env.PAY2S_SECRET_KEY_LIVE ?? '',
                         partner_code_live: 'PAY2SSK91H3KWR6IB6LJ',
                         bank_account_live: '1040746688|vcb'
                     }
