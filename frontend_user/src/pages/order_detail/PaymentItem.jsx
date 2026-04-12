@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
+import { useTranslation } from 'react-i18next';
 
 const PaymentItem = ({
     subtotal,
@@ -9,6 +10,7 @@ const PaymentItem = ({
     discount,
     vat
 }) => {
+    const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem('user'));
 
     return (
@@ -16,13 +18,13 @@ const PaymentItem = ({
             <Typography
                 variant={'body1'}
                 fontWeight={'bold'}>
-                Payment Information
+                {t('orderDetail.payment.title')}
             </Typography>
             <Box
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Sub Total:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.payment.subtotal')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -34,7 +36,7 @@ const PaymentItem = ({
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Delivery Fee:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.payment.deliveryFee')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -47,7 +49,7 @@ const PaymentItem = ({
                 justifyContent={'space-between'}
                 alignItems={'center'}>
                 <Typography variant={'body2'}>
-                    Vat(
+                    {t('orderDetail.payment.vat')}(
                     {subtotal === 0
                         ? '0.00'
                         : ((vat / subtotal) * 100).toLocaleString(undefined, {
@@ -67,7 +69,7 @@ const PaymentItem = ({
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Total:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.payment.total')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -79,7 +81,7 @@ const PaymentItem = ({
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Discount:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.payment.discount')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -91,7 +93,7 @@ const PaymentItem = ({
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Amount Due:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.payment.amountDue')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}

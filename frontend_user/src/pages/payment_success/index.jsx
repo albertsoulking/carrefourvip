@@ -7,8 +7,10 @@ import { useEffect, useRef, useState } from 'react';
 import api from '../../routes/api';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 export default function PaymentSuccessPage() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useSmartNavigate();
     const hasCalled = useRef(false);
@@ -68,34 +70,32 @@ export default function PaymentSuccessPage() {
                 variant={'h4'}
                 mt={2}>
                 <span style={{ display: errorText ? 'inline' : 'none' }}>
-                    Operation Completed
+                    {t('paymentResult.operationCompleted')}
                 </span>
                 <span
                     style={{
                         display: !errorText && !errorInvalid ? 'inline' : 'none'
                     }}>
-                    Payment Successful
+                    {t('paymentResult.successTitle')}
                 </span>
                 <span style={{ display: errorInvalid ? 'inline' : 'none' }}>
-                    Invalid Payment Link
+                    {t('paymentResult.invalidLink')}
                 </span>
             </Typography>
             <Typography
                 variant={'body1'}
                 mt={1}>
                 <span style={{ display: errorText ? 'inline' : 'none' }}>
-                    You have completed the payment, This checkout session has
-                    expired!
+                    {t('paymentResult.successExpired')}
                 </span>
                 <span
                     style={{
                         display: !errorText && !errorInvalid ? 'inline' : 'none'
                     }}>
-                    Thank you for your purchase! We have received your order.
+                    {t('paymentResult.successDescription')}
                 </span>
                 <span style={{ display: errorInvalid ? 'inline' : 'none' }}>
-                    This payment link is invalid, this checkout session has
-                    expired!
+                    {t('paymentResult.invalidDescription')}
                 </span>
             </Typography>
             <Button
@@ -103,7 +103,7 @@ export default function PaymentSuccessPage() {
                 color={errorInvalid ? 'inherit' : 'primary'}
                 sx={{ mt: 4 }}
                 onClick={() => navigate(web.home)}>
-                Back to Home
+                {t('common.backToHome')}
             </Button>
         </Box>
     );

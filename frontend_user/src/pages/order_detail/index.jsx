@@ -14,8 +14,10 @@ import RatingItem from './RatingItem';
 import web from '../../routes/web';
 import TopNavigator from '../layout/TopNavigator';
 import ModalPaymentCheckout from '../../components/ModalPaymentCheckout';
+import { useTranslation } from 'react-i18next';
 
 const OrderDetailPage = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const [order, setOrder] = useState(null);
     const [openPayment, setOpenPayment] = useState({
@@ -39,9 +41,9 @@ const OrderDetailPage = () => {
     return (
         <Box mt={8}>
             <TopNavigator
-                backText={'Orders'}
+                backText={t('orderDetail.backText')}
                 backPath={web.order}
-                title={'Order Detail'}
+                title={t('orderDetail.detail.title')}
             />
             {order ? (
                 <Box sx={{ p: 2 }}>
@@ -60,7 +62,7 @@ const OrderDetailPage = () => {
                             variant={'body1'}
                             fontWeight={'bold'}
                             mb={2}>
-                            Product Information
+                            {t('orderDetail.productTitle')}
                         </Typography>
                         {order &&
                             order.items.map((item) => (
@@ -100,11 +102,11 @@ const OrderDetailPage = () => {
                     justifyContent={'center'}
                     alignItems={'center'}
                     height={'70vh'}>
-                    <Typography
-                        variant={'body2'}
-                        color={'textSecondary'}
-                        fontStyle={'italic'}>
-                        No Order
+                        <Typography
+                            variant={'body2'}
+                            color={'textSecondary'}
+                            fontStyle={'italic'}>
+                        {t('orderDetail.noOrder')}
                     </Typography>
                 </Box>
             )}

@@ -8,5 +8,130 @@
         "btn": "Shopping",
         "desc": "Delivered within 1 hour! A wide range of food and daily necessities are waiting for you to choose!"
     }
+  },
+  "common": {
+    "backToHome": "Back to Home",
+    "add": "Add",
+    "update": "Update",
+    "delete": "Delete"
+  },
+  "payment": {
+    "title": "Payment",
+    "gatewayUnavailable": "Payment Gateway Unavailable!",
+    "goToOrderDetail": "Go to Order Detail Page",
+    "redirecting": "We are redirecting you to the payment page. Please wait patiently.",
+    "orderId": "Order ID",
+    "payLater": "Pay later",
+    "confirmPayment": "Confirm payment",
+    "pay2s": {
+      "orderInfo": "Order Info",
+      "orderType": "Order Type",
+      "payType": "Pay Type",
+      "responseTime": "Response Time"
+    },
+    "card": {
+      "accountName": "Account Name",
+      "accountNumber": "Account Number",
+      "bankName": "Bank Name",
+      "bankNameFull": "(Full Name: Joint Stock Commercial Bank for Foreign Trade of Vietnam)",
+      "swiftCode": "SWIFT Code",
+      "bankAddress": "Bank Address",
+      "copiedAccountName": "Copied Account Name!",
+      "copiedAccountNumber": "Copied Account Number!",
+      "copiedBankName": "Copied Bank Name!",
+      "copiedSwiftCode": "Copied SWIFT Code!",
+      "copiedBankAddress": "Copied Bank Address!"
+    }
+  },
+  "paymentSubmit": {
+    "title": "Operation Completed",
+    "description": "Hello, your order has been submitted and payment has been completed. We will arrange delivery of your product after confirming your payment.<br />Please check the [<strong>Carrefour</strong>] order details page for delivery progress.",
+    "checkOrderDetail": "<br />Please check the [<strong>Carrefour</strong>] order details page for delivery progress."
+  },
+  "orderDetail": {
+    "backText": "Orders",
+    "productTitle": "Product Information",
+    "noOrder": "No Order",
+    "detail": {
+      "title": "Order Detail",
+      "orderTime": "Order Time",
+      "paymentMethod": "Payment Method",
+      "deliveryMethod": "Delivery Method",
+      "shareLink": "Share Link",
+      "paymentLinkCopied": "Payment link copied!",
+      "clickToCopy": "Click to Copy"
+    },
+    "payment": {
+      "title": "Payment Information",
+      "subtotal": "Sub Total",
+      "deliveryFee": "Delivery Fee",
+      "vat": "Vat",
+      "total": "Total",
+      "discount": "Discount",
+      "amountDue": "Amount Due"
+    },
+    "address": {
+      "title": "Shipping Address",
+      "name": "Name",
+      "address": "Address",
+      "phone": "Phone"
+    }
+  },
+  "eventDetail": {
+    "resultTitle": "Lucky Wheel Result",
+    "youWon": "You Won",
+    "claim": "Claim",
+    "rewardReceived": "You have received a reward"
+  },
+  "wallet": {
+    "backText": "Profile",
+    "title": "My Wallet",
+    "balance": "Wallet Balance",
+    "tabs": {
+      "transactionHistory": "Transaction History",
+      "topUpHistory": "Top Up History",
+      "refundHistory": "Refund History"
+    },
+    "table": {
+      "status": "Status",
+      "amount": "Amount",
+      "postBalance": "Post Balance",
+      "date": "Date"
+    },
+    "topUp": {
+      "title": "Top Up",
+      "amount": "Amount",
+      "minimumAmount": "* Minimum amount 10 EUR *"
+    }
+  },
+  "address": {
+    "addTitle": "Add Address",
+    "editTitle": "Edit Address",
+    "deleteTitle": "Delete Address",
+    "deleteConfirm": "Are you sure you want to delete this address?",
+    "noAddressSelected": "No address selected for deletion.!",
+    "fields": {
+      "receiverName": "Receiver Name",
+      "receiverPhone": "Receiver Phone Number",
+      "zipCode": "Zip Code",
+      "addressLine": "Address/Street/House NO",
+      "cityRegion": "City/Region",
+      "stateProvince": "State/Province",
+      "country": "Country"
+    }
+  },
+  "deliveryAddress": {
+    "myAddresses": "My Addresses"
+  },
+  "paymentResult": {
+    "operationCompleted": "Operation Completed",
+    "successTitle": "Payment Successful",
+    "cancelTitle": "Payment Cancellation",
+    "invalidLink": "Invalid Payment Link",
+    "successExpired": "You have completed the payment, This checkout session has expired!",
+    "successDescription": "Thank you for your purchase! We have received your order.",
+    "cancelExpired": "You have cancelled the payment, This checkout session has expired!",
+    "cancelDescription": "Your payment has been cancelled. If you have any questions, please contact customer service.",
+    "invalidDescription": "This payment link is invalid, this checkout session has expired!"
   }
 }

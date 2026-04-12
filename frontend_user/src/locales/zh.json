@@ -8,5 +8,130 @@
         "btn": "购物",
         "desc": "1小时内送达！琳琅满目的食品以及日常必需品，等你来选购！"
     }
+  },
+  "common": {
+    "backToHome": "返回首页",
+    "add": "添加",
+    "update": "更新",
+    "delete": "删除"
+  },
+  "payment": {
+    "title": "支付",
+    "gatewayUnavailable": "支付网关不可用！",
+    "goToOrderDetail": "前往订单详情页",
+    "redirecting": "正在为你跳转到支付页面，请耐心等待。",
+    "orderId": "订单 ID",
+    "payLater": "稍后支付",
+    "confirmPayment": "确认支付",
+    "pay2s": {
+      "orderInfo": "订单信息",
+      "orderType": "订单类型",
+      "payType": "支付类型",
+      "responseTime": "响应时间"
+    },
+    "card": {
+      "accountName": "账户名称",
+      "accountNumber": "账号",
+      "bankName": "银行名称",
+      "bankNameFull": "（全称：越南外贸股份商业银行）",
+      "swiftCode": "SWIFT 代码",
+      "bankAddress": "银行地址",
+      "copiedAccountName": "已复制账户名称！",
+      "copiedAccountNumber": "已复制账号！",
+      "copiedBankName": "已复制银行名称！",
+      "copiedSwiftCode": "已复制 SWIFT 代码！",
+      "copiedBankAddress": "已复制银行地址！"
+    }
+  },
+  "paymentSubmit": {
+    "title": "操作已完成",
+    "description": "您好，您的订单已提交且支付已完成。我们会在确认收款后安排发货。<br />请前往 [<strong>家乐福</strong>] 订单详情页查看配送进度。",
+    "checkOrderDetail": "<br />请前往 [<strong>家乐福</strong>] 订单详情页查看配送进度。"
+  },
+  "orderDetail": {
+    "backText": "订单",
+    "productTitle": "商品信息",
+    "noOrder": "暂无订单",
+    "detail": {
+      "title": "订单详情",
+      "orderTime": "下单时间",
+      "paymentMethod": "支付方式",
+      "deliveryMethod": "配送方式",
+      "shareLink": "分享链接",
+      "paymentLinkCopied": "支付链接已复制！",
+      "clickToCopy": "点击复制"
+    },
+    "payment": {
+      "title": "支付信息",
+      "subtotal": "小计",
+      "deliveryFee": "配送费",
+      "vat": "增值税",
+      "total": "总计",
+      "discount": "优惠",
+      "amountDue": "应付金额"
+    },
+    "address": {
+      "title": "收货地址",
+      "name": "姓名",
+      "address": "地址",
+      "phone": "电话"
+    }
+  },
+  "eventDetail": {
+    "resultTitle": "幸运转盘结果",
+    "youWon": "你赢得了",
+    "claim": "领取",
+    "rewardReceived": "你已收到奖励"
+  },
+  "wallet": {
+    "backText": "个人中心",
+    "title": "我的钱包",
+    "balance": "钱包余额",
+    "tabs": {
+      "transactionHistory": "交易记录",
+      "topUpHistory": "充值记录",
+      "refundHistory": "退款记录"
+    },
+    "table": {
+      "status": "状态",
+      "amount": "金额",
+      "postBalance": "变更后余额",
+      "date": "日期"
+    },
+    "topUp": {
+      "title": "充值",
+      "amount": "金额",
+      "minimumAmount": "* 最低金额 10 欧元 *"
+    }
+  },
+  "address": {
+    "addTitle": "添加地址",
+    "editTitle": "编辑地址",
+    "deleteTitle": "删除地址",
+    "deleteConfirm": "确认删除这个地址吗？",
+    "noAddressSelected": "没有选中要删除的地址！",
+    "fields": {
+      "receiverName": "收货人姓名",
+      "receiverPhone": "收货人手机号",
+      "zipCode": "邮编",
+      "addressLine": "地址/街道/门牌号",
+      "cityRegion": "城市/地区",
+      "stateProvince": "州/省",
+      "country": "国家"
+    }
+  },
+  "deliveryAddress": {
+    "myAddresses": "我的地址"
+  },
+  "paymentResult": {
+    "operationCompleted": "操作已完成",
+    "successTitle": "支付成功",
+    "cancelTitle": "支付已取消",
+    "invalidLink": "无效的支付链接",
+    "successExpired": "你已完成支付，但当前结账会话已过期！",
+    "successDescription": "感谢你的购买！我们已经收到你的订单。",
+    "cancelExpired": "你已取消支付，当前结账会话已过期！",
+    "cancelDescription": "你的支付已取消。如有疑问，请联系客服。",
+    "invalidDescription": "当前支付链接无效，此结账会话已过期！"
   }
 }

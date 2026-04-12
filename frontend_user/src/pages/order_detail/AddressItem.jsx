@@ -1,16 +1,18 @@
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AddressItem = ({ userName, userAddress, userMobile }) => {
+    const { t } = useTranslation();
     return (
         <Box sx={{ mb: 2 }}>
             <Typography variant={'body1'} fontWeight={'bold'}>
-                Shipping Address
+                {t('orderDetail.address.title')}
             </Typography>
             <Box
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Name:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.address.name')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -22,7 +24,7 @@ const AddressItem = ({ userName, userAddress, userMobile }) => {
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Address:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.address.address')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}
@@ -34,7 +36,7 @@ const AddressItem = ({ userName, userAddress, userMobile }) => {
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}>
-                <Typography variant={'body2'}>Phone:</Typography>
+                <Typography variant={'body2'}>{t('orderDetail.address.phone')}:</Typography>
                 <Typography
                     variant={'body2'}
                     textAlign={'right'}

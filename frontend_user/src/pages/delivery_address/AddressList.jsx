@@ -8,8 +8,10 @@ import ModalAddLocation from '../address/ModalAddLocation';
 import ModalUpdateLocation from '../address/ModalUpdateLocation';
 import ModalDeleteLocation from '../address/ModalDeleteLocation';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const AddressList = ({ setOpen, setSelectAddress, setSelectedAddress }) => {
+    const { t } = useTranslation();
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openUpdateModal, setOpenUpdateModal] = useState({
         open: false,
@@ -57,7 +59,7 @@ const AddressList = ({ setOpen, setSelectAddress, setSelectedAddress }) => {
                     onClick={() => setOpen(false)}>
                     <CloseRounded />
                 </IconButton>
-                <Typography>My Addresses</Typography>
+                <Typography>{t('deliveryAddress.myAddresses')}</Typography>
                 <IconButton
                     color={'primary'}
                     onClick={() => setOpenAddModal(true)}>

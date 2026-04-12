@@ -7,8 +7,10 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function PaymentPay2sPage() {
+    const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useSmartNavigate();
     const [searchParams] = useSearchParams();
@@ -53,7 +55,7 @@ export default function PaymentPay2sPage() {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mx={3}>
-                <Typography variant={'body2'}>Order ID:</Typography>
+                <Typography variant={'body2'}>{t('payment.orderId')}:</Typography>
                 <Typography
                     variant={'body2'}
                     sx={{ float: 'right' }}>
@@ -65,7 +67,7 @@ export default function PaymentPay2sPage() {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mx={3}>
-                <Typography variant={'body2'}>Order Info:</Typography>
+                <Typography variant={'body2'}>{t('payment.pay2s.orderInfo')}:</Typography>
                 <Typography
                     variant={'body2'}
                     sx={{ float: 'right' }}>
@@ -77,7 +79,7 @@ export default function PaymentPay2sPage() {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mx={3}>
-                <Typography variant={'body2'}>Order Type:</Typography>
+                <Typography variant={'body2'}>{t('payment.pay2s.orderType')}:</Typography>
                 <Typography
                     variant={'body2'}
                     sx={{ float: 'right' }}>
@@ -89,7 +91,7 @@ export default function PaymentPay2sPage() {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mx={3}>
-                <Typography variant={'body2'}>Pay Type:</Typography>
+                <Typography variant={'body2'}>{t('payment.pay2s.payType')}:</Typography>
                 <Typography
                     variant={'body2'}
                     sx={{ float: 'right' }}>
@@ -101,7 +103,7 @@ export default function PaymentPay2sPage() {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mx={3}>
-                <Typography variant={'body2'}>Response Time:</Typography>
+                <Typography variant={'body2'}>{t('payment.pay2s.responseTime')}:</Typography>
                 <Typography
                     variant={'body2'}
                     sx={{ float: 'right' }}>
@@ -112,15 +114,17 @@ export default function PaymentPay2sPage() {
                 variant={'body1'}
                 mt={1}
                 p={1}>
-                <br /> Please check the [<strong>Carrefour</strong>] order
-                details page for delivery progress.
+                <Trans
+                    i18nKey={'paymentSubmit.checkOrderDetail'}
+                    components={{ br: <br />, strong: <strong /> }}
+                />
             </Typography>
             <Button
                 variant={'contained'}
                 color={'primary'}
                 sx={{ mt: 4 }}
                 onClick={() => navigate(web.home)}>
-                Back to Home
+                {t('common.backToHome')}
             </Button>
         </Box>
     );

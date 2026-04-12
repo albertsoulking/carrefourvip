@@ -10,6 +10,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const ModalDeleteLocation = ({
     open,
@@ -18,9 +19,10 @@ const ModalDeleteLocation = ({
     loadData,
     setSelectedAddress
 }) => {
+    const { t } = useTranslation();
     const handleOnDeleteClick = async () => {
         if (!data || !data.id) {
-            enqueueSnackbar('No address selected for deletion.!', {
+            enqueueSnackbar(t('address.noAddressSelected'), {
                 variant: 'error'
             });
             return;
@@ -55,7 +57,7 @@ const ModalDeleteLocation = ({
                     alignItems: 'center',
                     pb: 0
                 }}>
-                <span>Delete Address</span>
+                <span>{t('address.deleteTitle')}</span>
                 <IconButton
                     color={'error'}
                     onClick={() => setOpen({ open: false, data: null })}>
@@ -66,7 +68,7 @@ const ModalDeleteLocation = ({
                 sx={{ pb: 0 }}
                 dividers>
                 <DialogContentText mb={2}>
-                    Are you sure you want to delete this address?
+                    {t('address.deleteConfirm')}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -76,7 +78,7 @@ const ModalDeleteLocation = ({
                         textTransform: 'capitalize'
                     }}
                     onClick={handleOnDeleteClick}>
-                    Delete
+                    {t('common.delete')}
                 </Button>
             </DialogActions>
         </Dialog>

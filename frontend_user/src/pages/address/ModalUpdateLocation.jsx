@@ -11,37 +11,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import api from '../../routes/api';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const ModalUpdateLocation = ({ open, data = [], setOpen, loadData }) => {
+    const { t } = useTranslation();
     const fields = [
-        {
-            label: 'Receiver Name',
-            value: data?.receiverName ?? ''
-        },
-        {
-            label: 'Receiver Phone Number',
-            value: data?.receiverMobile ?? ''
-        },
-        {
-            label: 'Zip Code',
-            value: data?.postalCode ?? ''
-        },
-        {
-            label: 'Address/Street/House NO',
-            value: data?.address ?? ''
-        },
-        {
-            label: 'City/Region',
-            value: data?.city ?? ''
-        },
-        {
-            label: 'State/Province',
-            value: data?.state ?? ''
-        },
-        {
-            label: 'Country',
-            value: data?.country ?? ''
-        }
+        { label: t('address.fields.receiverName'), value: data?.receiverName ?? '' },
+        { label: t('address.fields.receiverPhone'), value: data?.receiverMobile ?? '' },
+        { label: t('address.fields.zipCode'), value: data?.postalCode ?? '' },
+        { label: t('address.fields.addressLine'), value: data?.address ?? '' },
+        { label: t('address.fields.cityRegion'), value: data?.city ?? '' },
+        { label: t('address.fields.stateProvince'), value: data?.state ?? '' },
+        { label: t('address.fields.country'), value: data?.country ?? '' }
     ];
 
     useEffect(() => {
@@ -99,7 +80,7 @@ const ModalUpdateLocation = ({ open, data = [], setOpen, loadData }) => {
                     alignItems: 'center',
                     pb: 0
                 }}>
-                <span>Edit Address</span>
+                <span>{t('address.editTitle')}</span>
                 <IconButton
                     color={'error'}
                     onClick={() => setOpen({ open: false, data: null })}>
@@ -135,7 +116,7 @@ const ModalUpdateLocation = ({ open, data = [], setOpen, loadData }) => {
                         textTransform: 'capitalize'
                     }}
                     onClick={handleOnUpdateClick}>
-                    Update
+                    {t('common.update')}
                 </Button>
             </DialogContent>
         </Dialog>

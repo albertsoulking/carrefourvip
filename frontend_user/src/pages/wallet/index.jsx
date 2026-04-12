@@ -20,8 +20,10 @@ import web from '../../routes/web';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
 import TopNavigator from '../layout/TopNavigator';
+import { useTranslation } from 'react-i18next';
 
 export default function WalletPage() {
+    const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useSmartNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -38,9 +40,9 @@ export default function WalletPage() {
     });
 
     const tabStatus = [
-        'Transaction History', // 0
-        'Top Up History', // 1
-        'Refund History' // 2
+        t('wallet.tabs.transactionHistory'),
+        t('wallet.tabs.topUpHistory'),
+        t('wallet.tabs.refundHistory')
     ];
 
     useEffect(() => {
@@ -78,9 +80,9 @@ export default function WalletPage() {
             mt={8}
             px={2}>
             <TopNavigator
-                backText={'Profile'}
+                backText={t('wallet.backText')}
                 backPath={web.profile}
-                title={'My Wallet'}
+                title={t('wallet.title')}
             />
             <Paper
                 sx={{
@@ -92,7 +94,7 @@ export default function WalletPage() {
                 }}
                 elevation={2}>
                 <Box>
-                    <Typography variant={'h6'}>Wallet Balance</Typography>
+                    <Typography variant={'h6'}>{t('wallet.balance')}</Typography>
                     <Typography
                         variant={'h4'}
                         color={'action'}
@@ -155,16 +157,16 @@ export default function WalletPage() {
                         <TableHead>
                             <TableRow>
                                 <TableCell sx={{ fontSize: 14 }}>
-                                    Status
+                                    {t('wallet.table.status')}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
-                                    Amount
+                                    {t('wallet.table.amount')}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
-                                    Post Balance
+                                    {t('wallet.table.postBalance')}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
-                                    Date
+                                    {t('wallet.table.date')}
                                 </TableCell>
                             </TableRow>
                         </TableHead>

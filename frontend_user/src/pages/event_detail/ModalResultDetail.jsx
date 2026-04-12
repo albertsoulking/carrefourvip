@@ -12,8 +12,10 @@ import { useState, useEffect } from 'react';
 import api from '../../routes/api';
 import { CloseRounded } from '@mui/icons-material';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const ModalResultDetail = ({ open, data, setOpen, eventId }) => {
+    const { t } = useTranslation();
     const [rewardId, setRewardId] = useState(null);
 
     useEffect(() => {
@@ -40,7 +42,9 @@ const ModalResultDetail = ({ open, data, setOpen, eventId }) => {
 
         await api.event.claimReward(payload);
         setOpen({ open: false, data: null });
-        enqueueSnackbar('You have received a reward', {  variant: 'success' });
+        enqueueSnackbar(t('eventDetail.rewardReceived'), {
+            variant: 'success'
+        });
     };
 
     return (
@@ -50,7 +54,7 @@ const ModalResultDetail = ({ open, data, setOpen, eventId }) => {
             <Box
                 display={'flex'}
                 justifyContent={'space-between'}>
-                <DialogTitle>Lucky Wheel Result</DialogTitle>
+                <DialogTitle>{t('eventDetail.resultTitle')}</DialogTitle>
                 <IconButton
                     color={'error'}
                     onClick={() => setOpen({ open: false, data: null })}>
@@ -62,7 +66,7 @@ const ModalResultDetail = ({ open, data, setOpen, eventId }) => {
                     textAlign={'center'}
                     fontWeight={'bold'}
                     fontSize={20}>
-                    You Won
+                    {t('eventDetail.youWon')}
                 </DialogContentText>
                 <Typography
                     textAlign={'center'}
@@ -78,7 +82,7 @@ const ModalResultDetail = ({ open, data, setOpen, eventId }) => {
                     variant={'contained'}
                     sx={{ width: 150 }}
                     onClick={claimReward}>
-                    Claim
+                    {t('eventDetail.claim')}
                 </Button>
             </Box>
         </Dialog>

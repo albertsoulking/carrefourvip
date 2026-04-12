@@ -2,8 +2,10 @@ import { Box, Typography, Button } from '@mui/material';
 import web from '../../routes/web';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function PaymentSubmitPage() {
+    const { t } = useTranslation();
     const navigate = useSmartNavigate();
 
     return (
@@ -17,24 +19,23 @@ export default function PaymentSubmitPage() {
             <Typography
                 variant={'h4'}
                 mt={2}>
-                Operation Completed
+                {t('paymentSubmit.title')}
             </Typography>
             <Typography
                 variant={'body1'}
                 mt={1}
                 p={1}>
-                Hello, your order has been submitted and payment has been
-                completed. We will arrange delivery of your product after
-                confirming your payment.
-                <br /> Please check the [<strong>Carrefour</strong>] order
-                details page for delivery progress.
+                <Trans
+                    i18nKey={'paymentSubmit.description'}
+                    components={{ br: <br />, strong: <strong /> }}
+                />
             </Typography>
             <Button
                 variant={'contained'}
                 color={'primary'}
                 sx={{ mt: 4 }}
                 onClick={() => navigate(web.home)}>
-                Back to Home
+                {t('common.backToHome')}
             </Button>
         </Box>
     );

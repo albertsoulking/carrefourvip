@@ -7,8 +7,10 @@ import {
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ModalTopUp = ({ open, setOpen }) => {
+    const { t } = useTranslation();
     const [amount, setAmount] = useState('');
 
     const handleOnClose = () => {
@@ -20,7 +22,7 @@ const ModalTopUp = ({ open, setOpen }) => {
         <Dialog
             open={open}
             onClose={handleOnClose}>
-            <DialogTitle>Top Up</DialogTitle>
+            <DialogTitle>{t('wallet.topUp.title')}</DialogTitle>
             <IconButton
                 sx={{ position: 'absolute', right: 5, top: 5 }}
                 onClick={handleOnClose}>
@@ -31,8 +33,8 @@ const ModalTopUp = ({ open, setOpen }) => {
                     value={amount}
                     sx={{ mb: 2 }}
                     type={'number'}
-                    label={'Amount'}
-                    helperText={'* Minimum amount 10 EUR *'}
+                    label={t('wallet.topUp.amount')}
+                    helperText={t('wallet.topUp.minimumAmount')}
                     size={'small'}
                     fullWidth
                     onChange={(e) => setAmount(e.target.value)}

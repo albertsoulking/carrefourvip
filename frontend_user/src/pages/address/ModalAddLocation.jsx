@@ -11,37 +11,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import api from '../../routes/api';
 import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const ModalAddLocation = ({ open, loadData, setOpen }) => {
+    const { t } = useTranslation();
     const fields = [
-        {
-            label: 'Receiver Name',
-            value: ''
-        },
-        {
-            label: 'Receiver Phone Number',
-            value: ''
-        },
-        {
-            label: 'Zip Code',
-            value: ''
-        },
-        {
-            label: 'Address/Street/House NO',
-            value: ''
-        },
-        {
-            label: 'City/Region',
-            value: ''
-        },
-        {
-            label: 'State/Province',
-            value: ''
-        },
-        {
-            label: 'Country',
-            value: ''
-        }
+        { label: t('address.fields.receiverName'), value: '' },
+        { label: t('address.fields.receiverPhone'), value: '' },
+        { label: t('address.fields.zipCode'), value: '' },
+        { label: t('address.fields.addressLine'), value: '' },
+        { label: t('address.fields.cityRegion'), value: '' },
+        { label: t('address.fields.stateProvince'), value: '' },
+        { label: t('address.fields.country'), value: '' }
     ];
 
     const [formData, setFormData] = useState(fields);
@@ -94,7 +75,7 @@ const ModalAddLocation = ({ open, loadData, setOpen }) => {
                     alignItems: 'center',
                     pb: 0
                 }}>
-                <span>Add Address</span>
+                <span>{t('address.addTitle')}</span>
                 <IconButton
                     color={'error'}
                     onClick={() => setOpen(false)}>
@@ -130,7 +111,7 @@ const ModalAddLocation = ({ open, loadData, setOpen }) => {
                         textTransform: 'capitalize'
                     }}
                     onClick={handleOnAddClick}>
-                    Add
+                    {t('common.add')}
                 </Button>
             </DialogContent>
         </Dialog>
