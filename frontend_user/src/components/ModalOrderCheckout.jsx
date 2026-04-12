@@ -70,19 +70,19 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
 
         // 判空
         if (!res?.data || Object.keys(res.data).length === 0) return;
-
+        
         const businessHours = normalizeArray(res.data.businessHours);
 
         // 今天星期几
         const todayIndex = new Date().getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
         const map = [
-            'sunday',
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday'
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday'
         ];
         const todayName = map[todayIndex];
 
@@ -121,7 +121,7 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
         const isOpen = now >= start && now < end;
         // setOpeningHours(isOpen);
         setOpeningHours(true); // 先不限制营业时间
-
+        
         // console.log({
         //     now: now.toISO(),
         //     start: start.toISO(),
