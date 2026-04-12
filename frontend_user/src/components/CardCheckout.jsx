@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useSmartNavigate } from '../hooks/useSmartNavigate';
 import web from '../routes/web';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 export default function CardCheckout({ orderId, setOpen, config }) {
+    const { t } = useTranslation();
     const navigate = useSmartNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -35,7 +37,7 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                 <Typography
                     fontSize={12}
                     sx={{ mb: 1 }}>
-                    <strong>Account Name: </strong>
+                    <strong>{t('payment.card.accountName')}: </strong>
                     <span>{config.accountName}</span>
                     <CopyAllRounded
                         fontSize={'small'}
@@ -46,7 +48,7 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                         }}
                         onClick={() => {
                             navigator.clipboard.writeText(config.accountName);
-                            enqueueSnackbar('Copied Account Name!', {
+                            enqueueSnackbar(t('payment.card.copiedAccountName'), {
                                 variant: 'primary'
                             });
                         }}
@@ -55,7 +57,7 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                 <Typography
                     fontSize={12}
                     sx={{ mb: 1 }}>
-                    <strong>Account Number: </strong>
+                    <strong>{t('payment.card.accountNumber')}: </strong>
                     <span>{config.accountNumber}</span>
                     <CopyAllRounded
                         fontSize={'small'}
@@ -66,16 +68,19 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                         }}
                         onClick={() => {
                             navigator.clipboard.writeText(config.accountNumber);
-                            enqueueSnackbar('Copied Account Number!', {
-                                variant: 'primary'
-                            });
+                            enqueueSnackbar(
+                                t('payment.card.copiedAccountNumber'),
+                                {
+                                    variant: 'primary'
+                                }
+                            );
                         }}
                     />
                 </Typography>
                 <Typography
                     fontSize={12}
                     sx={{ mb: 1 }}>
-                    <strong>Bank Name: </strong>
+                    <strong>{t('payment.card.bankName')}: </strong>
                     <span>{config.bankName}</span>
                     <CopyAllRounded
                         fontSize={'small'}
@@ -86,21 +91,22 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                         }}
                         onClick={() => {
                             navigator.clipboard.writeText(config.bankName);
-                            enqueueSnackbar('Copied Bank Name!', {
+                            enqueueSnackbar(t('payment.card.copiedBankName'), {
                                 variant: 'primary'
                             });
                         }}
                     />
-                    <br />
-                    <span>
-                        (Full Name: Joint Stock Commercial Bank for Foreign
-                        Trade of Vietnam)
-                    </span>
                 </Typography>
                 <Typography
                     fontSize={12}
                     sx={{ mb: 1 }}>
-                    <strong>SWIFT Code: </strong>
+                    <br />
+                    <span>{t('payment.card.bankNameFull')}</span>
+                </Typography>
+                <Typography
+                    fontSize={12}
+                    sx={{ mb: 1 }}>
+                    <strong>{t('payment.card.swiftCode')}: </strong>
                     <span>{config.swiftCode}</span>
                     <CopyAllRounded
                         fontSize={'small'}
@@ -111,14 +117,14 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                         }}
                         onClick={() => {
                             navigator.clipboard.writeText(config.swiftCode);
-                            enqueueSnackbar('Copied SWIFT Code!', {
+                            enqueueSnackbar(t('payment.card.copiedSwiftCode'), {
                                 variant: 'primary'
                             });
                         }}
                     />
                 </Typography>
                 <Typography fontSize={12}>
-                    <strong>Bank Address: </strong>
+                    <strong>{t('payment.card.bankAddress')}: </strong>
                     <span>{config.bankAddress}</span>
                     <CopyAllRounded
                         fontSize={'small'}
@@ -129,9 +135,12 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                         }}
                         onClick={() => {
                             navigator.clipboard.writeText(config.bankAddress);
-                            enqueueSnackbar('Copied Bank Address!', {
-                                variant: 'primary'
-                            });
+                            enqueueSnackbar(
+                                t('payment.card.copiedBankAddress'),
+                                {
+                                    variant: 'primary'
+                                }
+                            );
                         }}
                     />
                 </Typography>
@@ -148,14 +157,14 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                     loading={loading}
                     sx={{ textTransform: 'capitalize' }}
                     onClick={handleOnPayLater}>
-                    Pay later
+                    {t('payment.payLater')}
                 </Button>
                 <Button
                     variant={'contained'}
                     size={'small'}
                     sx={{ textTransform: 'capitalize' }}
                     onClick={handleSubmit}>
-                    Confirm payment
+                    {t('payment.confirmPayment')}
                 </Button>
             </Box>
         </Box>

@@ -23,8 +23,10 @@ import {
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({});
     const [imageList, setImageList] = useState([]);
     const [noteList, setNoteList] = useState([]);
@@ -33,31 +35,31 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
 
     const textColor = [
         {
-            label: '红色',
+            label: t('settingPayment.colors.red'),
             value: 'error'
         },
         {
-            label: '蓝色',
+            label: t('settingPayment.colors.blue'),
             value: 'primary'
         },
         {
-            label: '橘色',
+            label: t('settingPayment.colors.orange'),
             value: 'warning'
         },
         {
-            label: '紫色',
+            label: t('settingPayment.colors.purple'),
             value: 'secondary'
         },
         {
-            label: '绿色',
+            label: t('settingPayment.colors.green'),
             value: 'success'
         },
         {
-            label: '青色',
+            label: t('settingPayment.colors.cyan'),
             value: 'info'
         },
         {
-            label: '灰色',
+            label: t('settingPayment.colors.gray'),
             value: 'textDisabled'
         }
     ];
@@ -90,7 +92,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
             setNoteList([]);
             setNoticeList([]);
 
-            enqueueSnackbar('已更新支付通道!', {
+            enqueueSnackbar(t('settingPayment.snackbar.updated'), {
                 variant: 'success'
             });
         } catch (error) {
@@ -119,7 +121,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
             fullWidth
             container={document.body}
             disablePortal={false}>
-            <DialogTitle>支付详情</DialogTitle>
+            <DialogTitle>{t('settingPayment.modalDetail.title')}</DialogTitle>
             <DialogContent dividers>
                 <Box
                     display={'flex'}
@@ -145,7 +147,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                             size={'small'}
                             sx={{ mt: 1 }}
                             fullWidth>
-                            上传新图标
+                            {t('settingPayment.modalDetail.uploadNewLogo')}
                             <input
                                 type={'file'}
                                 onChange={async (e) => {
@@ -177,7 +179,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                     <Box>
                         <TextField
                             name={'name'}
-                            label={'名称'}
+                            label={t('table.name')}
                             value={formData?.name || ''}
                             fullWidth
                             margin={'dense'}
@@ -188,7 +190,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         />
                         <TextField
                             name={'code'}
-                            label={'编号'}
+                            label={t('settingPayment.fields.code')}
                             value={formData?.provider?.code || ''}
                             fullWidth
                             margin={'dense'}
@@ -197,7 +199,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         />
                         <TextField
                             name={'provider'}
-                            label={'供应商'}
+                            label={t('settingPayment.fields.provider')}
                             value={formData?.provider?.name || ''}
                             fullWidth
                             margin={'dense'}
@@ -210,7 +212,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                 <Typography
                     fontSize={12}
                     mb={1}>
-                    右侧多图标
+                    {t('settingPayment.modalDetail.sideImages')}
                 </Typography>
                 <Box
                     display={'flex'}
@@ -294,7 +296,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                 <Typography
                     fontSize={12}
                     mb={1}>
-                    提示多图标
+                    {t('settingPayment.modalDetail.noticeImages')}
                 </Typography>
                 <Box
                     display={'flex'}
@@ -378,7 +380,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                 <Typography
                     fontSize={12}
                     mb={1}>
-                    提示信息
+                    {t('settingPayment.modalDetail.notes')}
                 </Typography>
                 {noteList.map((note, index) => (
                     <Box
@@ -389,10 +391,10 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         <FormControl
                             fullWidth
                             size={'small'}>
-                            <InputLabel>颜色</InputLabel>
+                            <InputLabel>{t('settingPayment.fields.color')}</InputLabel>
                             <Select
                                 name={'type'}
-                                label={'颜色'}
+                                label={t('settingPayment.fields.color')}
                                 value={note.color || ''}
                                 onChange={(e) => {
                                     const newList = [...noteList];
@@ -410,7 +412,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         </FormControl>
                         <TextField
                             name={'text'}
-                            label={'文本'}
+                            label={t('settingPayment.fields.text')}
                             value={note.text || ''}
                             fullWidth
                             size={'small'}
@@ -423,18 +425,18 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         <FormControl
                             fullWidth
                             size={'small'}>
-                            <InputLabel>显示</InputLabel>
+                            <InputLabel>{t('settingPayment.fields.visible')}</InputLabel>
                             <Select
                                 name={'visible'}
-                                label={'显示'}
+                                label={t('settingPayment.fields.visible')}
                                 value={note.visible || ''}
                                 onChange={(e) => {
                                     const newList = [...noteList];
                                     newList[index].visible = e.target.value;
                                     setNoteList(newList);
                                 }}>
-                                <MenuItem value={0}>否</MenuItem>
-                                <MenuItem value={1}>是</MenuItem>
+                                <MenuItem value={0}>{t('common.no')}</MenuItem>
+                                <MenuItem value={1}>{t('common.yes')}</MenuItem>
                             </Select>
                         </FormControl>
                         <IconButton
@@ -458,13 +460,13 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                             { text: '', color: 'error', visible: 1 }
                         ])
                     }>
-                    添加
+                    {t('common.add')}
                 </Button>
                 <Divider sx={{ my: 2 }} />
                 <Typography
                     fontSize={12}
                     mb={1}>
-                    通知信息 (状态改为'维护'后显示)
+                    {t('settingPayment.modalDetail.notices')}
                 </Typography>
                 {noticeList.map((notice, index) => (
                     <Box
@@ -475,10 +477,10 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         <FormControl
                             fullWidth
                             size={'small'}>
-                            <InputLabel>颜色</InputLabel>
+                            <InputLabel>{t('settingPayment.fields.color')}</InputLabel>
                             <Select
                                 name={'type'}
-                                label={'颜色'}
+                                label={t('settingPayment.fields.color')}
                                 value={notice.color || ''}
                                 onChange={(e) => {
                                     const newList = [...noticeList];
@@ -496,7 +498,7 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         </FormControl>
                         <TextField
                             name={'text'}
-                            label={'文本'}
+                            label={t('settingPayment.fields.text')}
                             value={notice.text || ''}
                             fullWidth
                             size={'small'}
@@ -509,18 +511,18 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                         <FormControl
                             fullWidth
                             size={'small'}>
-                            <InputLabel>显示</InputLabel>
+                            <InputLabel>{t('settingPayment.fields.visible')}</InputLabel>
                             <Select
                                 name={'visible'}
-                                label={'显示'}
+                                label={t('settingPayment.fields.visible')}
                                 value={notice.visible || ''}
                                 onChange={(e) => {
                                     const newList = [...noticeList];
                                     newList[index].visible = e.target.value;
                                     setNoticeList(newList);
                                 }}>
-                                <MenuItem value={0}>否</MenuItem>
-                                <MenuItem value={1}>是</MenuItem>
+                                <MenuItem value={0}>{t('common.no')}</MenuItem>
+                                <MenuItem value={1}>{t('common.yes')}</MenuItem>
                             </Select>
                         </FormControl>
                         <IconButton
@@ -544,21 +546,21 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                             { text: '', color: 'error', visible: 1 }
                         ])
                     }>
-                    添加
+                    {t('common.add')}
                 </Button>
                 <Divider sx={{ my: 2 }} />
                 <Typography
                     fontSize={12}
                     mb={1}>
-                    黑名单
+                    {t('settingPayment.fields.blacklist')}
                 </Typography>
                 <TextField
                     name={'blackList'}
-                    label={'会员ID'}
+                    label={t('settingPayment.fields.userIds')}
                     value={formData.blackList || ''}
                     fullWidth
                     size={'small'}
-                    helperText={'多个ID用逗号 "," 隔开'}
+                    helperText={t('settingPayment.modalDetail.blacklistHelp')}
                     onChange={(e) =>
                         handleInputChange('blackList', e.target.value)
                     }
@@ -575,14 +577,14 @@ const ModalDetailPayment = ({ open, data, setOpen, loadData, searchModal }) => {
                     variant={'outlined'}
                     color={'default'}
                     sx={{ width: 100 }}>
-                    关闭
+                    {t('common.close')}
                 </Button>
                 <Button
                     onClick={handleOnSave}
                     variant={'contained'}
                     color={'primary'}
                     sx={{ width: 100 }}>
-                    保存更改
+                    {t('common.saveChanges')}
                 </Button>
             </DialogActions>
         </Dialog>

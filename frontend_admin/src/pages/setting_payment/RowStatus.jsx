@@ -1,25 +1,28 @@
 import { Chip, Box, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const OPTIONS = [
+const getOptions = (t) => [
     {
-        label: '启用',
+        label: t('settingPayment.status.active'),
         value: 'active',
         color: 'primary'
     },
     {
-        label: '禁用',
+        label: t('settingPayment.status.inactive'),
         value: 'inactive',
         color: 'default'
     },
     {
-        label: '维护',
+        label: t('settingPayment.status.maintenance'),
         value: 'maintenance',
         color: 'warning'
     }
 ];
 
 export default function RowStatus({ status, permissions, onChange }) {
+    const { t } = useTranslation();
+    const OPTIONS = getOptions(t);
     const current = OPTIONS.find((s) => s.value === status);
     const [anchorEl, setAnchorEl] = useState(null);
 

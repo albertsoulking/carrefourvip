@@ -30,25 +30,11 @@ import {
 } from '@mui/icons-material';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const TAB_KEYS = ['frontend', 'backend'];
 const SECTION_KEYS = ['general', 'test', 'live'];
 const CURRENCY_OPTIONS = ['USD', 'EUR', 'MMK'];
-
-const SECTION_META = {
-    general: {
-        title: 'General Config',
-        description: 'Shared values for both environments.'
-    },
-    test: {
-        title: 'Test Config',
-        description: 'Sandbox credentials and test-only values.'
-    },
-    live: {
-        title: 'Live Config',
-        description: 'Production credentials and live-only values.'
-    }
-};
 
 const normalizeScope = (value) =>
     value && typeof value === 'object' && !Array.isArray(value) ? value : {};
@@ -66,8 +52,6 @@ const DEFAULT_TEMPLATES = {
             currency: 'EUR'
         },
         backend: {
-            client_id_test: '',
-            client_id_live: '',
             secret_key_test: '',
             secret_key_live: '',
             currency: 'EUR'
@@ -75,114 +59,85 @@ const DEFAULT_TEMPLATES = {
     },
     stripe: {
         frontend: {
-            publishable_key_test: '',
-            publishable_key_live: '',
-            currency: 'EUR'
+            pk_test: '',
+            pk_live: ''
         },
         backend: {
-            secret_key_test: '',
-            secret_key_live: '',
-            webhook_secret_test: '',
-            webhook_secret_live: '',
-            currency: 'EUR'
+            sk_test: '',
+            sk_live: ''
         }
     },
     wise: {
         frontend: {
-            account_name: '',
-            currency: 'EUR'
         },
         backend: {
-            account_number_live: '',
-            iban_live: '',
-            swift_live: '',
-            currency: 'EUR'
         }
     },
     lemon: {
         frontend: {
-            store_id_test: '',
-            store_id_live: '',
-            currency: 'EUR'
+            api_key_pk_test: '',
+            api_key_pk_live: ''
         },
         backend: {
-            api_key_test: '',
-            api_key_live: '',
-            variant_id_test: '',
-            variant_id_live: '',
-            currency: 'EUR'
+            api_key_sk_test: '',
+            api_key_sk_live: ''
         }
     },
     pay2s: {
         frontend: {
-            merchant_code_test: '',
-            merchant_code_live: '',
-            currency: 'EUR'
+            access_key_test: '',
+            access_key_live: '',
+            partner_code_test: '',
+            bank_account_test: ''
         },
         backend: {
-            api_key_test: '',
-            api_key_live: '',
             secret_key_test: '',
             secret_key_live: '',
-            currency: 'EUR'
+            partner_code_live: '',
+            bank_account_live: ''
         }
     },
     behalf: {
         frontend: {
-            account_name: '',
-            currency: 'EUR'
+            payment_link: '',
+            note: ''
         },
         backend: {
-            account_number_live: '',
-            reference_live: '',
-            currency: 'EUR'
         }
     },
     card: {
         frontend: {
-            account_name: '',
-            card_number_live: '',
-            currency: 'EUR'
+            accountName: '',
+            accountNumber: '',
+            bankName: '',
+            swiftCode: '',
+            bankAddress: '',
+            note: ''
         },
         backend: {
-            bank_name_live: '',
-            card_number_live: '',
-            currency: 'EUR'
         }
     },
     starpay: {
         frontend: {
-            wallet_address_live: '',
-            currency: 'MMK'
+            crypto_address: '',
+            note: ''
         },
         backend: {
-            api_key_live: '',
-            secret_key_live: '',
-            wallet_address_live: '',
-            currency: 'MMK'
         }
     },
     faf: {
         frontend: {
             account_name: '',
-            currency: 'EUR'
+            payment_link: '',
+            note: ''
         },
         backend: {
-            paypal_email_live: '',
-            note_live: '',
-            currency: 'EUR'
         }
     },
     default: {
         frontend: {
-            client_id_test: '',
-            client_id_live: '',
-            currency: 'EUR'
         },
         backend: {
-            secret_key_test: '',
-            secret_key_live: '',
-            currency: 'EUR'
         }
     }
 };
@@ -265,17 +220,19 @@ const groupConfigFields = (scopeConfig) => {
     return grouped;
 };
 
-const validateCreateForm = (formData, formConfig) => {
+const validateCreateForm = (formData, formConfig, t) => {
     const nextErrors = {};
 
     if (!formData.providerId) {
-        nextErrors.providerId = '请选择供应商';
+        nextErrors.providerId = t('settingPayment.form.providerRequired');
     }
 
     TAB_KEYS.forEach((scope) => {
         Object.entries(normalizeScope(formConfig?.[scope])).forEach(([key, value]) => {
             if (String(value ?? '').trim() === '') {
-                nextErrors[`config.${scope}.${key}`] = 'This field is required.';
+                nextErrors[`config.${scope}.${key}`] = t(
+                    'settingPayment.form.requiredField'
+                );
             }
         });
     });
@@ -291,22 +248,38 @@ const ConfigSection = ({
     errors,
     onTogglePassword,
     onCopy,
-    onChange
+    onChange,
+    t
 }) => {
     if (fields.length === 0) return null;
+
+    const sectionMeta = {
+        general: {
+            title: t('settingPayment.config.general.title'),
+            description: t('settingPayment.config.general.description')
+        },
+        test: {
+            title: t('settingPayment.config.test.title'),
+            description: t('settingPayment.config.test.description')
+        },
+        live: {
+            title: t('settingPayment.config.live.title'),
+            description: t('settingPayment.config.live.description')
+        }
+    };
 
     return (
         <Box>
             <Typography
                 variant={'subtitle1'}
                 sx={{ fontWeight: 700, mb: 0.5 }}>
-                {SECTION_META[sectionKey].title}
+                {sectionMeta[sectionKey].title}
             </Typography>
             <Typography
                 variant={'body2'}
                 color={'text.secondary'}
                 sx={{ mb: 2 }}>
-                {SECTION_META[sectionKey].description}
+                {sectionMeta[sectionKey].description}
             </Typography>
             <Stack spacing={2}>
                 {fields.map((field) => {
@@ -336,7 +309,10 @@ const ConfigSection = ({
                                     ))}
                                 </Select>
                                 <FormHelperText>
-                                    {error || 'Select the settlement currency.'}
+                                    {error ||
+                                        t(
+                                            'settingPayment.form.selectSettlementCurrency'
+                                        )}
                                 </FormHelperText>
                             </FormControl>
                         );
@@ -359,7 +335,10 @@ const ConfigSection = ({
                                 endAdornment: (
                                     <InputAdornment position={'end'}>
                                         {field.type === 'password' && (
-                                            <Tooltip title={'Show / hide'}>
+                                            <Tooltip
+                                                title={t(
+                                                    'settingPayment.actions.showOrHide'
+                                                )}>
                                                 <IconButton
                                                     edge={'end'}
                                                     onClick={() => onTogglePassword(fieldId)}>
@@ -371,7 +350,10 @@ const ConfigSection = ({
                                                 </IconButton>
                                             </Tooltip>
                                         )}
-                                        <Tooltip title={'Copy value'}>
+                                        <Tooltip
+                                            title={t(
+                                                'settingPayment.actions.copyValue'
+                                            )}>
                                             <IconButton
                                                 edge={'end'}
                                                 onClick={() => onCopy(field.value, field.label)}>
@@ -395,6 +377,7 @@ export default function ModalCreate({
     loadData,
     searchModal
 }) {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         providerId: ''
     });
@@ -514,22 +497,22 @@ export default function ModalCreate({
     const handleCopy = async (value, label) => {
         try {
             await navigator.clipboard.writeText(String(value ?? ''));
-            enqueueSnackbar(`${label} copied.`, {
+            enqueueSnackbar(t('settingPayment.snackbar.copied', { label }), {
                 variant: 'success'
             });
         } catch (error) {
-            enqueueSnackbar('复制失败', {
+            enqueueSnackbar(t('settingPayment.snackbar.copyFailed'), {
                 variant: 'error'
             });
         }
     };
 
     const handleCreateSubmit = async () => {
-        const nextErrors = validateCreateForm(formData, formConfig);
+        const nextErrors = validateCreateForm(formData, formConfig, t);
         setErrors(nextErrors);
 
         if (Object.keys(nextErrors).length > 0) {
-            enqueueSnackbar('请先补全必填项', {
+            enqueueSnackbar(t('settingPayment.snackbar.completeRequiredFields'), {
                 variant: 'error'
             });
             return;
@@ -544,7 +527,7 @@ export default function ModalCreate({
             });
             loadData(searchModal);
             handleOnClose();
-            enqueueSnackbar('创建成功!', {
+            enqueueSnackbar(t('settingPayment.snackbar.created'), {
                 variant: 'success'
             });
         } catch (error) {
@@ -583,7 +566,8 @@ export default function ModalCreate({
                     alignItems: 'center',
                     '& .MuiSvgIcon-root': { mr: 1 }
                 }}>
-                <CategoryRounded color={'primary'} /> 添加新支付
+                <CategoryRounded color={'primary'} />{' '}
+                {t('settingPayment.modalCreate.title')}
             </DialogTitle>
             <DialogContent dividers>
                 <Stack spacing={2.5}>
@@ -591,10 +575,10 @@ export default function ModalCreate({
                         fullWidth
                         required
                         error={Boolean(errors.providerId)}>
-                        <InputLabel>供应商</InputLabel>
+                        <InputLabel>{t('settingPayment.fields.provider')}</InputLabel>
                         <Select
                             value={formData.providerId}
-                            label={'供应商'}
+                            label={t('settingPayment.fields.provider')}
                             onChange={(event) =>
                                 handleOnChange('providerId', event.target.value)
                             }>
@@ -607,14 +591,14 @@ export default function ModalCreate({
                             ))}
                         </Select>
                         <FormHelperText>
-                            {errors.providerId || '选择后会自动使用供应商名称创建支付通道'}
+                            {errors.providerId ||
+                                t('settingPayment.form.providerHelp')}
                         </FormHelperText>
                     </FormControl>
 
                     {selectedProvider && (
                         <Alert severity={'info'}>
-                            当前配置模板:
-                            {' '}
+                            {t('settingPayment.modalCreate.currentTemplate')}{' '}
                             {selectedProvider.name}
                             {' '}
                             (
@@ -630,17 +614,17 @@ export default function ModalCreate({
                         onChange={(event, value) => setActiveTab(value)}>
                         <Tab
                             value={'frontend'}
-                            label={'Frontend'}
+                            label={t('settingPayment.tabs.frontend')}
                         />
                         <Tab
                             value={'backend'}
-                            label={'Backend'}
+                            label={t('settingPayment.tabs.backend')}
                         />
                     </Tabs>
 
                     {!hasConfigFields ? (
                         <Alert severity={'warning'}>
-                            请先输入支付名称或选择供应商，系统会显示对应配置 UI。
+                            {t('settingPayment.modalCreate.emptyConfig')}
                         </Alert>
                     ) : (
                         <Stack spacing={3}>
@@ -663,6 +647,7 @@ export default function ModalCreate({
                                             onTogglePassword={handleTogglePassword}
                                             onCopy={handleCopy}
                                             onChange={handleConfigChange}
+                                            t={t}
                                         />
                                     </Box>
                                 );
@@ -677,7 +662,7 @@ export default function ModalCreate({
                     variant={'outlined'}
                     color={'error'}
                     sx={{ width: 100 }}>
-                    取消
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     onClick={handleCreateSubmit}
@@ -685,7 +670,9 @@ export default function ModalCreate({
                     color={'primary'}
                     disabled={submitting}
                     sx={{ width: 100 }}>
-                    {submitting ? '创建中' : '创建'}
+                    {submitting
+                        ? t('settingPayment.modalCreate.creating')
+                        : t('common.create')}
                 </Button>
             </DialogActions>
         </Dialog>

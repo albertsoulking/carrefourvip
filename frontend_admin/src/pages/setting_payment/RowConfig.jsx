@@ -1,8 +1,10 @@
 import { Box, Button } from '@mui/material';
 import ModalEditConfig from './ModalEditConfig';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const RowConfig = ({ data, permissions, id, gatewayName }) => {
+    const { t } = useTranslation();
     const [openConfig, setOpenConfig] = useState(false);
 
     return (
@@ -11,7 +13,7 @@ const RowConfig = ({ data, permissions, id, gatewayName }) => {
                 size={'small'}
                 sx={{ fontSize: 12, p: 0 }}
                 onClick={() => setOpenConfig(true)}>
-                查看
+                {t('table.view')}
             </Button>
             <ModalEditConfig
                 open={openConfig}

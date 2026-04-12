@@ -1,20 +1,23 @@
 import { Chip, Box, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const OPTIONS = [
+const getOptions = (t) => [
     {
-        label: '自动网关支付',
+        label: t('settingPayment.manual.autoGateway'),
         value: 0,
         color: 'primary'
     },
     {
-        label: '手动提交链接',
+        label: t('settingPayment.manual.manualLink'),
         value: 1,
         color: 'default'
     }
 ];
 
 export default function RowManual({ status, permissions, onChange }) {
+    const { t } = useTranslation();
+    const OPTIONS = getOptions(t);
     const current = OPTIONS.find((s) => s.value === status);
     const [anchorEl, setAnchorEl] = useState(null);
 

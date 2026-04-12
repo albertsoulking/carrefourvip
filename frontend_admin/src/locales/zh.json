@@ -226,5 +226,121 @@
         "payment_starpay": "Star支付",
         "payment_faf": "亲友付",
         "payment_wise": "Wise支付"
+    },
+    "common": {
+        "cancel": "取消",
+        "create": "创建",
+        "close": "关闭",
+        "save": "保存",
+        "saving": "保存中...",
+        "saveChanges": "保存更改",
+        "add": "添加",
+        "confirm": "确认",
+        "yes": "是",
+        "no": "否",
+        "update": "更新"
+    },
+    "settingPayment": {
+        "columns": {
+            "serial": "序号",
+            "logo": "图标",
+            "sortOrder": "排序",
+            "discount": "优惠 %",
+            "paymentMode": "支付形式",
+            "frontendVisible": "前端显示",
+            "config": "配置",
+            "createdAt": "添加时间"
+        },
+        "fields": {
+            "provider": "供应商",
+            "code": "编号",
+            "color": "颜色",
+            "text": "文本",
+            "visible": "显示",
+            "blacklist": "黑名单",
+            "userIds": "会员ID"
+        },
+        "tabs": {
+            "frontend": "前端",
+            "backend": "后端"
+        },
+        "config": {
+            "general": {
+                "title": "通用配置",
+                "description": "前后端共用的配置项。"
+            },
+            "test": {
+                "title": "测试配置",
+                "description": "沙箱环境和测试专用配置。"
+            },
+            "live": {
+                "title": "正式配置",
+                "description": "生产环境和正式专用配置。"
+            }
+        },
+        "actions": {
+            "showOrHide": "显示 / 隐藏",
+            "copyValue": "复制内容"
+        },
+        "status": {
+            "active": "启用",
+            "inactive": "禁用",
+            "maintenance": "维护"
+        },
+        "manual": {
+            "autoGateway": "自动网关支付",
+            "manualLink": "手动提交链接"
+        },
+        "colors": {
+            "red": "红色",
+            "blue": "蓝色",
+            "orange": "橘色",
+            "purple": "紫色",
+            "green": "绿色",
+            "cyan": "青色",
+            "gray": "灰色"
+        },
+        "form": {
+            "providerRequired": "请选择供应商",
+            "requiredField": "此字段为必填项",
+            "providerHelp": "选择后会自动使用供应商名称创建支付通道",
+            "selectSettlementCurrency": "请选择结算币种",
+            "sensitiveValueHelp": "敏感信息，可复制或临时显示"
+        },
+        "modalCreate": {
+            "title": "添加新支付",
+            "currentTemplate": "当前配置模板:",
+            "emptyConfig": "请先选择供应商，系统会显示对应配置 UI。",
+            "creating": "创建中"
+        },
+        "modalEdit": {
+            "title": "支付网关配置",
+            "titleWithName": "{{name}} 配置",
+            "invalidJson": "当前配置 JSON 无效，请先重置。",
+            "invalidJsonWarning": "检测到无效的配置 JSON。编辑前你可以先重置为最近一次可解析的默认结构。",
+            "noConfigFields": "当前标签页没有可编辑的配置项。",
+            "resetToDefault": "重置为默认值"
+        },
+        "modalDetail": {
+            "title": "支付详情",
+            "uploadNewLogo": "上传新图标",
+            "sideImages": "右侧多图标",
+            "noticeImages": "提示多图标",
+            "notes": "提示信息",
+            "notices": "通知信息（状态改为维护后显示）",
+            "blacklistHelp": "多个ID用逗号隔开"
+        },
+        "modalDelete": {
+            "title": "删除分类",
+            "confirm": "你确定要删除该商品分类吗？"
+        },
+        "snackbar": {
+            "copied": "已复制 {{label}}",
+            "copyFailed": "复制失败",
+            "completeRequiredFields": "请先补全必填项",
+            "created": "创建成功!",
+            "updated": "更新成功!",
+            "deleted": "删除成功!"
+        }
     }
 }

@@ -9,6 +9,7 @@ import {
 import { DeleteRounded } from '@mui/icons-material';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 export default function ModalDeleteCategory({
     open,
@@ -17,6 +18,7 @@ export default function ModalDeleteCategory({
     loadData,
     searchModal
 }) {
+    const { t } = useTranslation();
     // Handle create team submission
     const handleOnSubmit = async () => {
         if (!data) return;
@@ -29,7 +31,7 @@ export default function ModalDeleteCategory({
             await api.category.delete(payload);
             loadData(searchModal);
             setOpen(false);
-            enqueueSnackbar('删除成功!', {
+            enqueueSnackbar(t('settingPayment.snackbar.deleted'), {
                 variant: 'success'
             });
         } catch (error) {
@@ -63,11 +65,12 @@ export default function ModalDeleteCategory({
                     alignItems: 'center',
                     '& .MuiSvgIcon-root': { mr: 1 }
                 }}>
-                <DeleteRounded color={'error'} /> 删除分类
+                <DeleteRounded color={'error'} />{' '}
+                {t('settingPayment.modalDelete.title')}
             </DialogTitle>
             <DialogContent dividers>
                 <DialogContentText>
-                    你确定要删除该商品分类吗？
+                    {t('settingPayment.modalDelete.confirm')}
                 </DialogContentText>
             </DialogContent>
             <DialogActions sx={{ px: 3, py: 2 }}>
@@ -76,14 +79,14 @@ export default function ModalDeleteCategory({
                     variant={'outlined'}
                     color={'error'}
                     sx={{ width: 100 }}>
-                    取消
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     onClick={handleOnSubmit}
                     variant={'contained'}
                     color={'primary'}
                     sx={{ width: 100 }}>
-                    确认
+                    {t('common.confirm')}
                 </Button>
             </DialogActions>
         </Dialog>

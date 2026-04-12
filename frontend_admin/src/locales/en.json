@@ -226,5 +226,121 @@
         "payment_starpay": "Star Pay",
         "payment_faf": "Friends & Family",
         "payment_wise": "Wise"
+    },
+    "common": {
+        "cancel": "Cancel",
+        "create": "Create",
+        "close": "Close",
+        "save": "Save",
+        "saving": "Saving...",
+        "saveChanges": "Save Changes",
+        "add": "Add",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No",
+        "update": "Update"
+    },
+    "settingPayment": {
+        "columns": {
+            "serial": "No.",
+            "logo": "Logo",
+            "sortOrder": "Sort",
+            "discount": "Discount %",
+            "paymentMode": "Payment Mode",
+            "frontendVisible": "Frontend Visible",
+            "config": "Config",
+            "createdAt": "Created At"
+        },
+        "fields": {
+            "provider": "Provider",
+            "code": "Code",
+            "color": "Color",
+            "text": "Text",
+            "visible": "Visible",
+            "blacklist": "Blacklist",
+            "userIds": "User IDs"
+        },
+        "tabs": {
+            "frontend": "Frontend",
+            "backend": "Backend"
+        },
+        "config": {
+            "general": {
+                "title": "General Config",
+                "description": "Shared values for both environments."
+            },
+            "test": {
+                "title": "Test Config",
+                "description": "Sandbox credentials and test-only values."
+            },
+            "live": {
+                "title": "Live Config",
+                "description": "Production credentials and live-only values."
+            }
+        },
+        "actions": {
+            "showOrHide": "Show / hide",
+            "copyValue": "Copy value"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "maintenance": "Maintenance"
+        },
+        "manual": {
+            "autoGateway": "Auto gateway payment",
+            "manualLink": "Manual submit link"
+        },
+        "colors": {
+            "red": "Red",
+            "blue": "Blue",
+            "orange": "Orange",
+            "purple": "Purple",
+            "green": "Green",
+            "cyan": "Cyan",
+            "gray": "Gray"
+        },
+        "form": {
+            "providerRequired": "Please select a provider.",
+            "requiredField": "This field is required.",
+            "providerHelp": "The payment channel will use the provider name after selection.",
+            "selectSettlementCurrency": "Select the settlement currency.",
+            "sensitiveValueHelp": "Sensitive value. You can copy or reveal it."
+        },
+        "modalCreate": {
+            "title": "Add New Payment",
+            "currentTemplate": "Current config template:",
+            "emptyConfig": "Select a provider first and the matching config UI will appear.",
+            "creating": "Creating"
+        },
+        "modalEdit": {
+            "title": "Payment Gateway Config",
+            "titleWithName": "{{name}} Config",
+            "invalidJson": "Current config JSON is invalid. Please reset first.",
+            "invalidJsonWarning": "Invalid config JSON detected. You can reset to the last parsable default structure before editing.",
+            "noConfigFields": "No config fields were found for this tab.",
+            "resetToDefault": "Reset to Default"
+        },
+        "modalDetail": {
+            "title": "Payment Detail",
+            "uploadNewLogo": "Upload New Logo",
+            "sideImages": "Right-side images",
+            "noticeImages": "Notice images",
+            "notes": "Notes",
+            "notices": "Notices (shown when status is maintenance)",
+            "blacklistHelp": "Separate multiple IDs with commas."
+        },
+        "modalDelete": {
+            "title": "Delete Category",
+            "confirm": "Are you sure you want to delete this category?"
+        },
+        "snackbar": {
+            "copied": "{{label}} copied.",
+            "copyFailed": "Copy failed.",
+            "completeRequiredFields": "Please complete all required fields first.",
+            "created": "Created successfully!",
+            "updated": "Updated successfully!",
+            "deleted": "Deleted successfully!"
+        }
     }
 }

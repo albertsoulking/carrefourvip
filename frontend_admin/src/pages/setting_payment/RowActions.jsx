@@ -1,4 +1,5 @@
 import { Box, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const RowActions = ({
     data,
@@ -7,6 +8,7 @@ const RowActions = ({
     setOpenUpdateModal,
     setOpenDetailModal
 }) => {
+    const { t } = useTranslation();
     return (
         <Box>
             {permissions.includes('category.edit') && (
@@ -14,7 +16,7 @@ const RowActions = ({
                     size={'small'}
                     sx={{ fontSize: 12, p: 0 }}
                     onClick={() => setOpenUpdateModal({ open: true, data })}>
-                    编辑
+                    {t('table.edit')}
                 </Button>
             )}
             {permissions.includes('category.delete') && (
@@ -23,14 +25,14 @@ const RowActions = ({
                     size={'small'}
                     sx={{ fontSize: 12, p: 0 }}
                     onClick={() => setOpenDeleteModal({ open: true, data })}>
-                    删除
+                    {t('table.delete')}
                 </Button>
             )}
             <Button
                 size={'small'}
                 sx={{ fontSize: 12, p: 0 }}
                 onClick={() => setOpenDetailModal({ open: true, data })}>
-                查看
+                {t('table.view')}
             </Button>
         </Box>
     );

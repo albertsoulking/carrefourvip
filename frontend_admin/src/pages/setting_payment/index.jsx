@@ -148,7 +148,7 @@ const PaymentListPage = () => {
                 initial={'hidden'}
                 animate={'visible'}>
                 {/* Actions bar */}
-                {/* <motion.div variants={itemVariants}>
+                <motion.div variants={itemVariants}>
                     {isExpand ? (
                         <ActionBarExpand
                             setOpen={setOpenCreateModal}
@@ -168,7 +168,7 @@ const PaymentListPage = () => {
                             setIsExpand={setIsExpand}
                         />
                     )}
-                </motion.div> */}
+                </motion.div>
 
                 {/* Data grid */}
                 <motion.div variants={itemVariants}>

@@ -30,25 +30,11 @@ import {
 } from '@mui/icons-material';
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 const TAB_KEYS = ['frontend', 'backend'];
 const SECTION_KEYS = ['general', 'test', 'live'];
 const CURRENCY_OPTIONS = ['USD', 'EUR', 'MMK'];
-
-const SECTION_META = {
-    general: {
-        title: 'General Config',
-        description: 'Shared values used by both environments.'
-    },
-    test: {
-        title: 'Test Config',
-        description: 'Sandbox or test credentials.'
-    },
-    live: {
-        title: 'Live Config',
-        description: 'Production credentials.'
-    }
-};
 
 const normalizeScope = (value) =>
     value && typeof value === 'object' && !Array.isArray(value) ? value : {};
@@ -199,13 +185,15 @@ const groupConfigFields = (scopeConfig, gatewayName) => {
     return grouped;
 };
 
-const validateConfig = (config) => {
+const validateConfig = (config, t) => {
     const errors = {};
 
     TAB_KEYS.forEach((scope) => {
         Object.entries(normalizeScope(config?.[scope])).forEach(([key, value]) => {
             if (String(value ?? '').trim() === '') {
-                errors[`${scope}.${key}`] = 'This field is required.';
+                errors[`${scope}.${key}`] = t(
+                    'settingPayment.form.requiredField'
+                );
             }
         });
     });
@@ -221,24 +209,40 @@ const ConfigSection = ({
     visiblePasswords,
     onTogglePassword,
     onCopy,
-    onChange
+    onChange,
+    t
 }) => {
     if (fields.length === 0) {
         return null;
     }
+
+    const sectionMeta = {
+        general: {
+            title: t('settingPayment.config.general.title'),
+            description: t('settingPayment.config.general.description')
+        },
+        test: {
+            title: t('settingPayment.config.test.title'),
+            description: t('settingPayment.config.test.description')
+        },
+        live: {
+            title: t('settingPayment.config.live.title'),
+            description: t('settingPayment.config.live.description')
+        }
+    };
 
     return (
         <Box>
             <Typography
                 variant={'subtitle1'}
                 sx={{ fontWeight: 700, mb: 0.5 }}>
-                {SECTION_META[sectionKey].title}
+                {sectionMeta[sectionKey].title}
             </Typography>
             <Typography
                 variant={'body2'}
                 color={'text.secondary'}
                 sx={{ mb: 2 }}>
-                {SECTION_META[sectionKey].description}
+                {sectionMeta[sectionKey].description}
             </Typography>
             <Stack spacing={2}>
                 {fields.map((field) => {
@@ -272,7 +276,10 @@ const ConfigSection = ({
                                     ))}
                                 </Select>
                                 <FormHelperText>
-                                    {error || 'Select the settlement currency.'}
+                                    {error ||
+                                        t(
+                                            'settingPayment.form.selectSettlementCurrency'
+                                        )}
                                 </FormHelperText>
                             </FormControl>
                         );
@@ -294,7 +301,9 @@ const ConfigSection = ({
                             helperText={
                                 error ||
                                 (field.type === 'password'
-                                    ? 'Sensitive value. You can copy or reveal it.'
+                                    ? t(
+                                          'settingPayment.form.sensitiveValueHelp'
+                                      )
                                     : ' ')
                             }
                             onChange={(event) =>
@@ -304,7 +313,10 @@ const ConfigSection = ({
                                 endAdornment: (
                                     <InputAdornment position={'end'}>
                                         {field.type === 'password' && (
-                                            <Tooltip title={'Show / hide'}>
+                                            <Tooltip
+                                                title={t(
+                                                    'settingPayment.actions.showOrHide'
+                                                )}>
                                                 <IconButton
                                                     edge={'end'}
                                                     onClick={() =>
@@ -318,7 +330,10 @@ const ConfigSection = ({
                                                 </IconButton>
                                             </Tooltip>
                                         )}
-                                        <Tooltip title={'Copy value'}>
+                                        <Tooltip
+                                            title={t(
+                                                'settingPayment.actions.copyValue'
+                                            )}>
                                             <IconButton
                                                 edge={'end'}
                                                 onClick={() =>
@@ -346,6 +361,7 @@ export default function ModalEditConfig({
     gatewayName,
     onSave
 }) {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('frontend');
     const [rawJson, setRawJson] = useState('');
     const [jsonError, setJsonError] = useState('');
@@ -414,11 +430,11 @@ export default function ModalEditConfig({
     const handleCopy = async (value, label) => {
         try {
             await navigator.clipboard.writeText(String(value ?? ''));
-            enqueueSnackbar(`${label} copied.`, {
+            enqueueSnackbar(t('settingPayment.snackbar.copied', { label }), {
                 variant: 'success'
             });
         } catch (error) {
-            enqueueSnackbar('Unable to copy this value.', {
+            enqueueSnackbar(t('settingPayment.snackbar.copyFailed'), {
                 variant: 'error'
             });
         }
@@ -433,17 +449,17 @@ export default function ModalEditConfig({
 
     const handleSave = async () => {
         if (jsonError) {
-            enqueueSnackbar('Current config JSON is invalid. Please reset first.', {
+            enqueueSnackbar(t('settingPayment.modalEdit.invalidJson'), {
                 variant: 'error'
             });
             return;
         }
 
-        const nextErrors = validateConfig(formConfig);
+        const nextErrors = validateConfig(formConfig, t);
         setErrors(nextErrors);
 
         if (Object.keys(nextErrors).length > 0) {
-            enqueueSnackbar('Please complete all required fields before saving.', {
+            enqueueSnackbar(t('settingPayment.snackbar.completeRequiredFields'), {
                 variant: 'error'
             });
             return;
@@ -463,7 +479,7 @@ export default function ModalEditConfig({
                 });
             }
 
-            enqueueSnackbar('配置已更新!', {
+            enqueueSnackbar(t('settingPayment.snackbar.updated'), {
                 variant: 'success'
             });
             setOpen(false);
@@ -493,15 +509,18 @@ export default function ModalEditConfig({
             fullWidth
             maxWidth={'md'}>
             <DialogTitle>
-                {gatewayName ? `${gatewayName} Config` : 'Payment Gateway Config'}
+                {gatewayName
+                    ? t('settingPayment.modalEdit.titleWithName', {
+                          name: gatewayName
+                      })
+                    : t('settingPayment.modalEdit.title')}
             </DialogTitle>
             <DialogContent dividers>
                 {jsonError && (
                     <Alert
                         severity={'warning'}
                         sx={{ mb: 2 }}>
-                        Invalid config JSON detected. You can reset to the last
-                        parsable default structure before editing.
+                        {t('settingPayment.modalEdit.invalidJsonWarning')}
                         <Box sx={{ mt: 1 }}>
                             <Typography
                                 variant={'body2'}
@@ -523,17 +542,17 @@ export default function ModalEditConfig({
                     sx={{ mb: 3 }}>
                     <Tab
                         value={'frontend'}
-                        label={'Frontend'}
+                        label={t('settingPayment.tabs.frontend')}
                     />
                     <Tab
                         value={'backend'}
-                        label={'Backend'}
+                        label={t('settingPayment.tabs.backend')}
                     />
                 </Tabs>
 
                 {!hasAnyFields ? (
                     <Alert severity={'info'}>
-                        No config fields were found for this tab.
+                        {t('settingPayment.modalEdit.noConfigFields')}
                     </Alert>
                 ) : (
                     <Stack spacing={3}>
@@ -556,6 +575,7 @@ export default function ModalEditConfig({
                                         onTogglePassword={handleTogglePassword}
                                         onCopy={handleCopy}
                                         onChange={handleFieldChange}
+                                        t={t}
                                     />
                                 </Box>
                             );
@@ -568,19 +588,19 @@ export default function ModalEditConfig({
                     startIcon={<RefreshRounded />}
                     onClick={handleReset}
                     variant={'outlined'}>
-                    Reset to Default
+                    {t('settingPayment.modalEdit.resetToDefault')}
                 </Button>
                 <Box sx={{ flexGrow: 1 }} />
                 <Button
                     onClick={handleClose}
                     variant={'outlined'}>
-                    Close
+                    {t('common.close')}
                 </Button>
                 <Button
                     onClick={handleSave}
                     variant={'contained'}
                     disabled={saving}>
-                    {saving ? 'Saving...' : 'Save'}
+                    {saving ? t('common.saving') : t('common.save')}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -5,6 +5,7 @@ import RowStatus from './RowStatus';
 import RowManual from './RowManual';
 import RowVisible from './RowVisible';
 import RowConfig from './RowConfig';
+import i18n from '../../config/i18n';
 
 const getColumns = ({
     updateData,
@@ -15,7 +16,7 @@ const getColumns = ({
 }) => [
     {
         field: 'serial',
-        headerName: '序号',
+        headerName: i18n.t('settingPayment.columns.serial'),
         sortable: false,
         width: 50,
         renderCell: (params) => {
@@ -43,7 +44,7 @@ const getColumns = ({
     },
     {
         field: 'actions',
-        headerName: '操作',
+        headerName: i18n.t('table.actions'),
         width: 100,
         renderCell: (params) => (
             <RowActions
@@ -57,13 +58,13 @@ const getColumns = ({
     },
     {
         field: 'logo',
-        headerName: '图标',
+        headerName: i18n.t('settingPayment.columns.logo'),
         width: 70,
         renderCell: (params) => <RowAvatar imageUrl={params.value} />
     },
     {
         field: 'name',
-        headerName: '名称',
+        headerName: i18n.t('table.name'),
         width: 100,
         renderCell: (params) => (
             <Typography
@@ -75,7 +76,7 @@ const getColumns = ({
     },
     {
         field: 'provider.name',
-        headerName: '供应商',
+        headerName: i18n.t('settingPayment.fields.provider'),
         width: 100,
         renderCell: (params) => (
             <Typography
@@ -87,7 +88,7 @@ const getColumns = ({
     },
     {
         field: 'status',
-        headerName: '状态',
+        headerName: i18n.t('table.status.user'),
         width: 100,
         editable: true,
         renderCell: (params) => (
@@ -101,7 +102,7 @@ const getColumns = ({
     },
     {
         field: 'sortOrder',
-        headerName: '排序',
+        headerName: i18n.t('settingPayment.columns.sortOrder'),
         width: 70,
         editable: true,
         renderCell: (params) => (
@@ -110,7 +111,7 @@ const getColumns = ({
     },
     {
         field: 'discount',
-        headerName: '优惠 %',
+        headerName: i18n.t('settingPayment.columns.discount'),
         width: 70,
         editable: true,
         renderCell: (params) => (
@@ -119,7 +120,7 @@ const getColumns = ({
     },
     {
         field: 'isManual',
-        headerName: '支付形式',
+        headerName: i18n.t('settingPayment.columns.paymentMode'),
         width: 100,
         editable: true,
         renderCell: (params) => (
@@ -133,7 +134,7 @@ const getColumns = ({
     },
     {
         field: 'visible',
-        headerName: '前端显示',
+        headerName: i18n.t('settingPayment.columns.frontendVisible'),
         width: 100,
         editable: true,
         renderCell: (params) => (
@@ -147,7 +148,7 @@ const getColumns = ({
     },
     {
         field: 'config',
-        headerName: '配置',
+        headerName: i18n.t('settingPayment.columns.config'),
         width: 70,
         renderCell: (params) => (
             <RowConfig
@@ -159,7 +160,7 @@ const getColumns = ({
     },
     {
         field: 'createdAt',
-        headerName: '添加时间',
+        headerName: i18n.t('settingPayment.columns.createdAt'),
         width: 160,
         renderCell: (params) => (
             <Typography fontSize={12}>

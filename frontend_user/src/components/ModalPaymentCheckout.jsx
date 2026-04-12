@@ -20,6 +20,7 @@ import Pay2sCheckout from './Pay2sCheckout';
 import StarPayCheckout from './StarPayCheckout';
 import BehalfCheckout from './BehalfCheckout';
 import WiseCheckout from './WiseCheckout';
+import { useTranslation } from 'react-i18next';
 
 export default function ModalPaymentCheckout({
     open,
@@ -28,6 +29,7 @@ export default function ModalPaymentCheckout({
     paymentType,
     gateway
 }) {
+    const { t } = useTranslation();
     const navigate = useSmartNavigate();
     const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
@@ -83,7 +85,7 @@ export default function ModalPaymentCheckout({
                         fontWeight={'bold'}
                         textAlign={'center'}
                         lineHeight={2}>
-                        Payment
+                        {t('payment.title')}
                     </Typography>
                     <IconButton
                         sx={{
@@ -161,7 +163,7 @@ export default function ModalPaymentCheckout({
                     <></>
                 ) : (
                     <Box textAlign={'center'}>
-                        <Typography>Payment Gateway Unavailable!</Typography>
+                        <Typography>{t('payment.gatewayUnavailable')}</Typography>
                     </Box>
                 )}
                 {gateway?.isManual === 1 && (
@@ -174,14 +176,13 @@ export default function ModalPaymentCheckout({
                                     setOpen({ open: false, data: null });
                                     navigate(web.orderDetail(data?.id));
                                 }}>
-                                Go to Order Detail Page
+                                {t('payment.goToOrderDetail')}
                             </Button>
                         </Box>
                         <Typography
                             textAlign={'center'}
                             fontSize={12}>
-                            We are redirecting you to the payment page. Please
-                            wait patiently.
+                            {t('payment.redirecting')}
                         </Typography>
                     </>
                 )}
@@ -189,7 +190,7 @@ export default function ModalPaymentCheckout({
                     textAlign={'center'}
                     fontSize={12}
                     mt={1}>
-                    Order ID: <span translate={'no'}>#{data?.id}</span>
+                    {t('payment.orderId')}: <span translate={'no'}>#{data?.id}</span>
                 </Typography>
             </Box>
         </Dialog>
