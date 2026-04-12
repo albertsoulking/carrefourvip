@@ -77,12 +77,12 @@ const DeliverySettingPage = () => {
                                 loadData={loadData}
                             />
                         </motion.div>
-                        <motion.div variants={itemVariants}>
+                        {/* <motion.div variants={itemVariants}>
                             <CardBusinessHours
                                 data={deliveryData}
                                 loadData={loadData}
                             />
-                        </motion.div>
+                        </motion.div> */}
                     </>
                 )}
             </motion.div>
