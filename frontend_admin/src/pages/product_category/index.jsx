@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import getColumns from './columns';
 import api from '../../routes/api';
 import Overview from './OverView';
-import ModalCreateCategory from './ModalCreate';
+import ModalCreate from './ModalCreate';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
 import ActionBarCollapse from './ActionBarCollapse';
@@ -229,11 +229,9 @@ const ProductCategoryListPage = () => {
                 </motion.div>
             </motion.div>
             {/** Create Category */}
-            <ModalCreateCategory
+            <ModalCreate
                 open={openCreateModal}
                 setOpen={setOpenCreateModal}
-                loadData={loadData}
-                searchModal={searchModal}
             />
         </Box>
     );

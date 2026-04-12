@@ -25,7 +25,7 @@ import {
 import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
 
-export default function ModalCreate({ open, setOpen, loadData, searchModal }) {
+const ModalCreate = ({ open, setOpen }) => {
     const items = [
         {
             name: 'name',
@@ -86,7 +86,6 @@ export default function ModalCreate({ open, setOpen, loadData, searchModal }) {
 
         try {
             await api.category.create(payload);
-            loadData(searchModal);
             setOpen(false);
             setFormData({});
             setFile(null);
@@ -318,4 +317,6 @@ export default function ModalCreate({ open, setOpen, loadData, searchModal }) {
             </DialogActions>
         </Dialog>
     );
-}
+};
+
+export default ModalCreate;
