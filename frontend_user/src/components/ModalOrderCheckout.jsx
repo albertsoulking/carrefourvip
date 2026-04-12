@@ -119,7 +119,8 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
         }
 
         const isOpen = now >= start && now < end;
-        setOpeningHours(isOpen);
+        // setOpeningHours(isOpen);
+        setOpeningHours(true); // 先不限制营业时间
 
         // console.log({
         //     now: now.toISO(),
