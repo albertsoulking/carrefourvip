@@ -74,7 +74,7 @@ const HeaderBar = ({ logo }) => {
                     src={`${
                         import.meta.env.VITE_API_BASE_URL
                     }/uploads/images/${logo}`}
-                    alt={'carrefour vip'}
+                    alt={'logo'}
                     style={{
                         objectFit: 'cover',
                         height: 50,

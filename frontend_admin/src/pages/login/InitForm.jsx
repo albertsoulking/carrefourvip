@@ -165,7 +165,7 @@ const InitForm = ({ setIsInit }) => {
                             onSubmit={handleSubmit}
                             sx={{ width: '100%' }}>
                             <Typography textAlign={'center'}>
-                                初始化家乐福VIP网站
+                                初始化加乐福网站
                             </Typography>
 
                             {initSteps.map(renderStepItem)}
@@ -230,7 +230,7 @@ const InitForm = ({ setIsInit }) => {
                                         fontSize: '0.85rem',
                                         opacity: 0.8
                                     }}>
-                                    © {new Date().getFullYear()} CarreFour VIP
+                                    © {new Date().getFullYear()} Kalefu
                                     Admin. All rights reserved.
                                 </Typography>
                             </Box>

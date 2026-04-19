@@ -63,6 +63,7 @@ import { HeaderModule } from './header/header.module';
 import { EventModule } from './event/event.module';
 import { LuckyWheelModule } from './lucky_wheel/wheel.module';
 import { EventLogModule } from './event_log/event-log.module';
+import { FlightModule } from './flights/flight.module';
 
 @Module({
     imports: [
@@ -130,6 +131,7 @@ import { EventLogModule } from './event_log/event-log.module';
         LuckyWheelModule,
         EventLogModule,
         PaymentGatewaysModule,
+        FlightModule,
         ConfigModule.forRoot({
             isGlobal: true
         })

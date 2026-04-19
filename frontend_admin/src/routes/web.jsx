@@ -14,7 +14,8 @@ const product = {
 const order = {
     list: '/orders',
     delete: '/orders/deleted',
-    log: '/orders/logs'
+    log: '/orders/logs',
+    flight: '/orders/flights'
 };
 const marketing = {
     event: '/events',

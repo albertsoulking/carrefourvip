@@ -1,5 +1,4 @@
-# carrefourvip
-Carrefour Shopping Website
+Shopping Website
 
 node 16.20.2
 npm 8.19.4

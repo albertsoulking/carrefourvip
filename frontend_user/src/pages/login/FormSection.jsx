@@ -104,7 +104,7 @@ const FormSection = () => {
                     disableRipple
                     onClick={() => navigate(web.home)}>
                     <img
-                        src={assets.carrefour}
+                        src={assets.kalefu}
                         alt='logo'
                         style={{ objectFit: 'cover', width: 140 }}
                     />

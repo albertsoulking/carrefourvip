@@ -31,7 +31,7 @@ export class TwoFactorAuthenticationService {
             throw new NotFoundException(`Admin ID ${adminId} not found!`);
 
         const secret = speakeasy.generateSecret({
-            issuer: 'Carrefour Admin',
+            issuer: 'Admin',
             name: `${admin.name}/${admin.email}`
         });
         const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url || '');

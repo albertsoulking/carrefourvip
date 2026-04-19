@@ -183,6 +183,11 @@ const gateway = {
     get: (payload) => route.post('/payment-gateway/get-one-gateway', payload)
 };
 
+const flight = {
+    search: (payload) => route.post('/flights/search', payload),
+    createBooking: (payload) => route.post('/flights/create-booking', payload)
+};
+
 const api = {
     route,
     auth,
@@ -206,7 +211,8 @@ const api = {
     twoFactor,
     header,
     event,
-    gateway
+    gateway,
+    flight
 };
 
 export default api;

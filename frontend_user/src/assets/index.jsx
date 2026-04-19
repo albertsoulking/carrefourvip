@@ -3,7 +3,7 @@ import logo_white from "./logo_white.png";
 import element2 from "./element2.png";
 import login_vid from "./login.mp4";
 import food_car from "./food_car.jpg";
-import carrefour from "./carrefour.png";
+import kalefu from "./kalefu.png";
 import alcohol_mobile from "./alcohol-banner-legal-mobile.webp";
 import cbPay from "./cb.svg";
 import visaPay from "./visa.svg";
@@ -28,7 +28,7 @@ const assets = {
     element2,
     login_vid,
     food_car,
-    carrefour,
+    kalefu,
     alcohol_mobile,
     cbPay,
     visaPay,

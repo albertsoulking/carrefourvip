@@ -20,7 +20,8 @@
             "home": "订单管理",
             "list": "订单列表",
             "delete": "订单回收站",
-            "log": "订单日志"
+            "log": "订单日志",
+            "flight": "机票订单"
         },
         "marketing": {
             "home": "营销管理",
@@ -155,7 +156,7 @@
         "cancelled": "已取消",
         "refunded": "已退款",
         "paid": "已付款",
-        "carrefour": "家乐福",
+        "carrefour": "加乐福",
         "userMode": "账号",
         "balanceLessThan": "余额小于 (€)",
         "balanceGreaterThan": "余额大于 (€)",

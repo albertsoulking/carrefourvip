@@ -1,5 +1,5 @@
 {
-    "name": "CarreFour VIP Admin",
+    "name": "Kalefu Admin",
     "nav": {
         "default": "Admin Panel",
         "home": "Home",
@@ -20,7 +20,8 @@
             "home": "Orders",
             "list": "Order List",
             "delete": "Order Recycle Bin",
-            "log": "Order Log"
+            "log": "Order Log",
+            "flight": "Flight Tickets"
         },
         "marketing": {
             "home": "Marketing",

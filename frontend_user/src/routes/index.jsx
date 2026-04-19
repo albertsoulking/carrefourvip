@@ -27,6 +27,7 @@ import EventDetailPage from '../pages/event_detail';
 import LoginPage from '../pages/login';
 import RegisterPage from '../pages/register';
 import NotFoundPage from '../pages/not_found';
+import FlightPage from '../pages/flights';
 
 const routes = [
     { path: web.login, element: <LoginPage /> },
@@ -53,7 +54,8 @@ const routes = [
     { path: web.favorite, element: <FavoritePage /> },
     { path: web.order, element: <OrderPage /> },
     { path: web.event, element: <EventPage /> },
-    { path: web.eventDetail(':id'), element: <EventDetailPage /> }
+    { path: web.eventDetail(':id'), element: <EventDetailPage /> },
+    { path: web.flight, element: <FlightPage />}
 ];
 
 export default routes;

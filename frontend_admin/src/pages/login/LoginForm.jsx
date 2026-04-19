@@ -241,7 +241,7 @@ const LoginForm = ({
                                         fontSize: '0.85rem',
                                         opacity: 0.8
                                     }}>
-                                    © {new Date().getFullYear()} CarreFour
+                                    © {new Date().getFullYear()} Kalefu
                                     Admin. All rights reserved.
                                 </Typography>
                             </Box>

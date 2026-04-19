@@ -3,6 +3,7 @@ import CustomerListPage from '../pages/customer';
 import ProductListPage from '../pages/product';
 import ProductCategoryListPage from '../pages/product_category';
 import OrderListPage from '../pages/order';
+import FlightBookingListPage from '../pages/flight_booking';
 import DeliverySettingPage from '../pages/shipping';
 import SettingMaintenancePage from '../pages/settings_maintenance';
 import PermissionRolePage from '../pages/permission_role';
@@ -30,6 +31,7 @@ const routes = [
     { path: web.product.category, element: <ProductCategoryListPage /> },
     { path: web.order.list, element: <OrderListPage /> },
     { path: web.order.log, element: <OrderLogPage /> },
+    { path: web.order.flight, element: <FlightBookingListPage /> },
     { path: web.settings.site, element: <SettingSitePage /> },
     { path: web.settings.delivery, element: <DeliverySettingPage /> },
     { path: web.settings.payment, element: <PaymentListPage /> },

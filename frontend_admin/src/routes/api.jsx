@@ -152,6 +152,14 @@ const orders = {
     create: (payload) => route.post('/admin/orders/create-order', payload)
 };
 
+const flightBooking = {
+    getAll: (payload) =>
+        route.post(
+            '/admin/flight-bookings/get-all-flight-bookings',
+            payload
+        )
+};
+
 const transactions = {
     getAll: (payload) =>
         route.post('/admin/transactions/get-all-transactions', payload)
@@ -263,6 +271,7 @@ const api = {
     category,
     utilities,
     orders,
+    flightBooking,
     transactions,
     settings,
     permission,

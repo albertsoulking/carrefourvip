@@ -31,6 +31,7 @@ const favorite = '/favorites';
 const order = '/orders';
 const event = '/events';
 const eventDetail = id => `${event}/${id}`;
+const flight = '/flights';
 
 const mainWeb = {
     login,
@@ -56,7 +57,8 @@ const mainWeb = {
     favorite,
     order,
     event,
-    eventDetail
+    eventDetail,
+    flight
 };
 
 const web = {

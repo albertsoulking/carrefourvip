@@ -78,6 +78,8 @@ export class RoleMenuService {
 
     // menu
     async getMenusByPermission(roleId: number) {
+        await this.ensureDefaultMenusSynced();
+
         // 查找角色权限
         const rolePermissions = await this.rolePermissionRepo.find({
             where: { role: { id: roleId } },
@@ -188,6 +190,8 @@ export class RoleMenuService {
     }
 
     async getAdminAccess(userId: number) {
+        await this.ensureDefaultMenusSynced();
+
         // 查找管理员
         const admin = await this.adminRepo.findOne({
             where: { id: userId },
@@ -519,6 +523,8 @@ export class RoleMenuService {
 
     // role menu
     async getMenus(userId: number): Promise<Menu[]> {
+        await this.ensureDefaultMenusSynced();
+
         // 查找管理员
         const admin = await this.adminRepo.findOne({
             where: { id: userId },
@@ -658,6 +664,13 @@ export class RoleMenuService {
                 {
                     name: 'order.log',
                     path: '/orders/logs',
+                    icon: '',
+                    roles: ['admin', 'agent', 'team', 'support', 'head'],
+                    visible: 1
+                },
+                {
+                    name: 'order.flight',
+                    path: '/orders/flights',
                     icon: '',
                     roles: ['admin', 'agent', 'team', 'support', 'head'],
                     visible: 1
@@ -822,6 +835,79 @@ export class RoleMenuService {
             ]
         }
     ];
+
+    private async ensureDefaultMenusSynced() {
+        const allRoles = await this.roleRepo.find();
+        if (allRoles.length === 0) return;
+
+        const roleMap = new Map(allRoles.map((role) => [role.name, role]));
+
+        const syncMenu = async (
+            menuItem: any,
+            parent: Menu | null = null
+        ): Promise<Menu> => {
+            let menu = await this.menuRepo.findOne({
+                where: { name: menuItem.name },
+                relations: ['parent']
+            });
+
+            const targetParentId = parent?.id || null;
+            const currentParentId = menu?.parent?.id || null;
+
+            if (!menu) {
+                menu = this.menuRepo.create({
+                    name: menuItem.name,
+                    path: menuItem.path,
+                    icon: menuItem.icon,
+                    visible: menuItem.visible,
+                    parent: parent || undefined
+                });
+                menu = await this.menuRepo.save(menu);
+            } else if (
+                menu.path !== menuItem.path ||
+                menu.icon !== menuItem.icon ||
+                menu.visible !== menuItem.visible ||
+                currentParentId !== targetParentId
+            ) {
+                menu.path = menuItem.path;
+                menu.icon = menuItem.icon;
+                menu.visible = menuItem.visible;
+                if (parent) menu.parent = parent;
+                menu = await this.menuRepo.save(menu);
+            }
+
+            for (const roleName of menuItem.roles ?? []) {
+                const role = roleMap.get(roleName);
+                if (!role) continue;
+
+                const exists = await this.roleMenuRepo.findOne({
+                    where: {
+                        role: { id: role.id },
+                        menu: { id: menu.id }
+                    }
+                });
+
+                if (!exists) {
+                    await this.roleMenuRepo.save(
+                        this.roleMenuRepo.create({
+                            role,
+                            menu
+                        })
+                    );
+                }
+            }
+
+            for (const child of menuItem.children ?? []) {
+                await syncMenu(child, menu);
+            }
+
+            return menu;
+        };
+
+        for (const item of this.defaultMenus) {
+            await syncMenu(item);
+        }
+    }
 
     async reset() {
         // 1. 备份旧的管理员菜单 path

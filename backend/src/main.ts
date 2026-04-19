@@ -18,9 +18,12 @@ async function bootstrap() {
         origin: [
             // 'https://giftmall.shop',
             // 'https://kkkk.giftmall.shop',
-            // 'https://carrefour-vip.com',
-            // 'https://admin.carrefour-vip.com',
-            // 'https://api.carrefour-vip.com',
+            // 'https://47.81.33.42.sslip.io',
+            // 'https://admin.47.81.33.42.sslip.io',
+            // 'https://api.47.81.33.42.sslip.io',
+            // 'https://kale-express.cc',
+            // 'https://admin.kale-express.cc',
+            // 'https://api.kale-express.cc',
             'http://localhost:5173',
             'http://127.0.0.1:5173',
             'http://localhost:5174',
@@ -53,8 +56,8 @@ async function bootstrap() {
 
     // Setup Swagger documentation
     const config = new DocumentBuilder()
-        .setTitle('Carrfour API')
-        .setDescription('The Carrefour API description')
+        .setTitle('API')
+        .setDescription('The API description')
         .setVersion('1.0')
         .addTag('admin', 'Admin operations')
         .addBearerAuth(
