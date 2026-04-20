@@ -157,7 +157,8 @@ const flightBooking = {
         route.post(
             '/admin/flight-bookings/get-all-flight-bookings',
             payload
-        )
+        ),
+    update: (payload) => route.post('/admin/flight-bookings/update-flight-booking', payload)
 };
 
 const transactions = {

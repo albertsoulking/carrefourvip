@@ -7,6 +7,7 @@ import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
 import ActionBarCollapse from './ActionBarCollapse';
 import getColumns from './columns';
+import { enqueueSnackbar } from 'notistack';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,6 +76,29 @@ const FlightBookingListPage = () => {
         }
     };
 
+    const updateData = async ({
+        id,
+        status,
+        paymentLink
+    }) => {
+        try {
+            await api.flightBooking.update({
+                id,
+                status,
+                paymentLink
+            });
+        } catch (error) {
+            enqueueSnackbar(
+                Array.isArray(error.response?.data?.message)
+                    ? error.response.data.message[0]
+                    : error.response?.data?.message || error.message,
+                {
+                    variant: 'error'
+                }
+            );
+        }
+    };
+
     return (
         <Box sx={{ p: 3 }}>
             <motion.div
@@ -116,8 +140,27 @@ const FlightBookingListPage = () => {
                                 sortBy: model[0].field
                             });
                         }}
+                        processRowUpdate={async (newRow, oldRow) => {
+                            try {
+                                const updatedRow = {
+                                    ...newRow
+                                };
+
+                                await updateData(updatedRow);
+                                return updatedRow;
+                            } catch (err) {
+                                throw err;
+                            }
+                        }}
+                        onProcessRowUpdateError={(error) => {
+                            enqueueSnackbar(error, {
+                                variant: 'error'
+                            });
+                        }}
                         rows={fetchData?.data}
-                        columns={getColumns()}
+                        columns={getColumns({
+                            updateData
+                        })}
                         getRowHeight={() => 'auto'}
                         disableColumnFilter
                         disableColumnMenu

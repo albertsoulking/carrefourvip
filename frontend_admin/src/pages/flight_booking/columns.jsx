@@ -1,5 +1,6 @@
 import { Chip, Typography } from '@mui/material';
 import RowActions from './RowActions';
+import RowStatus from './RowStatus';
 
 function formatDateTime(value) {
     if (!value) return '-';
@@ -18,7 +19,9 @@ function getStatusColor(status) {
     return mapping[status] || 'default';
 }
 
-const getColumns = () => [
+const getColumns = ({
+    updateData
+}) => [
     {
         field: 'serial',
         headerName: '序号',
@@ -173,11 +176,25 @@ const getColumns = () => [
         headerName: '状态',
         width: 110,
         renderCell: (params) => (
-            <Chip
-                label={params.value}
-                size='small'
-                color={getStatusColor(params.value)}
+            <RowStatus
+                status={params.value}
+                onChange={(newStatus) =>
+                    updateData({ ...params.row, status: newStatus })
+                }
             />
+        )
+    },
+    {
+        field: 'paymentLink',
+        headerName: '支付链接',
+        width: 90,
+        editable: true,
+        renderCell: (params) => (
+            <Typography
+                fontSize={12}
+                noWrap>
+                {params.value}
+            </Typography>
         )
     },
     {
