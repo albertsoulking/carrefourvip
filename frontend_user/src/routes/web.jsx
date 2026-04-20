@@ -32,6 +32,7 @@ const order = '/orders';
 const event = '/events';
 const eventDetail = id => `${event}/${id}`;
 const flight = '/flights';
+const flightBooking = '/flight-booking';
 
 const mainWeb = {
     login,
@@ -58,7 +59,8 @@ const mainWeb = {
     order,
     event,
     eventDetail,
-    flight
+    flight,
+    flightBooking
 };
 
 const web = {

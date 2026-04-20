@@ -4,7 +4,7 @@ import OrderItem from './OrderItem';
 import api from '../../routes/api';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
 import TopNavigator from '../layout/TopNavigator';
-import BottomNavigator from '../layout/BottomNavigator';
+import web from '../../routes/web';
 
 const OrderPage = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -80,7 +80,8 @@ const OrderPage = () => {
         <Box sx={{ mt: 8, position: 'relative' }}>
             <TopNavigator
                 title={'My Orders'}
-                noBack
+                backPath={web.profile}
+                backText='Profile'
             />
             <Box sx={{ width: '100%' }}>
                 <Box>
@@ -136,7 +137,6 @@ const OrderPage = () => {
                     }}
                 />
             </Box>
-            <BottomNavigator />
         </Box>
     );
 };

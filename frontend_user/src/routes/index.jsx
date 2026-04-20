@@ -28,6 +28,7 @@ import LoginPage from '../pages/login';
 import RegisterPage from '../pages/register';
 import NotFoundPage from '../pages/not_found';
 import FlightPage from '../pages/flights';
+import FlightBookingPage from '../pages/flights_booking';
 
 const routes = [
     { path: web.login, element: <LoginPage /> },
@@ -55,7 +56,8 @@ const routes = [
     { path: web.order, element: <OrderPage /> },
     { path: web.event, element: <EventPage /> },
     { path: web.eventDetail(':id'), element: <EventDetailPage /> },
-    { path: web.flight, element: <FlightPage />}
+    { path: web.flight, element: <FlightPage /> },
+    { path: web.flightBooking, element: <FlightBookingPage /> }
 ];
 
 export default routes;

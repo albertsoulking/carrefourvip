@@ -185,7 +185,8 @@ const gateway = {
 
 const flight = {
     search: (payload) => route.post('/flights/search', payload),
-    createBooking: (payload) => route.post('/flights/create-booking', payload)
+    createBooking: (payload) => route.post('/flights/create-booking', payload),
+    getAllBooking: (payload) => route.post('/flights/get-all-booking', payload)
 };
 
 const api = {

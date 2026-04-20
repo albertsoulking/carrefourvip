@@ -19,6 +19,7 @@ import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import airlinesData from '../../data/airlines.json';
 import airportsData from '../../data/airports.json';
 import FlightBookingModal from './FlightBookingModal';
+import ModalFlightPayment from '../flights_booking/ModalFlightPayment';
 
 const airportsByIata = Object.values(airportsData || {}).reduce(
     (lookup, airport) => {
@@ -233,6 +234,10 @@ export default function FlightResults({
     searchContext
 }) {
     const [bookingModal, setBookingModal] = useState({
+        open: false,
+        flight: null
+    });
+    const [openPayment, setOpenPayment] = useState({
         open: false,
         flight: null
     });
@@ -689,7 +694,12 @@ export default function FlightResults({
                         flight: null
                     })
                 }
+                setOpenPayment={setOpenPayment}
             />
+            <ModalFlightPayment
+                open={openPayment.open}
+                data={openPayment.data}
+                setOpen={setOpenPayment} />
         </Stack>
     );
 }

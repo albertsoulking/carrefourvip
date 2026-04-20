@@ -3,7 +3,8 @@ import {
     CategoryRounded,
     AssignmentRounded,
     HomeRounded,
-    PersonRounded
+    PersonRounded,
+    FlightTakeoff
 } from '@mui/icons-material';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
 import web from '../../routes/web';
@@ -47,14 +48,14 @@ const BottomNavigator = () => {
                     icon={<HomeRounded />}
                 />
                 <BottomNavigationAction
-                    label={'Product'}
+                    label={'Products'}
                     value={web.products}
                     icon={<CategoryRounded />}
                 />
                 <BottomNavigationAction
-                    label={'Order'}
-                    value={web.order}
-                    icon={<AssignmentRounded />}
+                    label={'Flights'}
+                    value={web.flight}
+                    icon={<FlightTakeoff />}
                 />
                 <BottomNavigationAction
                     label={'Me'}

@@ -4,6 +4,8 @@ import FlightSearch from './FlightSearch';
 import TopNavigator from '../layout/TopNavigator';
 import web from '../../routes/web';
 import FlightResults from './FlightResults';
+import BottomNavigator from '../layout/BottomNavigator';
+import ModalFlightPayment from '../flights_booking/ModalFlightPayment';
 
 export default function FlightPage() {
     const [flights, setFlights] = useState([]);
@@ -11,12 +13,7 @@ export default function FlightPage() {
     const [searchContext, setSearchContext] = useState(null);
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', mt: 2, py: 6 }}>
-            <TopNavigator
-                backText={'Profile'}
-                backPath={web.profile}
-                title={'Flights'}
-            />
+        <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', pt:2, pb: 6 }}>
             <Container maxWidth={'lg'}>
                 <Typography
                     variant='h4'
@@ -45,6 +42,7 @@ export default function FlightPage() {
                     searchContext={searchContext}
                 />
             </Container>
+            <BottomNavigator />
         </Box>
     );
 }

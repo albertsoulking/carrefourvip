@@ -1,131 +1,70 @@
-import { useEffect, useState } from 'react';
 import {
     Box,
     Avatar,
     Typography,
-    Button,
     Grid,
+    Paper,
+    List,
+    ListItemButton,
+    ListItemText,
+    ListItemIcon,
+    Divider,
+    Button,
     Dialog
 } from '@mui/material';
-import web from '../../routes/web';
-import api from '../../routes/api';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
-import AddressList from '../delivery_address/AddressList';
-import EditProfile from './EditProfile';
-import ChangePassword from './ChangePassword';
-import { LaunchRounded, CopyAllRounded } from '@mui/icons-material';
+
+import {
+    AccountBalanceWalletRounded,
+    StarsRounded,
+    ConfirmationNumberRounded,
+    CookieRounded,
+    PrivacyTipRounded,
+    LocationOnRounded,
+    FavoriteRounded,
+    LogoutRounded,
+    ChevronRightRounded,
+    LockRounded,
+    LanguageRounded,
+    ChatRounded,
+    FlightRounded,
+    ShoppingBagRounded
+} from '@mui/icons-material';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
-import BottomNavigator from '../layout/BottomNavigator';
+import web from '../../routes/web';
+import { useEffect, useState } from 'react';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
+import EditProfile from './EditProfile';
+import ChangePassword from './ChangePassword';
+import api from '../../routes/api';
 import { enqueueSnackbar } from 'notistack';
-import UserProfile from './UserProfile';
-import UserAsset from './UserAsset';
 import TopNavigator from '../layout/TopNavigator';
+import BottomNavigator from '../layout/BottomNavigator';
 
-const ProfilePage = () => {
+export default function ProfilePage() {
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useSmartNavigate();
     const [openLanguage, setOpenLanguage] = useState(false);
     const [openEditProfile, setOpenEditProfile] = useState(false);
     const [openChangePassword, setOpenChangePassword] = useState(false);
-    const [openAddress, setOpenAddress] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [userData, setUserData] = useState(null);
 
-    const items = [
-        {
-            label: 'Language',
-            isAuth: true,
-            onClick: () => setOpenLanguage(true)
-        },
-        {
-            label: 'Edit Profile',
-            isAuth: true,
-            onClick: () => setOpenEditProfile(true)
-        },
-        {
-            label: 'Change Password',
-            isAuth: true,
-            onClick: () => setOpenChangePassword(true)
-        },
-        {
-            label: 'My Wallet',
-            isAuth: true,
-            onClick: () => navigate(web.wallet)
-        },
-        {
-            label: 'Messages',
-            isAuth: true,
-            onClick: () => navigate(web.messages)
-        },
-        {
-            label: 'Favorites',
-            isAuth: true,
-            onClick: () => navigate(web.favorite)
-        },
-        {
-            label: 'Delivery Address',
-            isAuth: true,
-            onClick: () => navigate(web.address)
-        },
-        {
-            label: 'Privacy Policy',
-            isAuth: true,
-            onClick: () => navigate(web.privacy)
-        },
-        {
-            label: 'Cookie Policy',
-            isAuth: true,
-            onClick: () => navigate(web.cookie)
-        },
-        {
-            label: 'Sign In',
-            isAuth: false,
-            onClick: () => navigate(web.login)
-        },
-        {
-            label: 'Sign Out',
-            isAuth: true,
-            onClick: async () => {
-                const payload = {
-                    userId: user?.id,
-                    userType: 'user'
-                };
-
-                try {
-                    await api.auth.logout(payload);
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    navigate(web.home);
-                } catch (error) {
-                    enqueueSnackbar(
-                        Array.isArray(error.response?.data?.message)
-                            ? error.response.data.message[0]
-                            : error.response?.data?.message || error.message,
-                        {
-                            variant: 'error'
-                        }
-                    );
-                }
-            }
-        }
-    ];
-
     useEffect(() => {
-        if (!user) {
-            navigate(web.login);
-            return;
-        }
+            if (!user) {
+                navigate(web.login);
+                return;
+            }
+    
+            setImagePreview(
+                `${import.meta.env.VITE_API_BASE_URL}/uploads/images/${
+                    user?.avatar
+                }`
+            );
+            loadData();
+        }, []);
 
-        setImagePreview(
-            `${import.meta.env.VITE_API_BASE_URL}/uploads/images/${
-                user?.avatar
-            }`
-        );
-        loadData();
-    }, []);
-
-    const loadData = async () => {
+        const loadData = async () => {
         const res = await api.users.getOne({ id: user?.id });
 
         setUserData(res.data);
@@ -172,19 +111,51 @@ const ProfilePage = () => {
         }
     };
 
+    const handleLogout = async () => {
+        const payload = {
+            userId: user?.id,
+            userType: 'user'
+        };
+
+        try {
+            await api.auth.logout(payload);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate(web.home);
+        } catch (error) {
+            enqueueSnackbar(
+                Array.isArray(error.response?.data?.message)
+                    ? error.response.data.message[0]
+                    : error.response?.data?.message || error.message,
+                {
+                    variant: 'error'
+                }
+            );
+        }
+    };
+
     return (
-        <Box sx={{ mt: 8, mb: 10, px: 2 }}>
-            <TopNavigator
+        <Box
+            bgcolor='#f5f5f5'
+            minHeight='100vh'>
+                <TopNavigator
                 title={'My Profile'}
                 noBack
             />
-                {/* <UserProfile />
-                <UserAsset /> */}
+            {/* 🔥 顶部渐变用户卡 */}
+            <Box
+                sx={{
+                    background: 'linear-gradient(135deg, #ff5722, #ff9800)',
+                    color: '#fff',
+                    pt: 8,
+                    px: 3,
+                    pb: 5,
+                    borderBottomLeftRadius: 20,
+                    borderBottomRightRadius: 20
+                }}>
                 <Box
-                    display={'flex'}
-                    flexDirection={'column'}
-                    alignItems={'center'}
-                    mb={4}>
+                    display='flex'
+                    alignItems='center'>
                     <Box
                         position={'relative'}
                         display={'inline-block'}>
@@ -211,31 +182,24 @@ const ProfilePage = () => {
                                 style={{ cursor: 'pointer' }}>
                                 <Avatar
                                     sx={{
-                                        width: 150,
-                                        height: 150,
-                                        border: '1px solid #1976d2',
-                                        bgcolor: '#222',
-                                        color: '#fff',
-                                        fontWeight: 'bold',
-                                        fontSize: 16,
-                                        mb: 2
+                                        width: 70,
+                                        height: 70,
+                                        mr: 2
                                     }}
-                                    src={imagePreview}
-                                    translate={'no'}>
-                                    {userData?.name ?? user?.name}
-                                </Avatar>
+                                    variant='rounded'
+                                    src={imagePreview} />
                                 <Box
                                     position={'absolute'}
-                                    bottom={8}
-                                    right={8}
+                                    bottom={-10}
+                                    right={5}
                                     bgcolor={'#fff'}
                                     borderRadius={'50%'}
                                     boxShadow={2}
                                     display={'flex'}
                                     alignItems={'center'}
                                     justifyContent={'center'}
-                                    width={40}
-                                    height={40}>
+                                    width={25}
+                                    height={25}>
                                     <svg
                                         width='36'
                                         height='36'
@@ -246,127 +210,169 @@ const ProfilePage = () => {
                             </label>
                         </Box>
                     </Box>
-                    <Box textAlign={'center'}>
+                    <Box>
                         <Typography
-                            fontWeight={600}
-                            fontSize={16}>
-                            Name:{' '}
-                            <Typography
-                                component={'span'}
-                                fontWeight={400}
-                                translate={'no'}>
-                                {userData?.name ?? user?.name}
-                            </Typography>
+                            fontSize={18}
+                            fontWeight={600}>
+                            {userData?.name ?? user?.name}
                         </Typography>
-                        <Typography
-                            fontWeight={600}
-                            fontSize={16}>
-                            Email:{' '}
-                            <Typography
-                                component={'span'}
-                                fontWeight={400}
-                                translate={'no'}>
-                                {userData?.email ?? user?.email}
-                            </Typography>
+                        <Typography fontSize={14}>
+                            {userData?.email ?? user?.email}
                         </Typography>
-                        <Typography
-                            fontWeight={600}
-                            fontSize={16}>
-                            Balance:{' '}
-                            <Typography
-                                component={'span'}
-                                fontWeight={400}
-                                translate={'no'}>
+                    </Box>
+                    <Box flexGrow={1}></Box>
+                    <Button
+                        variant='contained'
+                        onClick={() => setOpenEditProfile(true)}>
+                        Edit
+                    </Button>
+                </Box>
+            </Box>
+
+            {/* 💰 钱包 / 积分 */}
+            <Box
+                px={2}
+                mt={-3}>
+                <Paper sx={{ borderRadius: 3, p: 2 }}>
+                    <Grid
+                        container
+                        textAlign='center'>
+                        <Grid size={{ xs: 4 }}>
+                            <AccountBalanceWalletRounded />
+                            <Typography fontSize={14}>Balance</Typography>
+                            <Typography fontWeight={600}>
                                 {useStyledLocaleString(
                                     userData?.balance ?? user?.balance,
                                     user?.geoInfo
                                 )}
                             </Typography>
-                        </Typography>
-                        <Typography
-                            fontWeight={600}
-                            fontSize={16}>
-                            Point:{' '}
-                            <Typography
-                                component={'span'}
-                                fontWeight={400}
-                                translate={'no'}>
+                        </Grid>
+
+                        <Grid size={{ xs: 4 }}>
+                            <StarsRounded />
+                            <Typography fontSize={14}>Points</Typography>
+                            <Typography fontWeight={600}>
                                 {userData?.point ?? user?.point}
                             </Typography>
-                            <Button
-                                size={'small'}
-                                sx={{ minWidth: 0 }}
-                                onClick={() =>
-                                    window.open(
-                                        'https://jushop834.cc',
-                                        '_blank'
-                                    )
-                                }>
-                                <LaunchRounded fontSize={'small'} />
-                            </Button>
-                        </Typography>
-                        <Typography
-                            fontWeight={600}
-                            fontSize={16}>
-                            Event invitation code:{' '}
-                            <Typography
-                                component={'span'}
-                                fontWeight={400}
-                                translate={'no'}>
-                                CWLYDQ
-                            </Typography>
-                            <Button
-                                size={'small'}
-                                sx={{ minWidth: 0 }}
-                                onClick={() =>
-                                    navigator.clipboard.writeText('CWLYDQ')
-                                }>
-                                <CopyAllRounded fontSize={'small'} />
-                            </Button>
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box component={'form'}>
+                        </Grid>
+
+                        <Grid size={{ xs: 4 }}>
+                            <ConfirmationNumberRounded />
+                            <Typography fontSize={14}>Coupons</Typography>
+                            <Typography fontWeight={600}>0</Typography>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Box>
+
+            {/* 🛍️ 核心入口（重点） */}
+            <Box
+                px={2}
+                mt={2}>
+                <Paper sx={{ borderRadius: 3 }}>
                     <Grid
                         container
-                        spacing={2}
-                        sx={{ mb: 2 }}>
-                        {items.map(
-                            (item, index) =>
-                                item.isAuth === !!user && (
-                                    <Grid
-                                        size={{ xs: 12, md: 6 }}
-                                        key={index}>
-                                        <Button
-                                            variant={'outlined'}
-                                            fullWidth
-                                            sx={{
-                                                fontSize: 16,
-                                                fontWeight: 'bold',
-                                                textTransform: 'capitalize',
-                                                display: 'flex',
-                                                borderRadius: 2,
-                                                transition:
-                                                    'border-bottom-color 0.2s'
-                                            }}
-                                            onClick={item.onClick}>
-                                            {item.label}
-                                        </Button>
-                                    </Grid>
-                                )
-                        )}
+                        textAlign='center'>
+                        <Grid
+                            size={{ xs: 3 }}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => navigate(web.order)}>
+                            <Box py={2}>
+                                <ShoppingBagRounded />
+                                <Typography fontSize={13}>Orders</Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid
+                            size={{ xs: 3 }}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => navigate(web.flightBooking)}>
+                            <Box py={2}>
+                                <FlightRounded />
+                                <Typography fontSize={13}>Booking</Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid
+                            size={{ xs: 3 }}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => navigate(web.wallet)}>
+                            <Box py={2}>
+                                <AccountBalanceWalletRounded />
+                                <Typography fontSize={13}>Wallet</Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid
+                            size={{ xs: 3 }}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => navigate(web.messages)}>
+                            <Box py={2}>
+                                <ChatRounded />
+                                <Typography fontSize={13}>Messages</Typography>
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Box>
+                </Paper>
+            </Box>
+
+            {/* ⚙️ 功能分组 */}
+            <Box
+                px={2}
+                mt={2}>
+                {/* Account */}
+                <Paper sx={{ borderRadius: 3, mb: 2, overflow: 'hidden' }}>
+                    <List sx={{ p: 0, border: 0 }}>
+                        <MenuItem
+                            icon={<LanguageRounded />}
+                            label='Language'
+                            onClick={() => setOpenLanguage(true)}
+                        />
+                        <MenuItem
+                            icon={<LockRounded />}
+                            label='Change Password'
+                            onClick={() => setOpenChangePassword(true)}
+                        />
+                    </List>
+                </Paper>
+
+                {/* My Services */}
+                <Paper sx={{ borderRadius: 3, mb: 2, overflow: 'hidden' }}>
+                    <List sx={{ p: 0 }}>
+                        <MenuItem
+                            icon={<FavoriteRounded />}
+                            label='Favorites'
+                            onClick={() => navigate(web.favorite)}
+                        />
+                        <MenuItem
+                            icon={<LocationOnRounded />}
+                            label='Delivery Address'
+                            onClick={() => navigate(web.address)}
+                        />
+                        <MenuItem
+                            icon={<PrivacyTipRounded />}
+                            label='Privacy Policy'
+                            onClick={() => navigate(web.privacy)}
+                        />
+                        <MenuItem
+                            icon={<CookieRounded />}
+                            label='Cookie Policy'
+                            onClick={() => navigate(web.cookie)}
+                        />
+                    </List>
+                </Paper>
+
+                {/* Logout */}
+                <Paper sx={{ borderRadius: 3 }}>
+                    <ListItemButton
+                        onClick={handleLogout}
+                        sx={{ justifyContent: 'center', color: 'error.main' }}>
+                        <LogoutRounded sx={{ mr: 1 }} />
+                        Sign Out
+                    </ListItemButton>
+                </Paper>
+            </Box>
             <BottomNavigator />
-            {/** Open Address */}
-            <Dialog
-                open={openAddress}
-                onClose={() => setOpenAddress(false)}>
-                <AddressList
-                    open={openAddress}
-                    setOpen={setOpenAddress}
-                />
-            </Dialog>
             {/** Open Language */}
             <Dialog
                 PaperProps={{
@@ -408,6 +414,17 @@ const ProfilePage = () => {
             </Dialog>
         </Box>
     );
-};
+}
 
-export default ProfilePage;
+function MenuItem({ icon, label, onClick }) {
+    return (
+        <>
+            <ListItemButton onClick={onClick}>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={label} />
+                <ChevronRightRounded />
+            </ListItemButton>
+            <Divider />
+        </>
+    );
+}

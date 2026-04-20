@@ -98,7 +98,13 @@ function buildPassengerDrafts(adults, children, user) {
     return [...adultPassengers, ...childPassengers];
 }
 
-const FlightBookingModal = ({ open, onClose, flight, searchContext }) => {
+const FlightBookingModal = ({
+    open,
+    onClose,
+    flight,
+    searchContext,
+    setOpenPayment
+}) => {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     const today = getTodayDate();
     const [contactForm, setContactForm] = useState({
@@ -275,6 +281,14 @@ const FlightBookingModal = ({ open, onClose, flight, searchContext }) => {
                 }
             );
             onClose();
+            setOpenPayment({
+                open: true,
+                data: {
+                    ...res.data,
+                    price: flight.price,
+                    paymentLink: undefined
+                }
+            });
         } catch (error) {
             enqueueSnackbar(
                 Array.isArray(error.response?.data?.message)
@@ -319,7 +333,8 @@ const FlightBookingModal = ({ open, onClose, flight, searchContext }) => {
                                     <Typography
                                         variant='h6'
                                         fontWeight={700}>
-                                        {flight.airlineName} ({flight.airlineCode})
+                                        {flight.airlineName} (
+                                        {flight.airlineCode})
                                     </Typography>
                                     <Typography
                                         variant='body2'
