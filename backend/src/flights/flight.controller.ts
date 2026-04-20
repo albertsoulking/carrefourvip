@@ -24,4 +24,12 @@ export class FlightController {
     const userId = (req as any)?.user.id;
     return this.flightService.createBooking(userId, body);
   }
+
+  @Post('get-all-booking')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  getAllBooking(@Req() req: Request) {
+    const userId = (req as any)?.user.id;
+    return this.flightService.getAllFlightBooking(userId);
+  }
 }

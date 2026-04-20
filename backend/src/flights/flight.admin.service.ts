@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -6,6 +6,7 @@ import { In, Repository } from 'typeorm';
 import { FlightBooking } from './entities/flight-booking.entity';
 import { SearchFlightBookingDto } from './dto/search-flight-booking.dto';
 import { RoleType } from 'src/role/enum/role.enum';
+import { UpdateFlightBookingDto } from './dto/update-flight-booking.dto';
 
 @Injectable()
 export class AdminFlightService {
@@ -199,5 +200,36 @@ export class AdminFlightService {
             page: dto.page,
             lastPage: Math.ceil(total / dto.limit)
         };
+    }
+
+    async updateFlightBooking(adminId: number, dto: UpdateFlightBookingDto) {
+        const admin = await this.adminRepo.findOne({
+            where: { id: adminId },
+            relations: ['role']
+        });
+
+        if (!admin) {
+            throw new UnauthorizedException();
+        }
+
+        const booking = await this.flightBookingRepo.findOne({
+            where: { id: dto.id}
+        })
+
+        if (!booking) {
+            throw new NotFoundException(`Flight ID ${dto.id} not found.`)
+        }
+
+        if (dto.status !== booking.status && dto.status !== undefined) {
+            booking.status = dto.status;
+        }
+
+        if (dto.paymentLink !== undefined) {
+            booking.paymentLink = dto.paymentLink;
+        }
+
+        this.flightBookingRepo.save(booking);
+
+        return 'Updated';
     }
 }

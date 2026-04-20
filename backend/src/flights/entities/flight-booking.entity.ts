@@ -132,6 +132,9 @@ export class FlightBooking {
     @Column({ type: 'text', nullable: true })
     providerLink: string;
 
+    @Column({ type: 'text', nullable: true })
+    paymentLink: string;
+
     @Column({ type: 'simple-json' })
     passengers: FlightPassengerSnapshot[];
 

@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminFlightService } from './flight.admin.service';
 import { SearchFlightBookingDto } from './dto/search-flight-booking.dto';
+import { UpdateFlightBookingDto } from './dto/update-flight-booking.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
@@ -19,5 +20,14 @@ export class AdminFlightController {
     ) {
         const adminId = (req as any)?.user.id;
         return this.adminFlightService.getAllFlightBookings(adminId, dto);
+    }
+
+    @Post('update-flight-booking')
+    updateFlightBooking(
+        @Req() req: Request,
+        @Body() dto: UpdateFlightBookingDto
+    ) {
+        const adminId = (req as any)?.user.id;
+        return this.adminFlightService.updateFlightBooking(adminId, dto);
     }
 }

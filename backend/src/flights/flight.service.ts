@@ -98,7 +98,8 @@ export class FlightService {
             throw new NotFoundException(`User ID ${userId} not found`);
         }
 
-        const expectedPassengerCount = Number(dto.adults) + Number(dto.children);
+        const expectedPassengerCount =
+            Number(dto.adults) + Number(dto.children);
 
         if (dto.passengers.length !== expectedPassengerCount) {
             throw new BadRequestException(
@@ -146,6 +147,35 @@ export class FlightService {
             bookingReference: savedBooking.bookingReference,
             status: savedBooking.status
         };
+    }
+
+    async getAllFlightBooking(userId: number) {
+        const bookings = await this.flightBookingRepo.find({
+            where: { userId }
+        });
+
+        return bookings.map((b) => ({
+            id: b.id,
+            bookingReference: b.bookingReference,
+            status: b.status,
+
+            airlineName: b.airlineName,
+
+            originCode: b.originCode,
+            destinationCode: b.destinationCode,
+            originCity: b.originCity,
+            destinationCity: b.destinationCity,
+
+            departureAt: b.departureAt,
+
+            passengerName: `${b.contactFirstName} ${b.contactLastName}`,
+
+            currency: b.currency,
+            price: b.price,
+
+            providerLink: b.providerLink,
+            paymentLink: b.paymentLink
+        }));
     }
 
     // 🔥 fallback 假数据（防止空数据）
