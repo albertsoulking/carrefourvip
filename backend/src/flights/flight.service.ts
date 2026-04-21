@@ -151,7 +151,8 @@ export class FlightService {
 
     async getAllFlightBooking(userId: number) {
         const bookings = await this.flightBookingRepo.find({
-            where: { userId }
+            where: { userId },
+            order: { createdAt: 'DESC' }
         });
 
         return bookings.map((b) => ({

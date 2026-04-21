@@ -4,6 +4,7 @@ export enum NotificationType {
     USER = 'user',
     MESSAGE = 'message',
     PRODUCT = 'product',
+    FLIGHT_BOOKING = 'flight_booking',
     CATEGORY = 'category',
     ADMIN = 'admin',
     // user

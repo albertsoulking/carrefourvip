@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+    Injectable,
+    NotFoundException,
+    UnauthorizedException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -7,6 +11,9 @@ import { FlightBooking } from './entities/flight-booking.entity';
 import { SearchFlightBookingDto } from './dto/search-flight-booking.dto';
 import { RoleType } from 'src/role/enum/role.enum';
 import { UpdateFlightBookingDto } from './dto/update-flight-booking.dto';
+import { NotificationService } from 'src/notification/notification.service';
+import { NotificationType } from 'src/notification/enum/notification.enum';
+import { UserType } from 'src/login-activities/enum/login-activities.enum';
 
 @Injectable()
 export class AdminFlightService {
@@ -16,7 +23,8 @@ export class AdminFlightService {
         @InjectRepository(Admin)
         private readonly adminRepo: Repository<Admin>,
         @InjectRepository(User)
-        private readonly userRepo: Repository<User>
+        private readonly userRepo: Repository<User>,
+        private readonly notiService: NotificationService
     ) {}
 
     private async getScopedUserIds(admin: Admin): Promise<number[] | null> {
@@ -184,8 +192,7 @@ export class AdminFlightService {
             createdAt: 'booking.createdAt'
         };
 
-        const sortField =
-            sortFieldMap[dto.sortBy] ?? `booking.${dto.sortBy}`;
+        const sortField = sortFieldMap[dto.sortBy] ?? `booking.${dto.sortBy}`;
 
         const [data, total] = await query
             .skip(skip)
@@ -213,19 +220,53 @@ export class AdminFlightService {
         }
 
         const booking = await this.flightBookingRepo.findOne({
-            where: { id: dto.id}
-        })
+            where: { id: dto.id },
+            relations: ['user']
+        });
 
         if (!booking) {
-            throw new NotFoundException(`Flight ID ${dto.id} not found.`)
+            throw new NotFoundException(`Flight ID ${dto.id} not found.`);
         }
 
         if (dto.status !== booking.status && dto.status !== undefined) {
             booking.status = dto.status;
+
+            await this.notiService.sendNotification({
+                title: 'Flight Booking Status Update',
+                userId: booking.user.id,
+                content: `The status for the flight booking [#${booking.id}] has been updated to ${dto.status}`,
+                type: NotificationType.FLIGHT_BOOKING,
+                path: '/orders/flights',
+                createdAt: new Date(),
+                targetId: booking.id,
+                userType: UserType.ADMIN,
+                enableNoti: 0,
+                extra: JSON.stringify({
+                    url: dto.paymentLink
+                })
+            });
         }
 
-        if (dto.paymentLink !== undefined) {
+        if (
+            dto.paymentLink !== booking.paymentLink &&
+            dto.paymentLink !== undefined
+        ) {
             booking.paymentLink = dto.paymentLink;
+
+            await this.notiService.sendNotification({
+                title: 'Flight Booking Payment Link',
+                userId: booking.user.id,
+                content: `The payment link for the flight booking [#${booking.id}] has been automatically created`,
+                type: NotificationType.FLIGHT_BOOKING,
+                path: '/flight-booking',
+                createdAt: new Date(),
+                targetId: booking.id,
+                userType: UserType.USER,
+                enableNoti: 0,
+                extra: JSON.stringify({
+                    url: dto.paymentLink
+                })
+            });
         }
 
         this.flightBookingRepo.save(booking);

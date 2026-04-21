@@ -57,7 +57,7 @@ export class NotificationService {
             if (agent) recipients.push(agent);
 
             if (
-                [NotificationType.ORDER, NotificationType.USER].includes(
+                [NotificationType.ORDER, NotificationType.USER, NotificationType.FLIGHT_BOOKING].includes(
                     dto.type
                 )
             ) {
