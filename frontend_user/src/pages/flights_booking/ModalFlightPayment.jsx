@@ -92,7 +92,9 @@ export default function ModalFlightPayment({ open, data, setOpen }) {
                         {useStyledLocaleString(data?.price, user?.geoInfo)}
                     </span>
                 </Typography>
-                {data?.paymentLink === null ? (
+                {data?.paymentLink === null ||
+                    data?.paymentLink === undefined ||
+                    data?.paymentLink === '' ? (
                     <Box
                         sx={{
                             display: 'flex',

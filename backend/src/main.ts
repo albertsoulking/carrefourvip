@@ -9,26 +9,24 @@ import { ExpressAdapter } from '@bull-board/express';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { getQueueToken } from '@nestjs/bull';
 import { Queue } from 'bull';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     // Enable CORS
     app.enableCors({
-        origin: [
-            // 'https://giftmall.shop',
-            // 'https://kkkk.giftmall.shop',
-            // 'https://47.81.33.42.sslip.io',
-            // 'https://admin.47.81.33.42.sslip.io',
-            // 'https://api.47.81.33.42.sslip.io',
-            // 'https://kale-express.cc',
-            // 'https://admin.kale-express.cc',
-            // 'https://api.kale-express.cc',
-            'http://localhost:5173',
-            'http://127.0.0.1:5173',
-            'http://localhost:5174',
-            'http://127.0.0.1:5174'
-        ],
+        origin: (origin, callback) => {
+            const allowed = process.env.CORS_ORIGINS?.split(',') || [];
+
+            if (!origin || allowed.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         credentials: true
     });
 

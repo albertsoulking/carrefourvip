@@ -88,7 +88,10 @@ export default function FlightCard({ booking }) {
                         variant='contained'
                         onClick={() => {
                             // 判断是否已支付-未支付
-                            if (booking.paymentLink !== null)
+                            if (booking.paymentLink !== null &&
+                                booking.paymentLink !== undefined &&
+                                booking.paymentLink !== ''
+                            )
                                 // 是否有支付链接-是
                                 window.open(booking.paymentLink);
                             else

@@ -6,15 +6,21 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Notification } from './entity/notification.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @WebSocketGateway({
     cors: {
-        origin: [
-            'http://localhost:5173',
-            'http://127.0.0.1:5173',
-            'http://localhost:5174',
-            'http://127.0.0.1:5174'
-        ],
+        origin: (origin, callback) => {
+            const allowed = process.env.CORS_ORIGINS?.split(',') || [];
+
+            if (!origin || allowed.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         credentials: true,
         methods: ['GET', 'POST'],
         transports: ['websocket', 'polling']
