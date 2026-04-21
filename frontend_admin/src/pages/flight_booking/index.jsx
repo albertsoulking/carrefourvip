@@ -8,6 +8,8 @@ import ActionBarExpand from './ActionBarExpand';
 import ActionBarCollapse from './ActionBarCollapse';
 import getColumns from './columns';
 import { enqueueSnackbar } from 'notistack';
+import web from '../../routes/web';
+import useNotificationSocket from '../../hooks/useNotificationSocket';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,6 +77,15 @@ const FlightBookingListPage = () => {
             setLoading(false);
         }
     };
+
+    useNotificationSocket((noti) => {
+        if (!noti) return;
+        if (noti.type !== 'flight_booking') return;
+        if (noti.path !== web.order.flight) return;
+
+        loadData(searchModal);
+        setState(searchModal);
+    });
 
     const updateData = async ({
         id,

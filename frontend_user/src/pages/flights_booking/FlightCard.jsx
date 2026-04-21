@@ -81,15 +81,14 @@ export default function FlightCard({ booking }) {
                     color='primary.main'>
                     {booking.currency} {booking.price}
                 </Typography>
-                
+
                 {booking.status === 'submitted' && (
                     <Button
                         size='small'
                         variant='contained'
                         onClick={() => {
                             // 判断是否已支付-未支付
-
-                            if (booking.paymentLink)
+                            if (booking.paymentLink !== null)
                                 // 是否有支付链接-是
                                 window.open(booking.paymentLink);
                             else

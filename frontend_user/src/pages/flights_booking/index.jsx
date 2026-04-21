@@ -15,7 +15,6 @@ const FlightBookingPage = () => {
     const loadData = async () => {
         const res = await api.flight.getAllBooking();
         setBookings(res.data);
-        console.log(res.data);
     };
 
     return (
