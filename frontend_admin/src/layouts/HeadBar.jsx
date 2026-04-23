@@ -83,12 +83,12 @@ export default function HeadBar({
                             letterSpacing: 0.5
                         }}
                         translate={'no'}>
-                        Carre
+                        管理员
                         <Box
                             component={'span'}
                             sx={{ color: '#FFA500' }}
                             translate={'no'}>
-                            four
+                            后台
                         </Box>
                     </Typography>
                 </Box>

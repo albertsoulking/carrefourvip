@@ -14,8 +14,8 @@ const CartEmpty = () => {
                 </Typography>
                 <Grid sx={{ textAlign: 'center', my: 2 }}>
                     <img
-                        src={assets.food_car}
-                        alt={'Food Car'}
+                        src={assets.empty_cart}
+                        alt={'Empty Cart'}
                         style={{ width: 150, objectFit: 'cover' }}
                     />
                 </Grid>
@@ -23,15 +23,7 @@ const CartEmpty = () => {
                     fontWeight={'bold'}
                     fontSize={24}
                     textAlign={'center'}>
-                    What do you want to buy?
-                </Typography>
-                <Typography
-                    variant={'h6'}
-                    fontSize={18}
-                    fontWeight={'normal'}
-                    textAlign={'center'}
-                    sx={{ my: 2, color: '#000000' }}>
-                    You haven't added anything to your cart!
+                    Let's start shopping!
                 </Typography>
             </CardContent>
         </Card>
