@@ -629,7 +629,7 @@ const HomePage = () => {
                     <Stack
                         direction={{ xs: 'column', sm: 'row' }}
                         gap={1.2}
-                        sx={{ mt: 6 }}>
+                        sx={{ mt: 4, mb: 14 }}>
                         <Button
                             endIcon={<ArrowForwardRounded />}
                             variant={'contained'}

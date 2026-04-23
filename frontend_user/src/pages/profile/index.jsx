@@ -137,7 +137,8 @@ export default function ProfilePage() {
     return (
         <Box
             bgcolor='#f5f5f5'
-            minHeight='100vh'>
+            minHeight='100vh'
+            pb={15}>
                 <TopNavigator
                 title={'My Profile'}
                 noBack
