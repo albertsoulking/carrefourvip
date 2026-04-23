@@ -1,9 +1,6 @@
 import logo from "./logo.png";
-import logo_white from "./logo_white.png";
 import element2 from "./element2.png";
 import login_vid from "./login.mp4";
-import food_car from "./food_car.jpg";
-import kalefu from "./kalefu.png";
 import alcohol_mobile from "./alcohol-banner-legal-mobile.webp";
 import cbPay from "./cb.svg";
 import visaPay from "./visa.svg";
@@ -21,14 +18,12 @@ import b11 from './b11.jpg';
 import discount_5 from './discount_5.jpg';
 import paypalDiscount5 from './paypal_discount_5.jpg';
 import jumia from './jumia.jpg';
+import empty_cart from './empty_cart.png';
 
 const assets = {
     logo,
-    logo_white,
     element2,
     login_vid,
-    food_car,
-    kalefu,
     alcohol_mobile,
     cbPay,
     visaPay,
@@ -45,7 +40,8 @@ const assets = {
     b11,
     discount_5,
     paypalDiscount5,
-    jumia
+    jumia,
+    empty_cart
 };
 
 export default assets;

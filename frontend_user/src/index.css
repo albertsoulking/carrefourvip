@@ -1,14 +1,25 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root {
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Fraunces', serif;
+    --brand-forest: #17392c;
+    --brand-ink: #182018;
+    --brand-muted: #687166;
+    --brand-cream: #f7f2e8;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-body);
 }
 body {
-    background-color: #f5f5f5 !important;
-    color: #000;
+    background:
+        radial-gradient(circle at top, rgba(244, 186, 87, 0.12), transparent 30%),
+        linear-gradient(180deg, #fbf8f2 0%, #f2eadf 100%) !important;
+    color: var(--brand-ink);
 }
 
 html, body {

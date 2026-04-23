@@ -13,10 +13,10 @@ const AboutPage = () => {
             <Typography
                 variant='h4'
                 gutterBottom>
-                About Carrefourvip LLC
+                About Zenviquea LLC
             </Typography>
             <Typography variant='body1'>
-                Carrefourvip LLC is an e-commerce platform that sources consumer
+                Zenviquea LLC is an e-commerce platform that sources consumer
                 goods and lifestyle products from international and local
                 suppliers and sells them to customers in Europe and North
                 America through an online storefront. Our business model
@@ -26,7 +26,6 @@ const AboutPage = () => {
             <Box sx={{ my: 3 }}>
                 <img
                     src={assets.logo}
-                    alt='Carrefourvip Logo'
                     style={{ maxWidth: 180 }}
                 />
             </Box>
@@ -43,14 +42,14 @@ const AboutPage = () => {
                         display='flex'
                         alignItems='center'>
                         <LanguageIcon sx={{ mr: 1 }} />
-                        <Typography>https://carevourvip.com</Typography>
+                        <Typography>https://zenviquea.com</Typography>
                     </Box>
                     <Box
                         display='flex'
                         alignItems='center'
                         mt={1}>
                         <EmailIcon sx={{ mr: 1 }} />
-                        <Typography>carrefour@carevourvip.com</Typography>
+                        <Typography>head@zenviquea.com</Typography>
                     </Box>
                     <Box
                         display='flex'
@@ -71,7 +70,7 @@ const AboutPage = () => {
                     </Box>
                     <Box mt={2}>
                         <Typography variant='body2'>
-                            <strong>Company Representative:</strong> SOE MIN OO
+                            <strong>Company Representative:</strong> Oliver Smitch
                         </Typography>
                     </Box>
                 </Grid>
@@ -81,7 +80,7 @@ const AboutPage = () => {
                     variant='body2'
                     color='text.secondary'>
                     *This page is used for business verification purposes and
-                    reflects the official identity of Carrefourvip LLC.*
+                    reflects the official identity of Zenviquea LLC.*
                 </Typography>
             </Box>
         </Box>

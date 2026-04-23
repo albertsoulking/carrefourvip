@@ -40,7 +40,7 @@ const PaymentPage = () => {
                 alignItems={'center'}
                 mb={2}>
                 <img
-                    src={assets.logo_white}
+                    src={assets.logo}
                     width={80}
                     onClick={() => navigate(web.home)}
                 />

@@ -200,7 +200,7 @@ const FormSection = ({ setForm }) => {
                     disableRipple
                     onClick={() => navigate(web.home)}>
                     <img
-                        src={assets.kalefu}
+                        src={assets.logo}
                         alt='logo'
                         style={{ objectFit: 'cover', width: 140 }}
                     />

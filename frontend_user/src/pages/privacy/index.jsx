@@ -7,18 +7,18 @@ const PrivacyPolicyPage = () => {
     const text = [
         {
             title: 'Privacy Policy & Terms of Service',
-            text: 'Welcome to CarreFour! By using our website, you agree to the following Terms and Conditions. We recommend reading them carefully to understand your rights and responsibilities as a user.'
+            text: 'Welcome to Zenviquea! By using our website, you agree to the following Terms and Conditions. We recommend reading them carefully to understand your rights and responsibilities as a user.'
         },
         {
             title: 'Acceptance of Terms',
-            text: 'By accessing or using the CarreFour website, you confirm that you are at least 18 years of age and agree to comply with and be bound by these Terms and Conditions. If you disagree with any part of these terms, please discontinue your use of our services.'
+            text: 'By accessing or using the Zenviquea website, you confirm that you are at least 18 years of age and agree to comply with and be bound by these Terms and Conditions. If you disagree with any part of these terms, please discontinue your use of our services.'
         },
         {
             title: 'User Accounts',
             lists: [
                 {
                     title: 'Account Creation',
-                    text: 'To place orders on CarreFour, you need to create an account. You are responsible for maintaining the confidentiality of your login details.'
+                    text: 'To place orders on Zenviquea, you need to create an account. You are responsible for maintaining the confidentiality of your login details.'
                 },
                 {
                     title: 'Eligibility',
@@ -26,7 +26,7 @@ const PrivacyPolicyPage = () => {
                 },
                 {
                     title: 'Account Security',
-                    text: "Please ensure your account details are secure. CarreFour cannot be held liable for unauthorized access resulting from the user's negligence."
+                    text: "Please ensure your account details are secure. Zenviquea cannot be held liable for unauthorized access resulting from the user's negligence."
                 }
             ]
         },
@@ -39,7 +39,7 @@ const PrivacyPolicyPage = () => {
                 },
                 {
                     title: 'Payment',
-                    text: 'CarreFour accepts major credit/debit cards, online payment gateways, and other secure payment methods. All prices are inclusive of applicable taxes and service fees.'
+                    text: 'Zenviquea accepts major credit/debit cards, online payment gateways, and other secure payment methods. All prices are inclusive of applicable taxes and service fees.'
                 },
                 {
                     title: 'Order Confirmation',
@@ -56,7 +56,7 @@ const PrivacyPolicyPage = () => {
                 },
                 {
                     title: 'Refund Policy',
-                    text: 'If CarreFour or the restaurant is unable to fulfill your order, you may be eligible for a full or partial refund, based on the circumstances. Please refer to our Refund Policy for detailed guidelines.'
+                    text: 'If Zenviquea or the restaurant is unable to fulfill your order, you may be eligible for a full or partial refund, based on the circumstances. Please refer to our Refund Policy for detailed guidelines.'
                 }
             ]
         },
@@ -69,11 +69,11 @@ const PrivacyPolicyPage = () => {
                 },
                 {
                     title: 'Delivery Area and Limitations',
-                    text: 'CarreFour currently serves designated areas, and orders outside these locations may not be fulfilled.'
+                    text: 'Zenviquea currently serves designated areas, and orders outside these locations may not be fulfilled.'
                 },
                 {
                     title: 'Delivery Responsibility',
-                    text: 'CarreFour works with trusted delivery partners; however, we are not responsible for delays or issues occurring after the order leaves the restaurant.'
+                    text: 'Zenviquea works with trusted delivery partners; however, we are not responsible for delays or issues occurring after the order leaves the restaurant.'
                 }
             ]
         },
@@ -82,7 +82,7 @@ const PrivacyPolicyPage = () => {
             lists: [
                 {
                     title: 'Restaurant Liability',
-                    text: 'CarreFour is a platform connecting users with local restaurants. We are not responsible for the quality, freshness, or any health concerns related to the food provided by restaurants.'
+                    text: 'Zenviquea is a platform connecting users with local restaurants. We are not responsible for the quality, freshness, or any health concerns related to the food provided by restaurants.'
                 },
                 {
                     title: 'Allergies and Dietary Needs',
@@ -95,11 +95,11 @@ const PrivacyPolicyPage = () => {
             lists: [
                 {
                     title: 'Ownership',
-                    text: 'All content, logos, and branding on the CarreFour website are the property of CarreFour. Unauthorized use, reproduction, or distribution of any material is prohibited.'
+                    text: 'All content, logos, and branding on the Zenviquea website are the property of Zenviquea. Unauthorized use, reproduction, or distribution of any material is prohibited.'
                 },
                 {
                     title: 'User Contributions',
-                    text: 'If you submit feedback, reviews, or other content, you grant CarreFour a non-exclusive, royalty-free, and perpetual license to use, modify, and distribute your content for promotional purposes.'
+                    text: 'If you submit feedback, reviews, or other content, you grant Zenviquea a non-exclusive, royalty-free, and perpetual license to use, modify, and distribute your content for promotional purposes.'
                 }
             ]
         },
@@ -134,13 +134,13 @@ const PrivacyPolicyPage = () => {
             lists: [
                 {
                     title: 'Terms Revisions',
-                    text: 'CarreFour reserves the right to update these Terms and Conditions at any time. Changes will be effective upon posting on this page. Continued use of the website after modifications signifies your acceptance of the updated terms.'
+                    text: 'Zenviquea reserves the right to update these Terms and Conditions at any time. Changes will be effective upon posting on this page. Continued use of the website after modifications signifies your acceptance of the updated terms.'
                 }
             ]
         },
         {
             title: 'Contact Us',
-            text: 'If you have any questions about these Terms and Conditions, please contact us at support@carrefour.com or through the Contact Us page on our website.'
+            text: 'If you have any questions about these Terms and Conditions, please contact us at support@Zenviquea.com or through the Contact Us page on our website.'
         }
     ];
 

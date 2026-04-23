@@ -7,7 +7,7 @@ const CookiePolicyPage = () => {
     const text = [
         {
             title: 'Cookie Policy',
-            text: 'This Cookie Policy explains how CarreFour uses cookies and similar technologies on our website. By using our site, you consent to our use of cookies in accordance with this policy. Please read this document carefully to understand how we use cookies, the information we collect, and how you can manage your cookie preferences.'
+            text: 'This Cookie Policy explains how Zenviquea uses cookies and similar technologies on our website. By using our site, you consent to our use of cookies in accordance with this policy. Please read this document carefully to understand how we use cookies, the information we collect, and how you can manage your cookie preferences.'
         },
         {
             title: 'What Are Cookies?',
@@ -39,7 +39,7 @@ const CookiePolicyPage = () => {
             lists: [
                 {
                     title: 'Enhancing User Experience',
-                    text: 'Cookies help us remember your preferences and improve the ease of use on CarreFour.'
+                    text: 'Cookies help us remember your preferences and improve the ease of use on Zenviquea.'
                 },
                 {
                     title: 'Tracking Performance',
@@ -53,11 +53,11 @@ const CookiePolicyPage = () => {
         },
         {
             title: 'Third-Party Cookies',
-            text: 'CarreFour may work with third-party service providers who use cookies on our website. These providers help us with analytics, advertising, and social media integration. Third-party cookies are governed by the privacy policies of these providers, and we recommend reviewing their policies for more information.'
+            text: 'Zenviquea may work with third-party service providers who use cookies on our website. These providers help us with analytics, advertising, and social media integration. Third-party cookies are governed by the privacy policies of these providers, and we recommend reviewing their policies for more information.'
         },
         {
             title: 'Contact Us',
-            text: 'If you have any questions about these Terms and Conditions, please contact us at support@carrefour.com or through the Contact Us page on our website.'
+            text: 'If you have any questions about these Terms and Conditions, please contact us at support@Zenviquea.com or through the Contact Us page on our website.'
         }
     ];
 
