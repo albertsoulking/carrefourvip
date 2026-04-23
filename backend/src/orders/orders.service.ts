@@ -184,8 +184,7 @@ export class OrdersService {
 
             // 读取配送时间设置
             const raw = JSON.parse(setting?.value || '{}');
-            const deliSetting = JSON.parse(raw.deliveryRules || '[]');
-            const deliMethod = deliSetting.find(
+            const deliMethod = raw.deliveryRules.find(
                 (item: any) => item.code === order.deliveryMethod
             );
 

@@ -55,20 +55,23 @@ export class UsersService {
 
         // Verify the referral code is valid (from an admin)
         try {
-            const qb = this.adminRepo
-                .createQueryBuilder('admin')
-                .leftJoin('admin.role', 'role')
-                .where('role.name = :roleName', { roleName: RoleType.TEAM });
+            let admin:Admin | null = null;
 
-            if (dto.referralCode !== undefined && dto.referralCode !== null) {
-                qb.andWhere('admin.referralCode = :referralCode', {
-                    referralCode: dto.referralCode
-                });
+            if (dto.referralCode) {
+                // 有邀请码：直接查，不管 role
+                admin = await this.adminRepo
+                    .createQueryBuilder('admin')
+                    .where('admin.referralCode = :referralCode', {
+                        referralCode: dto.referralCode
+                    })
+                    .getOne();
             } else {
-                qb.andWhere('admin.referralCode IS NULL');
+                // 没邀请码：找最早创建的 admin
+                admin = await this.adminRepo
+                    .createQueryBuilder('admin')
+                    .orderBy('admin.createdAt', 'ASC') // 最早
+                    .getOne();
             }
-
-            const admin = await qb.getOne();
 
             const role = await this.roleRepo.findOneBy({
                 name: RoleType.CUSTOMER
