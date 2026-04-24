@@ -19,7 +19,7 @@ const useLang = () => {
             select.value = langCode;
             select.dispatchEvent(new Event('change'));
         }, 50);
-        console.log('Language changed to:', langCode);
+        
         document.cookie = `googtrans=/en/${langCode}; path=/`;
         document.cookie = `googtrans=/en/${langCode}; domain=${window.location.hostname}; path=/`;
     };

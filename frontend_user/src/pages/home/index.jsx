@@ -629,7 +629,7 @@ const HomePage = () => {
                     <Stack
                         direction={{ xs: 'column', sm: 'row' }}
                         gap={1.2}
-                        sx={{ mt: 4, mb: 14 }}>
+                        sx={{ mt: 4 }}>
                         <Button
                             endIcon={<ArrowForwardRounded />}
                             variant={'contained'}
@@ -675,7 +675,7 @@ const HomePage = () => {
                         direction={'row'}
                         gap={1}
                         flexWrap={'wrap'}
-                        sx={{ mt: 2 }}>
+                        sx={{ mt: 12 }}>
                         {highlightCategories.map((item) => (
                             <Chip
                                 key={item.id}
