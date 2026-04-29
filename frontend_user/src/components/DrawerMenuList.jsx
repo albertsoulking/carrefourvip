@@ -1,5 +1,5 @@
-import { CloseRounded } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Typography } from '@mui/material';
+import { CategoryRounded, CloseRounded } from '@mui/icons-material';
+import { Box, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import NavBar from './NavBar';
 import { useEffect } from 'react';
 import api from '../routes/api';
@@ -34,38 +34,65 @@ export default function DrawerMenuList({
             open={open}
             sx={{ '.MuiCard-root': { overflow: 'auto' } }}
             PaperProps={{
-                sx: { width: 360 }
+                sx: {
+                    width: { xs: '86%', sm: 360 },
+                    maxWidth: 420,
+                    bgcolor: 'var(--brand-cream)',
+                    borderRight: '1px solid var(--brand-line)'
+                }
             }}
             onClose={() => setOpen(false)}>
             <Box
-                display={'flex'}
-                justifyContent={'space-between'}
-                justifyItems={'center'}>
+                sx={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 2,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    px: 2,
+                    py: 1.5,
+                    bgcolor: 'var(--brand-nav)',
+                    borderBottom: '1px solid var(--brand-line)',
+                    backdropFilter: 'blur(var(--brand-blur))'
+                }}>
+                <Stack
+                    direction={'row'}
+                    spacing={1}
+                    alignItems={'center'}>
+                    <Box
+                        sx={{
+                            width: 38,
+                            height: 38,
+                            display: 'grid',
+                            placeItems: 'center',
+                            borderRadius: 'var(--brand-radius-md)',
+                            bgcolor: 'var(--brand-forest)',
+                            color: '#fff'
+                        }}>
+                        <CategoryRounded fontSize={'small'} />
+                    </Box>
+                    <Box>
+                        <Typography
+                            fontSize={18}
+                            fontWeight={800}
+                            color={'var(--brand-ink)'}>
+                            Categories
+                        </Typography>
+                        <Typography
+                            fontSize={12}
+                            color={'var(--brand-muted)'}>
+                            Browse product sections
+                        </Typography>
+                    </Box>
+                </Stack>
                 <IconButton
                     sx={{
-                        width: '100%',
-                        inlineSize: 'auto',
-                        color: '#fff',
-                        bgcolor: '#fff'
-                    }}
-                    disabled>
-                    <CloseRounded
-                        sx={{ color: '#fff' }}
-                    />
-                </IconButton>
-                <Typography
-                    fontSize={18}
-                    fontWeight={'bold'}
-                    sx={{ lineHeight: 2.5 }}>
-                    Menu
-                </Typography>
-                <IconButton
-                    sx={{
-                        width: '100%',
-                        inlineSize: 'auto'
+                        border: '1px solid var(--brand-line)',
+                        bgcolor: 'var(--brand-paper)'
                     }}
                     onClick={() => setOpen(false)}>
-                    <CloseRounded color={'error'} />
+                    <CloseRounded />
                 </IconButton>
             </Box>
             <NavBar

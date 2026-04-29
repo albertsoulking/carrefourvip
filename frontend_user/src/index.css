@@ -17,6 +17,9 @@
     --brand-radius-lg: 24px;
     --brand-radius-xl: 30px;
     --brand-radius-pill: 999px;
+    --app-top-bar-space: 72px;
+    --app-bottom-nav-space: 104px;
+    --app-fixed-action-space: 88px;
     --brand-body-bg: radial-gradient(circle at top left, rgba(0, 122, 255, 0.14), transparent 30%), linear-gradient(180deg, #f7fbff 0%, #eaf3ff 100%);
     --brand-hero: linear-gradient(135deg, rgba(0, 122, 255, 0.92), rgba(93, 159, 255, 0.68));
 }

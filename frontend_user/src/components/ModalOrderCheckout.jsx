@@ -244,11 +244,47 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
     return (
         <Dialog
             open={open}
-            fullWidth={false}
+            fullWidth
             maxWidth={'sm'}
+            PaperProps={{
+                sx: {
+                    width: 'calc(100vw - 24px)',
+                    maxHeight: 'calc(100vh - 24px)',
+                    bgcolor: 'var(--brand-paper)',
+                    overflow: 'hidden'
+                }
+            }}
             disableEnforceFocus
             keepMounted>
-            <Box sx={{ borderRadius: 2, p: 2 }}>
+            <Box
+                sx={{
+                    maxHeight: 'calc(100vh - 24px)',
+                    overflow: 'auto',
+                    bgcolor: 'var(--brand-paper)'
+                }}>
+            <Box
+                sx={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 2,
+                    px: 2,
+                    py: 1.5,
+                    bgcolor: 'var(--brand-nav)',
+                    borderBottom: '1px solid var(--brand-line)'
+                }}>
+                <Typography
+                    fontSize={18}
+                    fontWeight={800}
+                    color={'var(--brand-ink)'}>
+                    Order Preview
+                </Typography>
+                <Typography
+                    fontSize={12}
+                    color={'var(--brand-muted)'}>
+                    Review address, totals, and payment method.
+                </Typography>
+            </Box>
+            <Box sx={{ p: 2 }}>
                 {!openingHours && (
                     <Typography
                         color={'error'}
@@ -258,13 +294,14 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                         confirm your order during the next day's opening hours)
                     </Typography>
                 )}
-                <Typography
-                    fontSize={18}
-                    fontWeight={'bold'}
-                    textAlign={'center'}
-                    sx={{ lineHeight: 2.5 }}>
-                    Order Preview
-                </Typography>
+                <Box
+                    sx={{
+                        p: 1.5,
+                        mb: 1.5,
+                        border: '1px solid var(--brand-line)',
+                        borderRadius: 'var(--brand-radius-lg)',
+                        bgcolor: 'var(--brand-cream)'
+                    }}>
                 <Box
                     display={'flex'}
                     justifyContent={'space-between'}
@@ -287,8 +324,23 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                         {data?.quantity}
                     </Typography>
                 </Box>
+                </Box>
                 {siteData.deliveryAddressEnabled && (
-                    <>
+                    <Box
+                        sx={{
+                            p: 1.5,
+                            mb: 1.5,
+                            border: '1px solid var(--brand-line)',
+                            borderRadius: 'var(--brand-radius-lg)',
+                            bgcolor: 'var(--brand-paper)'
+                        }}>
+                        <Typography
+                            fontSize={13}
+                            fontWeight={800}
+                            color={'var(--brand-muted)'}
+                            mb={0.75}>
+                            Delivery Address
+                        </Typography>
                         <Box
                             display={'flex'}
                             justifyContent={'space-between'}
@@ -331,7 +383,7 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                                 {data?.userAddress}
                             </Typography>
                         </Box>
-                    </>
+                    </Box>
                 )}
                 <Box mb={2}>
                     <Typography
@@ -345,8 +397,9 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                         value={paymentType || ''}
                         sx={{
                             p: 1,
-                            borderRadius: 2,
-                            border: '1px solid #0000001f'
+                            borderRadius: 'var(--brand-radius-lg)',
+                            border: '1px solid var(--brand-line)',
+                            bgcolor: 'var(--brand-cream)'
                         }}
                         onChange={(e) => {
                             setPaymentType(e.target.value);
@@ -628,6 +681,20 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                     </RadioGroup>
                 </Box>
                 <Box
+                    sx={{
+                        p: 1.5,
+                        border: '1px solid var(--brand-line)',
+                        borderRadius: 'var(--brand-radius-lg)',
+                        bgcolor: 'var(--brand-paper)'
+                    }}>
+                <Typography
+                    fontSize={13}
+                    fontWeight={800}
+                    color={'var(--brand-muted)'}
+                    mb={0.75}>
+                    Order Summary
+                </Typography>
+                <Box
                     display={'flex'}
                     justifyContent={'space-between'}
                     alignItems={'center'}>
@@ -766,6 +833,7 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                         </span>
                     </Typography>
                 </Box>
+                </Box>
                 <Divider sx={{ my: 1 }} />
                 <Typography
                     fontSize={12}
@@ -779,17 +847,29 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                 <Divider sx={{ my: 1 }} />
                 <Box
                     display={'flex'}
-                    justifyContent={'flex-end'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
                     gap={1}
                     sx={{
-                        bgcolor: '#fff',
-                        width: '100%'
+                        position: 'sticky',
+                        bottom: 0,
+                        zIndex: 2,
+                        bgcolor: 'var(--brand-paper)',
+                        width: 'calc(100% + 32px)',
+                        mx: -2,
+                        mb: -2,
+                        px: 2,
+                        py: 1.5,
+                        borderTop: '1px solid var(--brand-line)'
                     }}>
                     <Button
                         variant={'outlined'}
                         color={'action'}
-                        size={'small'}
-                        sx={{ textTransform: 'capitalize' }}
+                        sx={{
+                            py: 1,
+                            textTransform: 'capitalize',
+                            flex: 1
+                        }}
                         startIcon={
                             <CircularProgress
                                 size={20}
@@ -828,8 +908,11 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                     <Button
                         variant={'contained'}
                         color={'primary'}
-                        size={'small'}
-                        sx={{ textTransform: 'capitalize' }}
+                        sx={{
+                            py: 1,
+                            textTransform: 'capitalize',
+                            flex: 1.15
+                        }}
                         startIcon={
                             <CircularProgress
                                 size={20}
@@ -851,6 +934,7 @@ const ModalOrderCheckout = ({ open, data, setOpen }) => {
                         </span>
                     </Button>
                 </Box>
+            </Box>
             </Box>
             <ModalPaymentCheckout
                 open={openPayment.open}

@@ -219,8 +219,15 @@ const ButtonPay = ({
         <Box
             display={'flex'}
             flexDirection={'column'}
-            sx={{ boxShadow: 'rgba(0, 0, 0, 0.1) -6px -6px 12px' }}>
-            <Box sx={{ px: 1 }}>
+            sx={{
+                position: 'sticky',
+                bottom: 0,
+                zIndex: 4,
+                bgcolor: 'var(--brand-paper)',
+                borderTop: '1px solid var(--brand-line)',
+                boxShadow: 'var(--brand-shadow)'
+            }}>
+            <Box sx={{ px: 2, pt: 1.25 }}>
                 <Typography
                     fontSize={12}
                     textAlign={'center'}
@@ -232,7 +239,7 @@ const ButtonPay = ({
                 <Box
                     display={'flex'}
                     justifyContent={'space-between'}
-                    sx={{ color: '#000000' }}>
+                    sx={{ color: 'var(--brand-ink)' }}>
                     <Typography
                         fontSize={14}
                         fontWeight={'normal'}>
@@ -249,7 +256,7 @@ const ButtonPay = ({
                     <Box
                         display={'flex'}
                         justifyContent={'space-between'}
-                        sx={{ color: '#000000' }}>
+                        sx={{ color: 'var(--brand-ink)' }}>
                         <Typography
                             fontSize={14}
                             fontWeight={'normal'}>
@@ -270,7 +277,7 @@ const ButtonPay = ({
                     <Box
                         display={'flex'}
                         justifyContent={'space-between'}
-                        sx={{ color: '#000000' }}>
+                        sx={{ color: 'var(--brand-ink)' }}>
                         <Typography
                             fontSize={15}
                             fontWeight={'normal'}>
@@ -302,8 +309,10 @@ const ButtonPay = ({
             <Divider sx={{ my: 0 }} />
             <Box
                 display={'flex'}
-                justifyContent={'space-around'}
-                alignItems={'center'}>
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                gap={1.5}
+                sx={{ px: 2, py: 1.25 }}>
                 <Box>
                     <Typography
                         variant={'body2'}
@@ -323,13 +332,12 @@ const ButtonPay = ({
                         </span>
                     </Typography>
                 </Box>
-                <Box sx={{ width: 30 }}></Box>
                 <Button
                     variant={'contained'}
                     sx={{
-                        my: 1,
-                        py: 0.5,
-                        px: 1.5,
+                        py: 1.1,
+                        px: 2,
+                        minWidth: 132,
                         whiteSpace: 'nowrap',
                         fontWeight: 'bold',
                         fontSize: 16,

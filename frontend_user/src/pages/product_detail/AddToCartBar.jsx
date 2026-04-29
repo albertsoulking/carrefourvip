@@ -58,68 +58,74 @@ const AddToCartBar = ({ data }) => {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                width: '103%',
-                height: 40,
+                width: '100%',
+                minHeight: 58,
                 display: 'flex',
-                boxShadow: 'rgba(0, 0, 0, 0.2) 0 0 12px',
+                boxShadow: 'var(--brand-shadow)',
                 zIndex: 10,
                 maxWidth: 'sm',
                 m: '0 auto',
-                bgcolor: '#000'
+                bgcolor: 'var(--brand-paper)',
+                borderTop: '1px solid var(--brand-line)',
+                px: 1,
+                py: 1,
+                gap: 1
             }}>
             {/* 每个区域都倾斜 + 背景色 */}
             <Box
                 sx={{
-                    width: '55%',
+                    flex: 1,
                     height: '100%',
-                    backgroundColor: '#fff',
+                    backgroundColor: 'var(--brand-cream)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'white'
+                    color: 'var(--brand-ink)',
+                    border: '1px solid var(--brand-line)',
+                    borderRadius: 'var(--brand-radius-md)'
                 }}>
                 <Typography
                     variant={'h5'}
                     fontWeight={'bold'}
                     translate={'no'}
-                    sx={{ color: '#000' }}>
+                    sx={{ color: 'var(--brand-ink)' }}>
                     {data?.price &&
                         useStyledLocaleString(data?.price, user?.geoInfo)}
                 </Typography>
             </Box>
             <Box
                 sx={{
-                    width: '25%',
+                    width: 58,
                     height: '100%',
-                    backgroundColor: '#3fbb2a',
-                    transform: 'skewX(-15deg)',
+                    backgroundColor: 'var(--brand-cream)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'white',
-                    mx: -1,
-                    cursor: 'pointer'
+                    color: 'var(--brand-forest)',
+                    cursor: 'pointer',
+                    border: '1px solid var(--brand-line)',
+                    borderRadius: 'var(--brand-radius-md)'
                 }}
                 onClick={handleOnFavoriteClick}>
                 {favorite ? (
                     <FavoriteRounded
                         color={'error'}
-                        sx={{ transform: 'skewX(15deg)' }}
                     />
                 ) : (
-                    <FavoriteBorderRounded sx={{ transform: 'skewX(15deg)' }} />
+                    <FavoriteBorderRounded />
                 )}
             </Box>
             <Box
                 sx={{
-                    width: '25%',
+                    width: 72,
                     height: '100%',
-                    backgroundColor: '#2196f3',
+                    backgroundColor: 'var(--brand-forest)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    borderRadius: 'var(--brand-radius-md)'
                 }}
                 onClick={() => setOpenDrawer(true)}>
                 <AddShoppingCartRounded />

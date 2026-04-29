@@ -64,45 +64,74 @@ export default function ModalPaymentCheckout({
             open={open}
             maxWidth={false}
             PaperProps={{
-                sx: { width: '100vw', maxWidth: 450 }
+                sx: {
+                    width: 'calc(100vw - 24px)',
+                    maxWidth: 460,
+                    maxHeight: 'calc(100vh - 24px)',
+                    bgcolor: 'var(--brand-paper)',
+                    overflow: 'hidden'
+                }
             }}
             disableEnforceFocus>
-            <Box sx={{ bgcolor: '#fafafa', borderRadius: 2, p: 2 }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    maxHeight: 'calc(100vh - 24px)'
+                }}>
                 <Box
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                    justifyItems={'center'}>
-                    <IconButton
-                        sx={{
-                            width: '100%',
-                            inlineSize: 'auto'
-                        }}
-                        disabled>
-                        <CloseRounded sx={{ color: '#fafafa' }} />
-                    </IconButton>
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        px: 2,
+                        py: 1.5,
+                        borderBottom: '1px solid var(--brand-line)',
+                        bgcolor: 'var(--brand-nav)'
+                    }}>
+                    <Box>
                     <Typography
-                        fontSize={24}
-                        fontWeight={'bold'}
-                        textAlign={'center'}
-                        lineHeight={2}>
+                        fontSize={18}
+                        fontWeight={800}
+                        color={'var(--brand-ink)'}>
                         {t('payment.title')}
                     </Typography>
+                    <Typography
+                        fontSize={12}
+                        color={'var(--brand-muted)'}>
+                        Complete or review this payment.
+                    </Typography>
+                    </Box>
                     <IconButton
                         sx={{
-                            width: '100%',
-                            inlineSize: 'auto'
+                            border: '1px solid var(--brand-line)',
+                            bgcolor: 'var(--brand-paper)'
                         }}
-                        color={'error'}
                         loading={loading}
                         onClick={handleOnPayLater}>
                         <CloseRounded />
                     </IconButton>
                 </Box>
+                <Box
+                    sx={{
+                        overflow: 'auto',
+                        px: 2,
+                        py: 2
+                    }}>
+                <Box
+                    sx={{
+                        p: 2,
+                        mb: 2,
+                        textAlign: 'center',
+                        borderRadius: 'var(--brand-radius-lg)',
+                        bgcolor: 'var(--brand-cream)',
+                        border: '1px solid var(--brand-line)'
+                    }}>
                 <Typography
-                    fontSize={24}
+                    fontSize={28}
                     fontWeight={'bold'}
                     textAlign={'center'}
-                    mb={1}>
+                    color={'var(--brand-forest)'}>
                     <span
                         style={{
                             display:
@@ -112,6 +141,13 @@ export default function ModalPaymentCheckout({
                         {useStyledLocaleString(data?.payAmount, user?.geoInfo)}
                     </span>
                 </Typography>
+                <Typography
+                    textAlign={'center'}
+                    fontSize={12}
+                    color={'var(--brand-muted)'}>
+                    {t('payment.orderId')}: <span translate={'no'}>#{data?.id}</span>
+                </Typography>
+                </Box>
                 {gateway?.isManual === 1 ? (
                     <Box
                         sx={{
@@ -186,12 +222,7 @@ export default function ModalPaymentCheckout({
                         </Typography>
                     </>
                 )}
-                <Typography
-                    textAlign={'center'}
-                    fontSize={12}
-                    mt={1}>
-                    {t('payment.orderId')}: <span translate={'no'}>#{data?.id}</span>
-                </Typography>
+                </Box>
             </Box>
         </Dialog>
     );

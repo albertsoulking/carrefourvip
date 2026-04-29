@@ -23,7 +23,7 @@ const EventPage = () => {
     return (
         <Box
             sx={{
-                pt: 8,
+                pt: 'var(--app-top-bar-space)',
                 pb: 4,
                 minHeight: '100vh',
                 bgcolor: 'var(--brand-cream)'

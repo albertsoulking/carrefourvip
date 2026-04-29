@@ -448,7 +448,7 @@ const HomePage = () => {
         <Box
             sx={{
                 minHeight: '100vh',
-                pb: 10,
+                pb: 'calc(var(--app-bottom-nav-space) + 16px)',
                 bgcolor: 'var(--brand-cream)'
             }}>
             <Box

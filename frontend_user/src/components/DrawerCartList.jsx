@@ -1,5 +1,5 @@
-import { CloseRounded } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Typography } from '@mui/material';
+import { CloseRounded, ShoppingCartRounded } from '@mui/icons-material';
+import { Box, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import AddressItem from './AddressItem';
 import CartEmpty from '../pages/product/CartEmpty';
 import CartHasItem from '../pages/product/CartHasItem';
@@ -126,39 +126,83 @@ export default function DrawerCartList({
             open={open}
             sx={{ '.MuiCard-root': { overflow: 'auto' } }}
             PaperProps={{
-                sx: { width: 360 }
+                sx: {
+                    width: { xs: '100%', sm: 420 },
+                    maxWidth: '100vw',
+                    bgcolor: 'var(--brand-cream)',
+                    borderLeft: '1px solid var(--brand-line)'
+                }
             }}
             onClose={() => setOpen(false)}
             keepMounted>
             <Box
-                display={'flex'}
-                justifyContent={'space-between'}
-                justifyItems={'center'}>
+                sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+            <Box
+                sx={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 3,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    px: 2,
+                    py: 1.5,
+                    bgcolor: 'var(--brand-nav)',
+                    borderBottom: '1px solid var(--brand-line)',
+                    backdropFilter: 'blur(var(--brand-blur))'
+                }}>
+                <Stack
+                    direction={'row'}
+                    spacing={1}
+                    alignItems={'center'}>
+                    <Box
+                        sx={{
+                            width: 38,
+                            height: 38,
+                            display: 'grid',
+                            placeItems: 'center',
+                            borderRadius: 'var(--brand-radius-md)',
+                            bgcolor: 'var(--brand-forest)',
+                            color: '#fff'
+                        }}>
+                        <ShoppingCartRounded fontSize={'small'} />
+                    </Box>
+                    <Box>
+                        <Typography
+                            fontSize={18}
+                            fontWeight={800}
+                            color={'var(--brand-ink)'}>
+                            Shopping Cart
+                        </Typography>
+                        <Typography
+                            fontSize={12}
+                            color={'var(--brand-muted)'}
+                            translate={'no'}>
+                            {selectedIds.length}/{cartData.length} selected
+                        </Typography>
+                    </Box>
+                </Stack>
                 <IconButton
                     sx={{
-                        width: '100%',
-                        inlineSize: 'auto',
-                        color: '#fff',
-                        bgcolor: '#fff'
-                    }}
-                    disabled>
-                    <CloseRounded sx={{ color: '#fff' }} />
-                </IconButton>
-                <Typography
-                    fontSize={18}
-                    fontWeight={'bold'}
-                    sx={{ lineHeight: 2.5 }}>
-                    Cart
-                </Typography>
-                <IconButton
-                    sx={{
-                        width: '100%',
-                        inlineSize: 'auto'
+                        border: '1px solid var(--brand-line)',
+                        bgcolor: 'var(--brand-paper)'
                     }}
                     onClick={() => setOpen(false)}>
-                    <CloseRounded color={'error'} />
+                    <CloseRounded />
                 </IconButton>
             </Box>
+            <Box
+                sx={{
+                    flex: 1,
+                    overflow: 'auto',
+                    px: 1.25,
+                    pt: 1.25,
+                    pb: 1
+                }}>
             {siteData.deliveryAddressEnabled && (
                 <AddressItem
                     selectedAddress={selectedAddress}
@@ -188,6 +232,7 @@ export default function DrawerCartList({
                     loadCartData={loadCartData}
                 />
             )}
+            </Box>
             <ButtonPay
                 data={cartData}
                 selectedIds={selectedIds}
@@ -197,6 +242,7 @@ export default function DrawerCartList({
                 siteData={siteData}
                 deliveryData={deliveryData}
             />
+            </Box>
         </Drawer>
     );
 }

@@ -1,4 +1,4 @@
-import { Grid, Button } from '@mui/material';
+import { Box, Grid, Button, Typography } from '@mui/material';
 import assets from '../assets';
 import web from '../routes/web';
 import { useSmartNavigate } from '../hooks/useSmartNavigate';
@@ -12,7 +12,11 @@ const NavBar = ({ categories, setOpenMenu }) => {
             direction={'column'}
             flexWrap={'nowrap'}
             alignItems={'flex-start'}
-            sx={{ overflow: 'overlay' }}>
+            sx={{
+                overflow: 'auto',
+                gap: 0.75,
+                p: 1.25
+            }}>
             {/* <Grid sx={{ display: { sm: 'flex', md: 'none' } }}>
                 <Button
                     startIcon={<LocationOnRounded sx={{ color: '#fa6833' }} />}
@@ -37,19 +41,24 @@ const NavBar = ({ categories, setOpenMenu }) => {
                 fullWidth
                 size={'small'}
                 sx={{
-                    px: 1,
+                    px: 1.25,
+                    py: 1,
                     fontSize: 14,
                     fontWeight: 'bold',
                     justifyContent: 'flex-start',
                     textTransform: 'capitalize',
                     display: 'flex',
-                    borderBottom: '2px solid transparent',
-                    transition: 'border-bottom-color 0.2s',
+                    color: 'var(--brand-ink)',
+                    bgcolor: 'var(--brand-paper)',
+                    border: '1px solid var(--brand-line)',
+                    borderRadius: 'var(--brand-radius-md)',
+                    transition: '0.2s',
                     '&:hover': {
-                        borderBottom: '2px solid #1976d2'
+                        borderColor: 'var(--brand-forest)',
+                        bgcolor: 'var(--brand-paper)'
                     },
                     '&.MuiButton-text': {
-                        borderRadius: 0
+                        borderRadius: 'var(--brand-radius-md)'
                     }
                 }}
                 startIcon={
@@ -71,7 +80,7 @@ const NavBar = ({ categories, setOpenMenu }) => {
 
                     navigate(web.products + '?' + params);
                 }}>
-                All
+                <Typography fontWeight={800}>All Products</Typography>
             </Button>
             {categories.map((item) => (
                 <Button
@@ -79,19 +88,24 @@ const NavBar = ({ categories, setOpenMenu }) => {
                     fullWidth
                     size={'small'}
                     sx={{
-                        px: 1,
+                        px: 1.25,
+                        py: 1,
                         fontSize: 14,
                         fontWeight: 'bold',
                         justifyContent: 'flex-start',
                         textTransform: 'capitalize',
                         display: 'flex',
-                        borderBottom: '2px solid transparent',
-                        transition: 'border-bottom-color 0.2s',
+                        color: 'var(--brand-ink)',
+                        bgcolor: 'var(--brand-paper)',
+                        border: '1px solid var(--brand-line)',
+                        borderRadius: 'var(--brand-radius-md)',
+                        transition: '0.2s',
                         '&:hover': {
-                            borderBottom: '2px solid #1976d2'
+                            borderColor: 'var(--brand-forest)',
+                            bgcolor: 'var(--brand-paper)'
                         },
                         '&.MuiButton-text': {
-                            borderRadius: 0
+                            borderRadius: 'var(--brand-radius-md)'
                         }
                     }}
                     startIcon={
@@ -115,9 +129,16 @@ const NavBar = ({ categories, setOpenMenu }) => {
 
                         navigate(web.products + '?' + params);
                     }}>
-                    <span style={{ display: item.name ? 'inline' : 'none' }}>
+                    <Box
+                        component={'span'}
+                        sx={{
+                            display: item.name ? 'inline' : 'none',
+                            minWidth: 0,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
                         {item.name}
-                    </span>
+                    </Box>
                 </Button>
             ))}
         </Grid>

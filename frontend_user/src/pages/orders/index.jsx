@@ -79,7 +79,7 @@ const OrderPage = () => {
     return (
         <Box
             sx={{
-                pt: 8,
+                pt: 'var(--app-top-bar-space)',
                 pb: 4,
                 minHeight: '100vh',
                 position: 'relative',

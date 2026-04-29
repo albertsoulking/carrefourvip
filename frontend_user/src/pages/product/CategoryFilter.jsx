@@ -10,10 +10,22 @@ const CategoryFilter = ({ filter, setFilter }) => {
         <Box
             mt={1}
             display={'flex'}
-            gap={2}
-            justifyContent={'space-around'}>
+            gap={1}
+            justifyContent={'space-between'}
+            sx={{
+                p: 0.75,
+                bgcolor: 'var(--brand-paper)',
+                border: '1px solid var(--brand-line)',
+                borderRadius: 'var(--brand-radius-md)'
+            }}>
             <Button
                 color={'inherit'}
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    color: 'var(--brand-ink)',
+                    '&:hover': { bgcolor: 'rgba(127, 127, 127, 0.08)' }
+                }}
                 onClick={() =>
                     setFilter({
                         orderBy: filter.orderBy === 'asc' ? 'desc' : 'asc',
@@ -49,6 +61,12 @@ const CategoryFilter = ({ filter, setFilter }) => {
             </Button>
             <Button
                 color={'inherit'}
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    color: 'var(--brand-ink)',
+                    '&:hover': { bgcolor: 'rgba(127, 127, 127, 0.08)' }
+                }}
                 onClick={() =>
                     setFilter({
                         orderBy: filter.orderBy === 'asc' ? 'desc' : 'asc',
@@ -84,6 +102,12 @@ const CategoryFilter = ({ filter, setFilter }) => {
             </Button>
             <Button
                 color={'inherit'}
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    color: 'var(--brand-ink)',
+                    '&:hover': { bgcolor: 'rgba(127, 127, 127, 0.08)' }
+                }}
                 onClick={() =>
                     setFilter({
                         orderBy: filter.orderBy === 'asc' ? 'desc' : 'asc',
@@ -118,6 +142,11 @@ const CategoryFilter = ({ filter, setFilter }) => {
                 Latest
             </Button>
             <Button
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    '&:hover': { bgcolor: 'rgba(127, 127, 127, 0.08)' }
+                }}
                 endIcon={<RefreshRounded />}
                 onClick={() =>
                     setFilter({

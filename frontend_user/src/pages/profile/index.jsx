@@ -138,7 +138,7 @@ export default function ProfilePage() {
         <Box
             bgcolor='var(--brand-cream)'
             minHeight='100vh'
-            pb={15}>
+            pb={'calc(var(--app-bottom-nav-space) + 16px)'}>
                 <TopNavigator
                 title={'My Profile'}
                 noBack

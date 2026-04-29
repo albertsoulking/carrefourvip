@@ -47,11 +47,21 @@ const OrderItem = ({ data, user, navigate }) => {
         <Card
             sx={{
                 m: 1,
-                borderRadius: 2,
-                boxShadow: 'rgba(0, 0, 0, 0.1) 0 4px 12px'
+                borderRadius: 'var(--brand-radius-lg)',
+                boxShadow: 'var(--brand-shadow)',
+                overflow: 'hidden'
             }}>
-            <CardActionArea onClick={() => navigate(web.orderDetail(data.id))}>
-                <CardContent sx={{ p: 1 }}>
+            <CardActionArea
+                onClick={() => navigate(web.orderDetail(data.id))}
+                sx={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    '&:hover': {
+                        bgcolor: 'rgba(127, 127, 127, 0.06)'
+                    }
+                }}>
+                <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
                     <Box
                         display='flex'
                         justifyContent='space-between'
@@ -76,7 +86,7 @@ const OrderItem = ({ data, user, navigate }) => {
                                 sx={{
                                     px: 1.5,
                                     py: 0.5,
-                                    borderRadius: 2,
+                                    borderRadius: 'var(--brand-radius-sm)',
                                     fontSize: 10,
                                     fontWeight: 500,
                                     width: 'fit-content',
@@ -93,7 +103,7 @@ const OrderItem = ({ data, user, navigate }) => {
                                 sx={{
                                     px: 1.5,
                                     py: 0.5,
-                                    borderRadius: 2,
+                                    borderRadius: 'var(--brand-radius-sm)',
                                     fontSize: 10,
                                     fontWeight: 500,
                                     width: 'fit-content',
@@ -131,7 +141,7 @@ const OrderItem = ({ data, user, navigate }) => {
                                 width: 50,
                                 height: 50,
                                 objectFit: 'cover',
-                                borderRadius: 2
+                                borderRadius: 'var(--brand-radius-sm)'
                             }}
                             translate={'no'}
                         />

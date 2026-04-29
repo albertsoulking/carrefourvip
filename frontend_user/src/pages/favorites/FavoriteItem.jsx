@@ -36,11 +36,21 @@ const FavoriteItem = ({ data, loadData, searchModal }) => {
         <Card
             sx={{
                 m: 1,
-                borderRadius: 2,
-                boxShadow: 'rgba(0, 0, 0, 0.1) 0 4px 12px'
+                borderRadius: 'var(--brand-radius-lg)',
+                boxShadow: 'var(--brand-shadow)',
+                overflow: 'hidden'
             }}>
             <Box display={'flex'}>
                 <CardActionArea
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'stretch',
+                        flex: 1,
+                        py: 1,
+                        '&:hover': {
+                            bgcolor: 'rgba(127, 127, 127, 0.06)'
+                        }
+                    }}
                     onClick={() =>
                         navigate(web.productDetail(data.product.id))
                     }>
@@ -59,7 +69,7 @@ const FavoriteItem = ({ data, loadData, searchModal }) => {
                                 width: '25%',
                                 height: 50,
                                 objectFit: 'contain',
-                                borderRadius: 2,
+                                borderRadius: 'var(--brand-radius-sm)',
                                 ml: 1
                             }}
                         />

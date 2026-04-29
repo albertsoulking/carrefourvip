@@ -18,7 +18,14 @@ const FlightBookingPage = () => {
     };
 
     return (
-        <Box sx={{ pt: 10, px: 2, pb: 4 }}>
+        <Box
+            sx={{
+                pt: 'var(--app-top-bar-space)',
+                px: 2,
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backPath={web.profile}
                 backText={'Profile'}

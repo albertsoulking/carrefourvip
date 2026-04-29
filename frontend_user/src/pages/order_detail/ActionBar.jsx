@@ -77,13 +77,21 @@ const ActionBar = ({
         <Box
             display={'flex'}
             justifyContent={'flex-end'}
+            flexWrap={'wrap'}
             gap={1}
-            mt={1}>
+            mt={1}
+            sx={{
+                p: 1,
+                bgcolor: 'var(--brand-paper)',
+                border: '1px solid var(--brand-line)',
+                borderRadius: 'var(--brand-radius-md)'
+            }}>
             <Button
                 variant={'outlined'}
                 color={'action'}
                 size={'small'}
                 sx={{
+                    flex: { xs: '1 1 44%', sm: '0 0 auto' },
                     textTransform: 'capitalize',
                     display: paymentStatus === 'pending' ? 'inline' : 'none'
                 }}
@@ -94,7 +102,10 @@ const ActionBar = ({
                 variant={'outlined'}
                 color={'action'}
                 size={'small'}
-                sx={{ textTransform: 'capitalize' }}
+                sx={{
+                    flex: { xs: '1 1 44%', sm: '0 0 auto' },
+                    textTransform: 'capitalize'
+                }}
                 onClick={handleOnBuyAgain}>
                 Buy Again
             </Button>
@@ -103,6 +114,7 @@ const ActionBar = ({
                 color={'primary'}
                 size={'small'}
                 sx={{
+                    flex: { xs: '1 1 44%', sm: '0 0 auto' },
                     textTransform: 'capitalize',
                     display: paymentStatus === 'pending' ? 'inline' : 'none'
                 }}
@@ -121,6 +133,7 @@ const ActionBar = ({
                 color={'action'}
                 size={'small'}
                 sx={{
+                    flex: { xs: '1 1 44%', sm: '0 0 auto' },
                     textTransform: 'capitalize',
                     display:
                         status === 'delivered' ||

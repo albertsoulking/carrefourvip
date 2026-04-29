@@ -39,7 +39,13 @@ const OrderDetailPage = () => {
     };
 
     return (
-        <Box mt={8}>
+        <Box
+            sx={{
+                pt: 'var(--app-top-bar-space)',
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backText={t('orderDetail.backText')}
                 backPath={web.order}

@@ -100,7 +100,13 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
     // };
 
     return (
-        <Box mt={8}>
+        <Box
+            sx={{
+                pt: 'var(--app-top-bar-space)',
+                pb: 'var(--app-fixed-action-space)',
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backPath={id ? web.products : -1}
                 setOpen={setOpen}
@@ -179,7 +185,7 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                     </Box>
                 </Box>
             ) : (
-                <Box>
+                <Box sx={{ pb: 2 }}>
                     <Box sx={{ px: 2, mb: 2 }}>
                         <Typography
                             variant={'h5'}

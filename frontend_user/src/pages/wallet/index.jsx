@@ -78,7 +78,7 @@ export default function WalletPage() {
     return (
         <Box
             sx={{
-                pt: 8,
+                pt: 'var(--app-top-bar-space)',
                 px: 2,
                 pb: 4,
                 minHeight: '100vh',

@@ -18,7 +18,7 @@ export default function FlightPage() {
                 minHeight: '100vh',
                 bgcolor: 'var(--brand-cream)',
                 pt: 3,
-                pb: 11
+                pb: 'calc(var(--app-bottom-nav-space) + 16px)'
             }}>
             <Container maxWidth={'lg'}>
                 <Typography

@@ -424,11 +424,12 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                     fullWidth
                     size={'large'}
                     sx={{
-                        position: 'fixed',
+                        position: 'sticky',
                         bottom: 0,
-                        left: 0,
-                        right: 0,
-                        textTransform: 'capitalize'
+                        textTransform: 'capitalize',
+                        mt: 2,
+                        py: 1.25,
+                        borderRadius: 'var(--brand-radius-md)'
                     }}
                     onClick={handleOnAddToCart}>
                     {loading ? (

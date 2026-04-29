@@ -189,7 +189,7 @@ const InfiniteProductList = () => {
             sx={{
                 px: 2,
                 pt: 8,
-                pb: 11,
+                pb: 'calc(var(--app-bottom-nav-space) + 16px)',
                 minHeight: '100vh',
                 bgcolor: 'var(--brand-cream)'
             }}>
@@ -289,7 +289,9 @@ const InfiniteProductList = () => {
                 sx={{
                     position: 'fixed',
                     right: 20,
-                    bottom: isScrolledTop ? -50 : 80,
+                    bottom: isScrolledTop
+                        ? -50
+                        : 'calc(var(--app-bottom-nav-space) + 12px)',
                     opacity: isScrolledTop ? 0 : 1,
                     visibility: isScrolledTop ? 'hidden' : 'visible',
                     zIndex: 5,

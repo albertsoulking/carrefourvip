@@ -45,7 +45,13 @@ const MessagePage = () => {
     };
 
     return (
-        <Box sx={{ mt: 8 }}>
+        <Box
+            sx={{
+                pt: 'var(--app-top-bar-space)',
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backText={'Profile'}
                 backPath={web.profile}
