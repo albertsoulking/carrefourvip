@@ -21,23 +21,33 @@ const TopNavigator = ({
                 right: 0,
                 maxWidth: 'sm',
                 m: '0 auto',
-                p: 1.5,
+                px: 2,
+                py: 1.35,
                 zIndex: 999,
-                bgcolor: 'rgb(255 255 255 / 80%)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0px 3px 10px -2px rgba(0, 0, 0, 0.2)',
+                bgcolor: 'rgba(247, 242, 232, 0.86)',
+                backdropFilter: 'blur(18px)',
+                borderRadius: 0,
+                border: 0,
+                borderBottom: '1px solid var(--brand-line)',
+                boxShadow: '0 10px 24px rgba(23, 57, 44, 0.08)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}
-            elevation={3}>
+            elevation={0}>
             {noBack ? (
                 <Box flexGrow={0.3}></Box>
             ) : (
                 <Button
                     size={'small'}
                     startIcon={<ArrowBackIosNewRounded fontSize={'small'} />}
-                    sx={{ textTransform: 'capitalize', p: 0, fontSize: 16 }}
+                    sx={{
+                        color: 'var(--brand-forest)',
+                        textTransform: 'none',
+                        p: 0,
+                        fontSize: 15,
+                        fontWeight: 800
+                    }}
                     onClick={() => {
                         if (setOpen) {
                             setOpen(false);
@@ -48,7 +58,14 @@ const TopNavigator = ({
                     {backText}
                 </Button>
             )}
-            <Typography>{title}</Typography>
+            <Typography
+                sx={{
+                    color: 'var(--brand-ink)',
+                    fontWeight: 800,
+                    fontSize: 16
+                }}>
+                {title}
+            </Typography>
             {/* {btn} */}
             {btn ?? <Box flexGrow={0.3}></Box>}
         </Paper>

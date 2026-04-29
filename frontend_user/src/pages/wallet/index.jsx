@@ -77,8 +77,13 @@ export default function WalletPage() {
 
     return (
         <Box
-            mt={8}
-            px={2}>
+            sx={{
+                pt: 8,
+                px: 2,
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backText={t('wallet.backText')}
                 backPath={web.profile}
@@ -90,15 +95,21 @@ export default function WalletPage() {
                     mb: 2,
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    borderRadius: '26px',
+                    background:
+                        'linear-gradient(135deg, rgba(255, 253, 250, 0.96), rgba(239, 232, 219, 0.72))'
                 }}
-                elevation={2}>
+                elevation={0}>
                 <Box>
                     <Typography variant={'h6'}>{t('wallet.balance')}</Typography>
                     <Typography
                         variant={'h4'}
-                        color={'action'}
                         fontWeight={'bold'}
+                        sx={{
+                            color: 'var(--brand-forest)',
+                            fontFamily: 'var(--font-display)'
+                        }}
                         translate={'no'}>
                         {userBalance
                             ? useStyledLocaleString(userBalance, user?.geoInfo)
@@ -133,7 +144,11 @@ export default function WalletPage() {
                     scrollButtons='auto'
                     sx={{
                         minHeight: 'auto',
-                        minWidth: 'auto'
+                        minWidth: 'auto',
+                        bgcolor: 'rgba(255, 253, 250, 0.72)',
+                        border: '1px solid var(--brand-line)',
+                        borderRadius: '18px',
+                        boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
                     }}
                     allowScrollButtonsMobile>
                     {tabStatus.map((label) => (
@@ -152,7 +167,7 @@ export default function WalletPage() {
                 {/* 交易记录表格 */}
                 <TableContainer
                     component={Paper}
-                    sx={{ height: '100%', mt: 2 }}>
+                    sx={{ height: '100%', mt: 2, borderRadius: '22px' }}>
                     <Table>
                         <TableHead>
                             <TableRow>

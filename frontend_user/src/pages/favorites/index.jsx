@@ -32,13 +32,20 @@ const FavoritePage = () => {
     };
 
     return (
-        <Box sx={{ mt: 8, position: 'relative' }}>
+        <Box
+            sx={{
+                pt: 8,
+                pb: 4,
+                minHeight: '100vh',
+                position: 'relative',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backText={'Profile'}
                 backPath={web.profile}
                 title={'My Favorites'}
             />
-            <Box sx={{ p: 0.5 }}>
+            <Box sx={{ p: 1.5 }}>
                 {favoriteData.data.map((fav) => (
                     <FavoriteItem
                         key={fav.id}

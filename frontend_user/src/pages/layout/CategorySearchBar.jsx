@@ -83,14 +83,20 @@ const CategorySearchBar = () => {
                 top: 0,
                 left: 0,
                 right: 0,
-                bgcolor: 'rgb(255 255 255 / 80%)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0px 3px 10px -2px rgba(0, 0, 0, 0.2)'
+                bgcolor: 'rgba(247, 242, 232, 0.86)',
+                backdropFilter: 'blur(18px)',
+                borderBottom: '1px solid var(--brand-line)',
+                boxShadow: '0 10px 24px rgba(23, 57, 44, 0.08)'
             }}
             disableGutters>
             <Toolbar>
                 <IconButton
-                    color={'primary'}
+                    sx={{
+                        width: 42,
+                        height: 42,
+                        bgcolor: '#fffdfa',
+                        border: '1px solid var(--brand-line)'
+                    }}
                     onClick={() => setOpenMenu(true)}>
                     <MenuRounded />
                 </IconButton>
@@ -100,15 +106,24 @@ const CategorySearchBar = () => {
                         flexGrow: 1,
                         display: 'flex',
                         alignItems: 'center',
-                        bgcolor: 'grey.100',
-                        borderRadius: 2,
-                        px: 2
+                        bgcolor: '#fffdfa',
+                        border: '1px solid var(--brand-line)',
+                        borderRadius: '18px',
+                        px: 1.5,
+                        py: 0.25,
+                        mx: 1,
+                        boxShadow: '0 10px 22px rgba(23, 57, 44, 0.07)'
                     }}>
-                    <SearchRounded color={'action'} />
+                    <SearchRounded sx={{ color: 'var(--brand-muted)' }} />
                     <InputBase
                         value={value ?? ''}
                         placeholder={'Search for products'}
-                        sx={{ ml: 1, flex: 1 }}
+                        sx={{
+                            ml: 1,
+                            flex: 1,
+                            color: 'var(--brand-ink)',
+                            fontSize: 14
+                        }}
                         onChange={(e) => setValue(e.target.value)}
                         onKeyDown={(event) => {
                             if (event.key === 'Enter' && event.keyCode === 13)
@@ -126,7 +141,12 @@ const CategorySearchBar = () => {
 
                 {/* 购物车 */}
                 <IconButton
-                    color={'primary'}
+                    sx={{
+                        width: 42,
+                        height: 42,
+                        bgcolor: '#fffdfa',
+                        border: '1px solid var(--brand-line)'
+                    }}
                     onClick={() => setOpenCart(true)}>
                     <Badge
                         badgeContent={Number(headerStatus.totalCart)}

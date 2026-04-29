@@ -13,18 +13,28 @@ export default function FlightPage() {
     const [searchContext, setSearchContext] = useState(null);
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', pt:2, pb: 6 }}>
+        <Box
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                pt: 3,
+                pb: 11
+            }}>
             <Container maxWidth={'lg'}>
                 <Typography
                     variant='h4'
                     fontWeight={600}
+                    sx={{
+                        color: 'var(--brand-ink)',
+                        fontFamily: 'var(--font-display)'
+                    }}
                     gutterBottom>
                     Flight Booking
                 </Typography>
 
                 <Typography
                     variant='body2'
-                    color='text.secondary'
+                    sx={{ color: 'var(--brand-muted)' }}
                     mb={3}>
                     Search and compare flights. Prices may change during
                     booking.

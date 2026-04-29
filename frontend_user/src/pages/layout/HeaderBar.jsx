@@ -63,9 +63,10 @@ const HeaderBar = ({ logo }) => {
                 top: 0,
                 left: 0,
                 right: 0,
-                bgcolor: 'rgb(255 255 255 / 80%)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0px 3px 10px -2px rgba(0, 0, 0, 0.2)'
+                bgcolor: 'rgba(247, 242, 232, 0.86)',
+                backdropFilter: 'blur(18px)',
+                borderBottom: '1px solid var(--brand-line)',
+                boxShadow: '0 10px 24px rgba(23, 57, 44, 0.08)'
             }}
             disableGutters>
             <Toolbar sx={{ justifyContent: 'center' }}>
@@ -87,8 +88,8 @@ const HeaderBar = ({ logo }) => {
                         sx={{
                             fontWeight: 700,
                             fontSize: 22,
-                            color: '#222',
-                            letterSpacing: 0.5
+                            color: 'var(--brand-ink)',
+                            fontFamily: 'var(--font-display)'
                         }}
                         textAlign={'center'}
                         translate={'no'}>

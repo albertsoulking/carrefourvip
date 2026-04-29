@@ -34,7 +34,13 @@ const AddressPage = () => {
     };
 
     return (
-        <Box mt={8}>
+        <Box
+            sx={{
+                pt: 8,
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 backText={'Profile'}
                 backPath={web.profile}

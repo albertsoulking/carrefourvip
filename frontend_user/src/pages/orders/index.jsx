@@ -77,14 +77,21 @@ const OrderPage = () => {
     };
 
     return (
-        <Box sx={{ mt: 8, position: 'relative' }}>
+        <Box
+            sx={{
+                pt: 8,
+                pb: 4,
+                minHeight: '100vh',
+                position: 'relative',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <TopNavigator
                 title={'My Orders'}
                 backPath={web.profile}
                 backText='Profile'
             />
             <Box sx={{ width: '100%' }}>
-                <Box>
+                <Box sx={{ px: 2 }}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -93,7 +100,11 @@ const OrderPage = () => {
                         scrollButtons='auto'
                         sx={{
                             minHeight: 'auto',
-                            minWidth: 'auto'
+                            minWidth: 'auto',
+                            bgcolor: 'rgba(255, 253, 250, 0.72)',
+                            border: '1px solid var(--brand-line)',
+                            borderRadius: '18px',
+                            boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
                         }}
                         allowScrollButtonsMobile>
                         {tabs.map((tab, idx) => (
@@ -110,7 +121,7 @@ const OrderPage = () => {
                         ))}
                     </Tabs>
                 </Box>
-                <Box sx={{ p: 0.5 }}>
+                <Box sx={{ p: 1.5 }}>
                     {orderData.data.map((order) => (
                         <OrderItem
                             key={order.id}

@@ -7,6 +7,9 @@
     --brand-ink: #182018;
     --brand-muted: #687166;
     --brand-cream: #f7f2e8;
+    --brand-paper: #fffdfa;
+    --brand-line: rgba(23, 57, 44, 0.08);
+    --brand-shadow: 0 14px 32px rgba(23, 57, 44, 0.08);
 }
 
 * {
@@ -20,6 +23,10 @@ body {
         radial-gradient(circle at top, rgba(244, 186, 87, 0.12), transparent 30%),
         linear-gradient(180deg, #fbf8f2 0%, #f2eadf 100%) !important;
     color: var(--brand-ink);
+}
+
+a {
+    color: var(--brand-forest);
 }
 
 html, body {

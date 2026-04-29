@@ -9,9 +9,17 @@ const AboutPage = () => {
     return (
         <Box
             px={2}
-            py={6}>
+            py={6}
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <Typography
                 variant='h4'
+                sx={{
+                    color: 'var(--brand-ink)',
+                    fontFamily: 'var(--font-display)'
+                }}
                 gutterBottom>
                 About Zenviquea LLC
             </Typography>
@@ -23,7 +31,16 @@ const AboutPage = () => {
                 includes direct-to-consumer sales, inventory management, and
                 international logistics partnerships.
             </Typography>
-            <Box sx={{ my: 3 }}>
+            <Box
+                sx={{
+                    my: 3,
+                    p: 2,
+                    width: 'fit-content',
+                    borderRadius: '24px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
                 <img
                     src={assets.logo}
                     style={{ maxWidth: 180 }}

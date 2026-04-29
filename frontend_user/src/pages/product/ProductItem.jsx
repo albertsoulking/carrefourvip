@@ -114,10 +114,15 @@ const ProductItem = ({ data, doubleRow }) => {
             elevation={0}
             sx={{
                 position: 'relative',
-                borderRadius: 2,
+                borderRadius: '22px',
                 transition: '0.3s ease',
-                border: '1px solid #0000001a',
-                ':hover': { boxShadow: 'rgba(0, 0, 0, 0.2) 0 4px 12px' },
+                bgcolor: '#fffdfa',
+                border: '1px solid var(--brand-line)',
+                boxShadow: '0 14px 32px rgba(23, 57, 44, 0.08)',
+                ':hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 18px 38px rgba(23, 57, 44, 0.14)'
+                },
                 '&.MuiCard-root': {
                     overflow: 'hidden'
                 }
@@ -131,7 +136,7 @@ const ProductItem = ({ data, doubleRow }) => {
                     right: 0,
                     width: 0,
                     height: 0,
-                    borderTop: '45px solid #dcdfe1', // 三角形颜色
+                    borderTop: '45px solid #efe8db', // 三角形颜色
                     borderLeft: '45px solid transparent',
                     borderTopRightRadius: 8,
                     zIndex: 1
@@ -218,7 +223,7 @@ const ProductItem = ({ data, doubleRow }) => {
                             userSelect: 'text',
                             cursor: 'pointer',
                             ':hover': {
-                                textDecoration: 'underline'
+                                color: 'var(--brand-forest)'
                             }
                         }}
                         onClick={(e) => {
@@ -235,7 +240,12 @@ const ProductItem = ({ data, doubleRow }) => {
                     <Chip
                         label={data?.category.name}
                         size={'small'}
-                        sx={{ width: 'fit-content', mt: 0.5 }}
+                        sx={{
+                            width: 'fit-content',
+                            mt: 0.5,
+                            bgcolor: 'rgba(23, 57, 44, 0.08)',
+                            color: 'var(--brand-forest)'
+                        }}
                         onClick={(e) => {
                             e.stopPropagation();
                             const params = new URLSearchParams({
@@ -253,13 +263,24 @@ const ProductItem = ({ data, doubleRow }) => {
                         <Typography
                             variant={'h5'}
                             fontWeight={'bold'}
+                            sx={{
+                                color: 'var(--brand-ink)',
+                                fontFamily: 'var(--font-display)'
+                            }}
                             translate={'no'}>
                             {useStyledLocaleString(data.price, user?.geoInfo)}
                         </Typography>
                         <Button
                             size={'small'}
                             variant={'contained'}
-                            sx={{ minWidth: 0 }}
+                            color={'primary'}
+                            sx={{
+                                minWidth: 0,
+                                width: 38,
+                                height: 38,
+                                borderRadius: '50%',
+                                p: 0
+                            }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 handleOnAddToCart(data);

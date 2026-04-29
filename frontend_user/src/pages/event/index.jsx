@@ -1,11 +1,11 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import api from '../../routes/api';
 import { useState } from 'react';
 import EventItem from './EventItem';
 import web from '../../routes/web';
-import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
+import TopNavigator from '../layout/TopNavigator';
 
 const EventPage = () => {
     const navigate = useSmartNavigate();
@@ -21,17 +21,27 @@ const EventPage = () => {
     };
 
     return (
-        <Box sx={{ py: 4, height: '70vh' }}>
-            <Button
-                size={'small'}
-                startIcon={<ArrowBackIosNewRounded fontSize={'small'} />}
-                sx={{ position: 'absolute' }}
-                onClick={() => navigate(web.profile)}>
-                Back
-            </Button>
+        <Box
+            sx={{
+                pt: 8,
+                pb: 4,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
+            <TopNavigator
+                title={'Event Zone'}
+                backText={'Profile'}
+                backPath={web.profile}
+            />
             <Typography
                 fontWeight={'bold'}
-                textAlign={'center'}>
+                textAlign={'center'}
+                sx={{
+                    mb: 2,
+                    color: 'var(--brand-ink)',
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 24
+                }}>
                 Event Zone
             </Typography>
             {eventData.map((event) => (

@@ -41,7 +41,23 @@ export default function TopUpSuccessPage() {
     return (
         <Box
             textAlign={'center'}
-            mt={10}>
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 2
+            }}>
+            <Box
+                sx={{
+                    width: '100%',
+                    p: 3,
+                    borderRadius: '28px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
             <CheckCircleOutlineRoundedIcon
                 color={'success'}
                 sx={{ fontSize: 80 }}
@@ -63,6 +79,7 @@ export default function TopUpSuccessPage() {
                 onClick={() => navigate(web.wallet)}>
                 Back to My Wallt
             </Button>
+            </Box>
         </Box>
     );
 }

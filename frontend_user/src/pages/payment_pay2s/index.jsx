@@ -26,7 +26,21 @@ export default function PaymentPay2sPage() {
     return (
         <Box
             textAlign={'center'}
-            mt={10}>
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                pt: 8,
+                pb: 4,
+                px: 2
+            }}>
+            <Box
+                sx={{
+                    p: 3,
+                    borderRadius: '28px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
             {resultCode === '0' ? (
                 <CheckCircleOutlineRounded
                     color={'success'}
@@ -126,6 +140,7 @@ export default function PaymentPay2sPage() {
                 onClick={() => navigate(web.home)}>
                 {t('common.backToHome')}
             </Button>
+            </Box>
         </Box>
     );
 }

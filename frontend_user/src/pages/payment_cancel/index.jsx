@@ -57,7 +57,23 @@ export default function PaymentCancelPage() {
     return (
         <Box
             textAlign={'center'}
-            mt={10}>
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 2
+            }}>
+            <Box
+                sx={{
+                    width: '100%',
+                    p: 3,
+                    borderRadius: '28px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
             <HighlightOffRoundedIcon
                 color={'error'}
                 sx={{ fontSize: 80, display: errorInvalid ? 'none' : 'inline' }}
@@ -105,6 +121,7 @@ export default function PaymentCancelPage() {
                 onClick={() => navigate(web.home)}>
                 {t('common.backToHome')}
             </Button>
+            </Box>
         </Box>
     );
 }

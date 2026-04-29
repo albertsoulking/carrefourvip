@@ -11,10 +11,26 @@ export default function PaymentSubmitPage() {
     return (
         <Box
             textAlign={'center'}
-            mt={10}>
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 2
+            }}>
+            <Box
+                sx={{
+                    width: '100%',
+                    p: 3,
+                    borderRadius: '28px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
             <AccessTimeIcon
                 color={'action'}
-                sx={{ mt: 10, fontSize: 80 }}
+                sx={{ fontSize: 80 }}
             />
             <Typography
                 variant={'h4'}
@@ -37,6 +53,7 @@ export default function PaymentSubmitPage() {
                 onClick={() => navigate(web.home)}>
                 {t('common.backToHome')}
             </Button>
+            </Box>
         </Box>
     );
 }

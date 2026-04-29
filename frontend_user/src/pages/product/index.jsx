@@ -185,7 +185,14 @@ const InfiniteProductList = () => {
     };
 
     return (
-        <Box sx={{ px: 2, py: 8 }}>
+        <Box
+            sx={{
+                px: 2,
+                pt: 8,
+                pb: 11,
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)'
+            }}>
             <CategorySearchBar />
             <Grid
                 container
@@ -202,7 +209,13 @@ const InfiniteProductList = () => {
                         scrollButtons='auto'
                         sx={{
                             minHeight: 'auto',
-                            minWidth: 'auto'
+                            minWidth: 'auto',
+                            mb: 1,
+                            px: 0.5,
+                            bgcolor: 'rgba(255, 253, 250, 0.72)',
+                            border: '1px solid var(--brand-line)',
+                            borderRadius: '18px',
+                            boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
                         }}
                         allowScrollButtonsMobile>
                         <Tab
@@ -285,6 +298,9 @@ const InfiniteProductList = () => {
                     height: 50,
                     borderRadius: '50%',
                     p: 0,
+                    bgcolor: 'var(--brand-forest)',
+                    color: '#fff',
+                    boxShadow: '0 16px 30px rgba(23, 57, 44, 0.22)',
                     transition: '0.5s',
                     animation: 'scroll_top 5s linear infinite'
                 }}

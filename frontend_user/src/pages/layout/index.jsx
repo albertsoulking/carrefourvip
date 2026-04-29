@@ -8,7 +8,13 @@ const Layout = () => {
     return (
         <Container
             maxWidth={'sm'}
-            sx={{bgcolor: '#fff', border: '1px solid #e0e0e0'}}
+            sx={{
+                minHeight: '100vh',
+                bgcolor: 'var(--brand-cream)',
+                borderLeft: '1px solid rgba(23, 57, 44, 0.08)',
+                borderRight: '1px solid rgba(23, 57, 44, 0.08)',
+                boxShadow: '0 0 60px rgba(23, 57, 44, 0.08)'
+            }}
             disableGutters>
             <Outlet />
         </Container>

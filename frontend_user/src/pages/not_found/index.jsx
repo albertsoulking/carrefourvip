@@ -7,8 +7,26 @@ const NotFoundPage = () => {
     const navigate = useSmartNavigate();
 
     return (
-        <Grid sx={{ width: '100%', position: 'relative' }}>
-            <Box textAlign={'center'}>
+        <Grid
+            sx={{
+                width: '100%',
+                minHeight: '100vh',
+                position: 'relative',
+                bgcolor: 'var(--brand-cream)',
+                display: 'grid',
+                placeItems: 'center',
+                px: 2
+            }}>
+            <Box
+                textAlign={'center'}
+                sx={{
+                    width: '100%',
+                    p: 3,
+                    borderRadius: '28px',
+                    bgcolor: '#fffdfa',
+                    border: '1px solid var(--brand-line)',
+                    boxShadow: 'var(--brand-shadow)'
+                }}>
                 <Grid sx={{ position: 'absolute', top: 0, right: 0 }}>
                     <img
                         src={assets.element2}
@@ -20,8 +38,11 @@ const NotFoundPage = () => {
                     noWrap
                     variant={'h1'}
                     fontWeight={'bold'}
-                    color={'primary'}
-                    sx={{ fontSize: '10rem' }}>
+                    sx={{
+                        fontSize: { xs: '7rem', sm: '10rem' },
+                        color: 'var(--brand-forest)',
+                        fontFamily: 'var(--font-display)'
+                    }}>
                     404
                 </Typography>
                 <Typography

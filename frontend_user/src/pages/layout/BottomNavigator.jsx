@@ -46,17 +46,14 @@ const BottomNavigator = () => {
                 mx: 'auto',
                 zIndex: 999,
 
-                background: 'rgba(255,255,255,0.22)',
+                background: 'rgba(255, 253, 250, 0.82)',
                 backdropFilter: 'blur(18px) saturate(160%)',
                 WebkitBackdropFilter: 'blur(18px) saturate(160%)',
 
                 borderRadius: '30px',
-                border: '1px solid rgba(255,255,255,0.35)',
+                border: '1px solid rgba(23, 57, 44, 0.1)',
 
-                boxShadow: `
-                    0 6px 25px rgba(0,0,0,0.12),
-                    inset 0 1px rgba(255,255,255,0.6)
-                `
+                boxShadow: '0 18px 42px rgba(23, 57, 44, 0.16)'
             }}
         >
             <BottomNavigation
@@ -95,7 +92,13 @@ const BottomNavigator = () => {
                             }}
                             sx={{
                                 position: 'relative',
-                                color: selected ? '#007aff' : 'rgba(0,0,0,0.6)',
+                                color: selected
+                                    ? 'var(--brand-forest)'
+                                    : 'var(--brand-muted)',
+                                '& .MuiBottomNavigationAction-label': {
+                                    fontWeight: 800,
+                                    fontSize: 11
+                                },
 
                                 '& .MuiSvgIcon-root': {
                                     fontSize: item.center ? 26 : 24
@@ -110,9 +113,8 @@ const BottomNavigator = () => {
                                           left: 6,
                                           right: 6,
                                           borderRadius: '25px',
-                                          background:
-                                              'linear-gradient(145deg, rgba(0,0,0,0.2), rgba(255,255,255,0.15))',
-                                          zIndex: -1,
+                                          background: 'rgba(23, 57, 44, 0.08)',
+                                          zIndex: -1
                                         //   width: 80,
                                       }
                                     : {}

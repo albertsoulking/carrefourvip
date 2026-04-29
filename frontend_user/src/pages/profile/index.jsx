@@ -136,7 +136,7 @@ export default function ProfilePage() {
 
     return (
         <Box
-            bgcolor='#f5f5f5'
+            bgcolor='var(--brand-cream)'
             minHeight='100vh'
             pb={15}>
                 <TopNavigator
@@ -146,13 +146,15 @@ export default function ProfilePage() {
             {/* 🔥 顶部渐变用户卡 */}
             <Box
                 sx={{
-                    background: 'linear-gradient(135deg, #ff5722, #ff9800)',
+                    background:
+                        'linear-gradient(135deg, rgba(23, 57, 44, 0.96), rgba(54, 99, 75, 0.86))',
                     color: '#fff',
                     pt: 8,
                     px: 3,
                     pb: 5,
-                    borderBottomLeftRadius: 20,
-                    borderBottomRightRadius: 20
+                    borderBottomLeftRadius: 28,
+                    borderBottomRightRadius: 28,
+                    boxShadow: '0 22px 45px rgba(23, 57, 44, 0.18)'
                 }}>
                 <Box
                     display='flex'
@@ -185,7 +187,9 @@ export default function ProfilePage() {
                                     sx={{
                                         width: 70,
                                         height: 70,
-                                        mr: 2
+                                        mr: 2,
+                                        borderRadius: '18px',
+                                        border: '2px solid rgba(255, 255, 255, 0.64)'
                                     }}
                                     variant='rounded'
                                     src={imagePreview} />
@@ -194,6 +198,7 @@ export default function ProfilePage() {
                                     bottom={-10}
                                     right={5}
                                     bgcolor={'#fff'}
+                                    color={'var(--brand-forest)'}
                                     borderRadius={'50%'}
                                     boxShadow={2}
                                     display={'flex'}
@@ -224,6 +229,11 @@ export default function ProfilePage() {
                     <Box flexGrow={1}></Box>
                     <Button
                         variant='contained'
+                        sx={{
+                            bgcolor: '#fff',
+                            color: 'var(--brand-forest)',
+                            '&:hover': { bgcolor: '#fff' }
+                        }}
                         onClick={() => setOpenEditProfile(true)}>
                         Edit
                     </Button>
@@ -234,7 +244,7 @@ export default function ProfilePage() {
             <Box
                 px={2}
                 mt={-3}>
-                <Paper sx={{ borderRadius: 3, p: 2 }}>
+                <Paper sx={{ borderRadius: '24px', p: 2 }}>
                     <Grid
                         container
                         textAlign='center'>
@@ -270,7 +280,7 @@ export default function ProfilePage() {
             <Box
                 px={2}
                 mt={2}>
-                <Paper sx={{ borderRadius: 3 }}>
+                <Paper sx={{ borderRadius: '24px', overflow: 'hidden' }}>
                     <Grid
                         container
                         textAlign='center'>
@@ -322,7 +332,7 @@ export default function ProfilePage() {
                 px={2}
                 mt={2}>
                 {/* Account */}
-                <Paper sx={{ borderRadius: 3, mb: 2, overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: '24px', mb: 2, overflow: 'hidden' }}>
                     <List sx={{ p: 0, border: 0 }}>
                         <MenuItem
                             icon={<LanguageRounded />}
@@ -338,7 +348,7 @@ export default function ProfilePage() {
                 </Paper>
 
                 {/* My Services */}
-                <Paper sx={{ borderRadius: 3, mb: 2, overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: '24px', mb: 2, overflow: 'hidden' }}>
                     <List sx={{ p: 0 }}>
                         <MenuItem
                             icon={<FavoriteRounded />}
@@ -364,7 +374,7 @@ export default function ProfilePage() {
                 </Paper>
 
                 {/* Logout */}
-                <Paper sx={{ borderRadius: 3 }}>
+                <Paper sx={{ borderRadius: '24px', overflow: 'hidden' }}>
                     <ListItemButton
                         onClick={handleLogout}
                         sx={{ justifyContent: 'center', color: 'error.main' }}>
