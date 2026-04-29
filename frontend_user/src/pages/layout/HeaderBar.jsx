@@ -63,10 +63,10 @@ const HeaderBar = ({ logo }) => {
                 top: 0,
                 left: 0,
                 right: 0,
-                bgcolor: 'rgba(247, 242, 232, 0.86)',
-                backdropFilter: 'blur(18px)',
+                bgcolor: 'var(--brand-nav)',
+                backdropFilter: 'blur(var(--brand-blur))',
                 borderBottom: '1px solid var(--brand-line)',
-                boxShadow: '0 10px 24px rgba(23, 57, 44, 0.08)'
+                boxShadow: 'var(--brand-shadow)'
             }}
             disableGutters>
             <Toolbar sx={{ justifyContent: 'center' }}>

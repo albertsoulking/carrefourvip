@@ -46,14 +46,14 @@ const BottomNavigator = () => {
                 mx: 'auto',
                 zIndex: 999,
 
-                background: 'rgba(255, 253, 250, 0.82)',
-                backdropFilter: 'blur(18px) saturate(160%)',
-                WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+                background: 'var(--brand-nav)',
+                backdropFilter: 'blur(var(--brand-blur)) saturate(160%)',
+                WebkitBackdropFilter: 'blur(var(--brand-blur)) saturate(160%)',
 
-                borderRadius: '30px',
+                borderRadius: 'var(--brand-radius-xl)',
                 border: '1px solid rgba(23, 57, 44, 0.1)',
 
-                boxShadow: '0 18px 42px rgba(23, 57, 44, 0.16)'
+                boxShadow: 'var(--brand-shadow)'
             }}
         >
             <BottomNavigation

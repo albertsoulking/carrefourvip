@@ -36,8 +36,8 @@ export default function PaymentPay2sPage() {
             <Box
                 sx={{
                     p: 3,
-                    borderRadius: '28px',
-                    bgcolor: '#fffdfa',
+                    borderRadius: 'var(--brand-radius-xl)',
+                    bgcolor: 'var(--brand-paper)',
                     border: '1px solid var(--brand-line)',
                     boxShadow: 'var(--brand-shadow)'
                 }}>

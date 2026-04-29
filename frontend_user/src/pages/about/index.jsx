@@ -36,8 +36,8 @@ const AboutPage = () => {
                     my: 3,
                     p: 2,
                     width: 'fit-content',
-                    borderRadius: '24px',
-                    bgcolor: '#fffdfa',
+                    borderRadius: 'var(--brand-radius-lg)',
+                    bgcolor: 'var(--brand-paper)',
                     border: '1px solid var(--brand-line)',
                     boxShadow: 'var(--brand-shadow)'
                 }}>

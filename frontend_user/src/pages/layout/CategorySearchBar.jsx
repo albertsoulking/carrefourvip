@@ -83,10 +83,10 @@ const CategorySearchBar = () => {
                 top: 0,
                 left: 0,
                 right: 0,
-                bgcolor: 'rgba(247, 242, 232, 0.86)',
-                backdropFilter: 'blur(18px)',
+                bgcolor: 'var(--brand-nav)',
+                backdropFilter: 'blur(var(--brand-blur))',
                 borderBottom: '1px solid var(--brand-line)',
-                boxShadow: '0 10px 24px rgba(23, 57, 44, 0.08)'
+                boxShadow: 'var(--brand-shadow)'
             }}
             disableGutters>
             <Toolbar>
@@ -94,7 +94,7 @@ const CategorySearchBar = () => {
                     sx={{
                         width: 42,
                         height: 42,
-                        bgcolor: '#fffdfa',
+                        bgcolor: 'var(--brand-paper)',
                         border: '1px solid var(--brand-line)'
                     }}
                     onClick={() => setOpenMenu(true)}>
@@ -106,13 +106,13 @@ const CategorySearchBar = () => {
                         flexGrow: 1,
                         display: 'flex',
                         alignItems: 'center',
-                        bgcolor: '#fffdfa',
+                        bgcolor: 'var(--brand-paper)',
                         border: '1px solid var(--brand-line)',
-                        borderRadius: '18px',
+                        borderRadius: 'var(--brand-radius-md)',
                         px: 1.5,
                         py: 0.25,
                         mx: 1,
-                        boxShadow: '0 10px 22px rgba(23, 57, 44, 0.07)'
+                        boxShadow: 'var(--brand-shadow)'
                     }}>
                     <SearchRounded sx={{ color: 'var(--brand-muted)' }} />
                     <InputBase
@@ -144,7 +144,7 @@ const CategorySearchBar = () => {
                     sx={{
                         width: 42,
                         height: 42,
-                        bgcolor: '#fffdfa',
+                        bgcolor: 'var(--brand-paper)',
                         border: '1px solid var(--brand-line)'
                     }}
                     onClick={() => setOpenCart(true)}>

@@ -212,10 +212,10 @@ const InfiniteProductList = () => {
                             minWidth: 'auto',
                             mb: 1,
                             px: 0.5,
-                            bgcolor: 'rgba(255, 253, 250, 0.72)',
+                            bgcolor: 'var(--brand-paper)',
                             border: '1px solid var(--brand-line)',
-                            borderRadius: '18px',
-                            boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
+                            borderRadius: 'var(--brand-radius-md)',
+                            boxShadow: 'var(--brand-shadow)'
                         }}
                         allowScrollButtonsMobile>
                         <Tab
@@ -300,7 +300,7 @@ const InfiniteProductList = () => {
                     p: 0,
                     bgcolor: 'var(--brand-forest)',
                     color: '#fff',
-                    boxShadow: '0 16px 30px rgba(23, 57, 44, 0.22)',
+                    boxShadow: 'var(--brand-shadow)',
                     transition: '0.5s',
                     animation: 'scroll_top 5s linear infinite'
                 }}

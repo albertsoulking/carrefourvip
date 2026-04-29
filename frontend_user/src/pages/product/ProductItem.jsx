@@ -114,14 +114,14 @@ const ProductItem = ({ data, doubleRow }) => {
             elevation={0}
             sx={{
                 position: 'relative',
-                borderRadius: '22px',
+                borderRadius: 'var(--brand-radius-lg)',
                 transition: '0.3s ease',
-                bgcolor: '#fffdfa',
+                bgcolor: 'var(--brand-paper)',
                 border: '1px solid var(--brand-line)',
-                boxShadow: '0 14px 32px rgba(23, 57, 44, 0.08)',
+                boxShadow: 'var(--brand-shadow)',
                 ':hover': {
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 18px 38px rgba(23, 57, 44, 0.14)'
+                    boxShadow: 'var(--brand-shadow)'
                 },
                 '&.MuiCard-root': {
                     overflow: 'hidden'

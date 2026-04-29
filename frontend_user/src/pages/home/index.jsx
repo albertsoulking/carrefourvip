@@ -136,7 +136,7 @@ const PromoPanel = ({ title, description, image, actionLabel, onClick }) => (
             flex: '1 0 260px',
             position: 'relative',
             overflow: 'hidden',
-            borderRadius: '24px',
+            borderRadius: 'var(--brand-radius-lg)',
             p: 2.5,
             color: '#fff',
             cursor: 'pointer',
@@ -144,7 +144,7 @@ const PromoPanel = ({ title, description, image, actionLabel, onClick }) => (
             backgroundImage: `linear-gradient(135deg, rgba(13, 27, 23, 0.82), rgba(25, 76, 59, 0.3)), url(${image})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            boxShadow: '0 18px 40px rgba(23, 57, 44, 0.16)'
+            boxShadow: 'var(--brand-shadow)'
         }}
         onClick={onClick}>
         <Typography
@@ -176,7 +176,7 @@ const PromoPanel = ({ title, description, image, actionLabel, onClick }) => (
                 py: 0.9,
                 bgcolor: '#fff',
                 color: 'var(--brand-forest)',
-                borderRadius: '999px',
+                borderRadius: 'var(--brand-radius-pill)',
                 fontWeight: 700,
                 textTransform: 'none',
                 boxShadow: 'none',
@@ -202,7 +202,7 @@ const CategoryTile = ({ item, onClick }) => {
                 overflow: 'hidden',
                 minHeight: 120,
                 p: 1.5,
-                borderRadius: '22px',
+                borderRadius: 'var(--brand-radius-lg)',
                 cursor: 'pointer',
                 color: categoryImage ? '#fff' : 'var(--brand-ink)',
                 border: categoryImage
@@ -213,7 +213,7 @@ const CategoryTile = ({ item, onClick }) => {
                     : 'linear-gradient(145deg, #fff8eb, #ecefe7)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                boxShadow: '0 14px 32px rgba(23, 57, 44, 0.08)'
+                boxShadow: 'var(--brand-shadow)'
             }}
             onClick={onClick}>
             <Chip
@@ -254,7 +254,7 @@ const ProductGridSkeleton = ({ count = 4 }) => (
                 key={index}
                 sx={{
                     overflow: 'hidden',
-                    borderRadius: '22px',
+                    borderRadius: 'var(--brand-radius-lg)',
                     border: '1px solid rgba(23, 57, 44, 0.08)',
                     bgcolor: '#fff'
                 }}>
@@ -459,8 +459,8 @@ const HomePage = () => {
                     px: 2,
                     pt: 1.5,
                     pb: 1.75,
-                    backdropFilter: 'blur(18px)',
-                    bgcolor: 'rgba(247, 242, 232, 0.82)',
+                    backdropFilter: 'blur(var(--brand-blur))',
+                    bgcolor: 'var(--brand-nav)',
                     borderBottom: '1px solid rgba(23, 57, 44, 0.08)'
                 }}>
                 <Stack
@@ -516,7 +516,7 @@ const HomePage = () => {
                             height: 46,
                             bgcolor: '#fff',
                             border: '1px solid rgba(23, 57, 44, 0.08)',
-                            boxShadow: '0 10px 18px rgba(23, 57, 44, 0.08)'
+                            boxShadow: 'var(--brand-shadow)'
                         }}
                         onClick={() => setOpenCart(true)}>
                         <Badge
@@ -535,10 +535,10 @@ const HomePage = () => {
                         gap: 1,
                         p: 0.75,
                         pl: 1.5,
-                        borderRadius: '20px',
-                        bgcolor: '#fffdfa',
+                        borderRadius: 'var(--brand-radius-md)',
+                        bgcolor: 'var(--brand-paper)',
                         border: '1px solid rgba(23, 57, 44, 0.08)',
-                        boxShadow: '0 14px 30px rgba(23, 57, 44, 0.08)'
+                        boxShadow: 'var(--brand-shadow)'
                     }}>
                     <SearchRounded sx={{ color: 'var(--brand-muted)' }} />
                     <InputBase
@@ -586,7 +586,7 @@ const HomePage = () => {
                         overflow: 'hidden',
                         minHeight: 300,
                         p: 2.5,
-                        borderRadius: '30px',
+                        borderRadius: 'var(--brand-radius-xl)',
                         color: '#fff',
                         backgroundImage: `linear-gradient(180deg, rgba(9, 15, 14, 0.18), rgba(9, 15, 14, 0.72)), url(${heroSlides[heroIndex]})`,
                         backgroundSize: 'cover',
@@ -635,7 +635,7 @@ const HomePage = () => {
                             variant={'contained'}
                             sx={{
                                 py: 1.2,
-                                borderRadius: '999px',
+                                borderRadius: 'var(--brand-radius-pill)',
                                 bgcolor: '#fff',
                                 color: 'var(--brand-forest)',
                                 fontWeight: 700,
@@ -653,7 +653,7 @@ const HomePage = () => {
                             variant={'outlined'}
                             sx={{
                                 py: 1.2,
-                                borderRadius: '999px',
+                                borderRadius: 'var(--brand-radius-pill)',
                                 borderColor: 'rgba(255, 255, 255, 0.3)',
                                 color: '#fff',
                                 fontWeight: 700,
@@ -683,7 +683,7 @@ const HomePage = () => {
                                 sx={{
                                     color: '#fff',
                                     bgcolor: 'rgba(255, 255, 255, 0.12)',
-                                    borderRadius: '999px',
+                                    borderRadius: 'var(--brand-radius-pill)',
                                     backdropFilter: 'blur(6px)'
                                 }}
                                 onClick={() => handleCategoryClick(item.id)}
@@ -699,7 +699,7 @@ const HomePage = () => {
                                 bottom: 18,
                                 left: 18,
                                 p: 2,
-                                borderRadius: '22px',
+                                borderRadius: 'var(--brand-radius-lg)',
                                 cursor: 'pointer',
                                 border: '1px solid rgba(255, 255, 255, 0.18)',
                                 bgcolor: 'rgba(12, 20, 18, 0.4)',
@@ -773,7 +773,7 @@ const HomePage = () => {
                             sx={{
                                 width: index === heroIndex ? 26 : 8,
                                 height: 8,
-                                borderRadius: '999px',
+                                borderRadius: 'var(--brand-radius-pill)',
                                 bgcolor:
                                     index === heroIndex
                                         ? 'var(--brand-forest)'
@@ -806,7 +806,7 @@ const HomePage = () => {
                               key={index}
                               variant={'rectangular'}
                               height={120}
-                              sx={{ borderRadius: '22px' }}
+                              sx={{ borderRadius: 'var(--brand-radius-lg)' }}
                           />
                       ))
                     : categories.map((item) => (
@@ -915,10 +915,10 @@ const HomePage = () => {
                         key={item.title}
                         sx={{
                             p: 2,
-                            borderRadius: '22px',
-                            bgcolor: '#fffdfa',
+                            borderRadius: 'var(--brand-radius-lg)',
+                            bgcolor: 'var(--brand-paper)',
                             border: '1px solid rgba(23, 57, 44, 0.08)',
-                            boxShadow: '0 14px 28px rgba(23, 57, 44, 0.06)'
+                            boxShadow: 'var(--brand-shadow)'
                         }}>
                         <Box
                             sx={{
@@ -959,10 +959,9 @@ const HomePage = () => {
                     mx: 2,
                     mt: 4,
                     p: 2.5,
-                    borderRadius: '28px',
+                    borderRadius: 'var(--brand-radius-xl)',
                     color: '#fff',
-                    background:
-                        'linear-gradient(135deg, #17392c 0%, #244b3b 52%, #b8892d 100%)',
+                    background: 'var(--brand-hero)',
                     boxShadow: '0 24px 48px rgba(23, 57, 44, 0.18)'
                 }}>
                 <Typography

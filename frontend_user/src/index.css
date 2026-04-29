@@ -3,6 +3,63 @@
 :root {
     --font-body: 'Plus Jakarta Sans', sans-serif;
     --font-display: 'Fraunces', serif;
+    --brand-forest: #007aff;
+    --brand-ink: #172033;
+    --brand-muted: #667085;
+    --brand-cream: #f7fbff;
+    --brand-paper: rgba(255, 255, 255, 0.72);
+    --brand-line: rgba(23, 32, 51, 0.1);
+    --brand-shadow: 0 18px 48px rgba(22, 42, 80, 0.14);
+    --brand-nav: rgba(247, 251, 255, 0.78);
+    --brand-blur: 22px;
+    --brand-radius-sm: 14px;
+    --brand-radius-md: 18px;
+    --brand-radius-lg: 24px;
+    --brand-radius-xl: 30px;
+    --brand-radius-pill: 999px;
+    --brand-body-bg: radial-gradient(circle at top left, rgba(0, 122, 255, 0.14), transparent 30%), linear-gradient(180deg, #f7fbff 0%, #eaf3ff 100%);
+    --brand-hero: linear-gradient(135deg, rgba(0, 122, 255, 0.92), rgba(93, 159, 255, 0.68));
+}
+
+:root[data-theme='luxury'] {
+    --brand-forest: #d4af37;
+    --brand-ink: #f6edd0;
+    --brand-muted: #b8a878;
+    --brand-cream: #0b0b0b;
+    --brand-paper: #151515;
+    --brand-line: rgba(212, 175, 55, 0.22);
+    --brand-shadow: 0 20px 56px rgba(0, 0, 0, 0.56);
+    --brand-nav: rgba(11, 11, 11, 0.86);
+    --brand-blur: 16px;
+    --brand-radius-sm: 10px;
+    --brand-radius-md: 14px;
+    --brand-radius-lg: 16px;
+    --brand-radius-xl: 18px;
+    --brand-radius-pill: 999px;
+    --brand-body-bg: radial-gradient(circle at top, rgba(212, 175, 55, 0.12), transparent 28%), linear-gradient(180deg, #080808 0%, #12100a 100%);
+    --brand-hero: linear-gradient(135deg, rgba(9, 9, 9, 0.98), rgba(62, 48, 13, 0.9));
+}
+
+:root[data-theme='travel'] {
+    --brand-forest: #00aeef;
+    --brand-ink: #16324f;
+    --brand-muted: #5f7894;
+    --brand-cream: #f5fbff;
+    --brand-paper: #ffffff;
+    --brand-line: rgba(0, 174, 239, 0.14);
+    --brand-shadow: 0 16px 40px rgba(0, 174, 239, 0.14);
+    --brand-nav: rgba(245, 251, 255, 0.88);
+    --brand-blur: 14px;
+    --brand-radius-sm: 12px;
+    --brand-radius-md: 16px;
+    --brand-radius-lg: 20px;
+    --brand-radius-xl: 24px;
+    --brand-radius-pill: 999px;
+    --brand-body-bg: radial-gradient(circle at top right, rgba(0, 174, 239, 0.18), transparent 32%), linear-gradient(180deg, #f5fbff 0%, #eaf8ff 100%);
+    --brand-hero: linear-gradient(135deg, rgba(0, 174, 239, 0.94), rgba(109, 210, 255, 0.78));
+}
+
+:root[data-theme='modern'] {
     --brand-forest: #17392c;
     --brand-ink: #182018;
     --brand-muted: #687166;
@@ -10,6 +67,34 @@
     --brand-paper: #fffdfa;
     --brand-line: rgba(23, 57, 44, 0.08);
     --brand-shadow: 0 14px 32px rgba(23, 57, 44, 0.08);
+    --brand-nav: rgba(247, 242, 232, 0.86);
+    --brand-blur: 18px;
+    --brand-radius-sm: 14px;
+    --brand-radius-md: 18px;
+    --brand-radius-lg: 24px;
+    --brand-radius-xl: 30px;
+    --brand-radius-pill: 999px;
+    --brand-body-bg: radial-gradient(circle at top, rgba(244, 186, 87, 0.12), transparent 30%), linear-gradient(180deg, #fbf8f2 0%, #f2eadf 100%);
+    --brand-hero: linear-gradient(135deg, #17392c 0%, #244b3b 52%, #b8892d 100%);
+}
+
+:root[data-theme='classic'] {
+    --brand-forest: #0050a4;
+    --brand-ink: #17212f;
+    --brand-muted: #5f6b7a;
+    --brand-cream: #f4f6f8;
+    --brand-paper: #ffffff;
+    --brand-line: #d8dee6;
+    --brand-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    --brand-nav: #ffffff;
+    --brand-blur: 0px;
+    --brand-radius-sm: 4px;
+    --brand-radius-md: 6px;
+    --brand-radius-lg: 8px;
+    --brand-radius-xl: 10px;
+    --brand-radius-pill: 4px;
+    --brand-body-bg: #f4f6f8;
+    --brand-hero: linear-gradient(135deg, #0050a4 0%, #0068c9 72%, #e30613 100%);
 }
 
 * {
@@ -19,9 +104,7 @@
     font-family: var(--font-body);
 }
 body {
-    background:
-        radial-gradient(circle at top, rgba(244, 186, 87, 0.12), transparent 30%),
-        linear-gradient(180deg, #fbf8f2 0%, #f2eadf 100%) !important;
+    background: var(--brand-body-bg) !important;
     color: var(--brand-ink);
 }
 

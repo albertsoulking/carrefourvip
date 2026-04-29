@@ -154,7 +154,7 @@ export default function ProfilePage() {
                     pb: 5,
                     borderBottomLeftRadius: 28,
                     borderBottomRightRadius: 28,
-                    boxShadow: '0 22px 45px rgba(23, 57, 44, 0.18)'
+                    boxShadow: 'var(--brand-shadow)'
                 }}>
                 <Box
                     display='flex'
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                                         width: 70,
                                         height: 70,
                                         mr: 2,
-                                        borderRadius: '18px',
+                                        borderRadius: 'var(--brand-radius-md)',
                                         border: '2px solid rgba(255, 255, 255, 0.64)'
                                     }}
                                     variant='rounded'
@@ -244,7 +244,7 @@ export default function ProfilePage() {
             <Box
                 px={2}
                 mt={-3}>
-                <Paper sx={{ borderRadius: '24px', p: 2 }}>
+                <Paper sx={{ borderRadius: 'var(--brand-radius-lg)', p: 2 }}>
                     <Grid
                         container
                         textAlign='center'>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
             <Box
                 px={2}
                 mt={2}>
-                <Paper sx={{ borderRadius: '24px', overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: 'var(--brand-radius-lg)', overflow: 'hidden' }}>
                     <Grid
                         container
                         textAlign='center'>
@@ -332,7 +332,7 @@ export default function ProfilePage() {
                 px={2}
                 mt={2}>
                 {/* Account */}
-                <Paper sx={{ borderRadius: '24px', mb: 2, overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: 'var(--brand-radius-lg)', mb: 2, overflow: 'hidden' }}>
                     <List sx={{ p: 0, border: 0 }}>
                         <MenuItem
                             icon={<LanguageRounded />}
@@ -348,7 +348,7 @@ export default function ProfilePage() {
                 </Paper>
 
                 {/* My Services */}
-                <Paper sx={{ borderRadius: '24px', mb: 2, overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: 'var(--brand-radius-lg)', mb: 2, overflow: 'hidden' }}>
                     <List sx={{ p: 0 }}>
                         <MenuItem
                             icon={<FavoriteRounded />}
@@ -374,7 +374,7 @@ export default function ProfilePage() {
                 </Paper>
 
                 {/* Logout */}
-                <Paper sx={{ borderRadius: '24px', overflow: 'hidden' }}>
+                <Paper sx={{ borderRadius: 'var(--brand-radius-lg)', overflow: 'hidden' }}>
                     <ListItemButton
                         onClick={handleLogout}
                         sx={{ justifyContent: 'center', color: 'error.main' }}>

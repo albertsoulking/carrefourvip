@@ -96,9 +96,9 @@ export default function WalletPage() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    borderRadius: '26px',
-                    background:
-                        'linear-gradient(135deg, rgba(255, 253, 250, 0.96), rgba(239, 232, 219, 0.72))'
+                    borderRadius: 'var(--brand-radius-xl)',
+                    background: 'var(--brand-hero)',
+                    color: '#fff'
                 }}
                 elevation={0}>
                 <Box>
@@ -145,10 +145,10 @@ export default function WalletPage() {
                     sx={{
                         minHeight: 'auto',
                         minWidth: 'auto',
-                        bgcolor: 'rgba(255, 253, 250, 0.72)',
+                        bgcolor: 'var(--brand-paper)',
                         border: '1px solid var(--brand-line)',
-                        borderRadius: '18px',
-                        boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
+                        borderRadius: 'var(--brand-radius-md)',
+                        boxShadow: 'var(--brand-shadow)'
                     }}
                     allowScrollButtonsMobile>
                     {tabStatus.map((label) => (
@@ -167,7 +167,7 @@ export default function WalletPage() {
                 {/* 交易记录表格 */}
                 <TableContainer
                     component={Paper}
-                    sx={{ height: '100%', mt: 2, borderRadius: '22px' }}>
+                    sx={{ height: '100%', mt: 2, borderRadius: 'var(--brand-radius-lg)' }}>
                     <Table>
                         <TableHead>
                             <TableRow>

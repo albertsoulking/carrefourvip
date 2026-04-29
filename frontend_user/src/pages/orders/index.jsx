@@ -101,10 +101,10 @@ const OrderPage = () => {
                         sx={{
                             minHeight: 'auto',
                             minWidth: 'auto',
-                            bgcolor: 'rgba(255, 253, 250, 0.72)',
+                            bgcolor: 'var(--brand-paper)',
                             border: '1px solid var(--brand-line)',
-                            borderRadius: '18px',
-                            boxShadow: '0 10px 22px rgba(23, 57, 44, 0.06)'
+                            borderRadius: 'var(--brand-radius-md)',
+                            boxShadow: 'var(--brand-shadow)'
                         }}
                         allowScrollButtonsMobile>
                         {tabs.map((tab, idx) => (
