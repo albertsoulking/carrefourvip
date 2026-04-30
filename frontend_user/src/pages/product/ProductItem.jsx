@@ -6,7 +6,6 @@ import {
     CardContent,
     IconButton,
     Typography,
-    CardMedia,
     CircularProgress,
     Chip,
     Drawer,
@@ -24,6 +23,19 @@ import { useSmartNavigate } from '../../hooks/useSmartNavigate';
 import { enqueueSnackbar } from 'notistack';
 import ProductDetailPage from '../product_detail';
 
+const safeParseArray = (value) => {
+    if (Array.isArray(value)) return value;
+    if (!value) return [];
+
+    try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.error('Invalid product attributes JSON:', error);
+        return [];
+    }
+};
+
 const ProductItem = ({ data, doubleRow }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useSmartNavigate();
@@ -35,7 +47,7 @@ const ProductItem = ({ data, doubleRow }) => {
     const [quantity] = useState(1);
 
     useEffect(() => {
-        const attrs = JSON.parse(data?.attributes || '[]');
+        const attrs = safeParseArray(data?.attributes);
         setFavorite(data?.isFavorite);
         setSelectedAttr(attrs.length > 0 ? attrs[0] : {});
     }, [data]);
@@ -114,6 +126,7 @@ const ProductItem = ({ data, doubleRow }) => {
             elevation={0}
             sx={{
                 position: 'relative',
+                height: '100%',
                 borderRadius: 'var(--brand-radius-lg)',
                 transition: '0.3s ease',
                 bgcolor: 'var(--brand-paper)',
@@ -164,7 +177,9 @@ const ProductItem = ({ data, doubleRow }) => {
             </Box>
             <CardContent
                 sx={{
-                    display: doubleRow ? 'inline' : 'flex',
+                    display: doubleRow ? 'flex' : 'flex',
+                    flexDirection: doubleRow ? 'column' : 'row',
+                    height: '100%',
                     cursor: 'pointer',
                     ':last-child': { pb: 0 },
                     p: 0
@@ -172,13 +187,13 @@ const ProductItem = ({ data, doubleRow }) => {
                 onClick={() => setOpenDetail({ open: true, data })}>
                 <Box
                     width={doubleRow ? '100%' : '55%'}
-                    height={200}
+                    height={doubleRow ? 180 : 190}
                     position={'relative'}>
                     {!loaded && (
                         <Skeleton
                             variant='rectangular'
-                            width={doubleRow ? '100%' : '55%'}
-                            height={200}
+                            width={'100%'}
+                            height={'100%'}
                             sx={{ position: 'absolute', top: 0, left: 0 }}
                         />
                     )}
@@ -188,7 +203,7 @@ const ProductItem = ({ data, doubleRow }) => {
                             import.meta.env.VITE_API_BASE_URL
                         }/uploads/thumbs/${data?.imageUrl}`}
                         alt={data?.name}
-                        width={doubleRow ? '100%' : '55%'}
+                        width={'100%'}
                         height={'100%'}
                         display={loaded ? 'flex' : 'none'}
                         sx={{
@@ -209,7 +224,7 @@ const ProductItem = ({ data, doubleRow }) => {
                     flexDirection={'column'}
                     justifyContent={'space-between'}
                     width={'100%'}
-                    sx={{ p: 1 }}>
+                    sx={{ p: 1.25, flex: 1 }}>
                     <Typography
                         gutterBottom
                         variant={'body2'}
@@ -238,18 +253,18 @@ const ProductItem = ({ data, doubleRow }) => {
                         </span>
                     </Typography>
                     <Chip
-                        label={data?.category.name}
+                        label={data?.category?.name}
                         size={'small'}
                         sx={{
                             width: 'fit-content',
                             mt: 0.5,
-                            bgcolor: 'rgba(23, 57, 44, 0.08)',
+                            bgcolor: 'rgba(127, 127, 127, 0.08)',
                             color: 'var(--brand-forest)'
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
                             const params = new URLSearchParams({
-                                category: data.category?.id
+                                category: data?.category?.id
                             });
 
                             navigate(web.products + '?' + params);
@@ -258,7 +273,9 @@ const ProductItem = ({ data, doubleRow }) => {
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            mt: 1
                         }}>
                         <Typography
                             variant={'h5'}

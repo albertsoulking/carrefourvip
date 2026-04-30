@@ -75,7 +75,7 @@ const NavBar = ({ categories, setOpenMenu }) => {
                     setOpenMenu(false);
 
                     const params = new URLSearchParams({
-                        c: 0
+                        category: 0
                     }).toString();
 
                     navigate(web.products + '?' + params);
@@ -124,7 +124,7 @@ const NavBar = ({ categories, setOpenMenu }) => {
                         setOpenMenu(false);
 
                         const params = new URLSearchParams({
-                            c: item.id
+                            category: item.id
                         });
 
                         navigate(web.products + '?' + params);

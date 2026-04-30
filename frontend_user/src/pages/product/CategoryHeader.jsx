@@ -2,16 +2,23 @@ import { Box, Typography } from '@mui/material';
 import assets from '../../assets';
 
 const CategoryHeader = ({ data }) => {
-    const height = 100;
+    const height = 118;
     
     return (
         <Box
             position={'relative'}
-            height={height}
+            minHeight={height}
             display={'flex'}
             justifyContent={'center'}
             alignItems={'center'}
-            zIndex={888}>
+            zIndex={1}
+            sx={{
+                overflow: 'hidden',
+                borderRadius: 'var(--brand-radius-lg)',
+                border: '1px solid var(--brand-line)',
+                boxShadow: 'var(--brand-shadow)',
+                bgcolor: 'var(--brand-paper)'
+            }}>
             <img
                 src={
                     data?.bgImageUrl
@@ -27,14 +34,28 @@ const CategoryHeader = ({ data }) => {
                     objectFit: 'cover',
                     position: 'absolute',
                     zIndex: -1,
-                    borderRadius: 8
+                    filter: 'saturate(0.98)'
+                }}
+            />
+            <Box
+                sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: -1,
+                    background:
+                        'linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.52))'
                 }}
             />
             <Typography
                 variant={'h5'}
                 fontWeight={'bold'}
                 textAlign={'center'}
-                sx={{ color: '#fff', textShadow: '3px 3px 6px #000' }}>
+                sx={{
+                    px: 2,
+                    color: '#fff',
+                    fontFamily: 'var(--font-display)',
+                    textShadow: '0 2px 8px rgba(0,0,0,0.35)'
+                }}>
                 {data?.name ?? 'All Products'}
             </Typography>
         </Box>

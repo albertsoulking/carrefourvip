@@ -5,7 +5,9 @@ import {
     Button,
     IconButton,
     TextField,
-    CircularProgress
+    CircularProgress,
+    ToggleButton,
+    ToggleButtonGroup
 } from '@mui/material';
 import { useState } from 'react';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
@@ -14,6 +16,24 @@ import { useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import ModalViewImage from './ModalViewImage';
 import api from '../../routes/api';
+
+const safeParseArray = (value) => {
+    if (Array.isArray(value)) return value;
+    if (!value) return [];
+
+    try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.error('Invalid attribute JSON:', error);
+        return [];
+    }
+};
+
+const getVariantLabel = (variant) => {
+    if (!variant?.code) return '';
+    return variant[variant.code] ?? '';
+};
 
 export default function DrawerAttribute({ open, data, setOpen }) {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -26,11 +46,15 @@ export default function DrawerAttribute({ open, data, setOpen }) {
     const [disabledAttr, setDisabledAttr] = useState([]);
 
     useEffect(() => {
-        const attrs = JSON.parse(data?.attributes || '[]');
-        const groups = JSON.parse(data?.attrGroups || '[]');
+        const attrs = safeParseArray(data?.attributes).filter((attr) =>
+            Array.isArray(attr?.variants)
+        );
+        const groups = safeParseArray(data?.attrGroups).filter((group) => group?.code);
         setAttributes(attrs);
         setAttrGroups(groups);
         setSelectedAttr(attrs.length > 0 ? attrs[0] : {});
+        setQuantity(1);
+        setDisabledAttr([]);
     }, [open]);
 
     const handleOnAddToCart = async () => {
@@ -40,7 +64,7 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                 ? selectedAttr.image
                 : data?.attributes
                 ? data.imageUrl
-                : null,
+                : data?.imageUrl,
             quantity,
             attributes: JSON.stringify(selectedAttr),
             basePrice: data?.price,
@@ -79,7 +103,7 @@ export default function DrawerAttribute({ open, data, setOpen }) {
             ...new Set(
                 attributes
                     .map((p) => {
-                        const variant = p.variants.find((v) => v.code === code);
+                        const variant = (p.variants || []).find((v) => v.code === code);
                         return variant ? variant[code] : null;
                     })
                     .filter(Boolean) // 去掉 null/undefined
@@ -102,6 +126,67 @@ export default function DrawerAttribute({ open, data, setOpen }) {
         return totalPrice.toString();
     };
 
+    const isOptionDisabled = (val) =>
+        disabledAttr.length > 0 && !disabledAttr.includes(val);
+
+    const handleSelectOption = (g, val) => {
+        if (isOptionDisabled(val)) return;
+
+        setSelectedAttr((prev) => {
+            const variants = (prev.variants || []).map((v) =>
+                g.code === v.code
+                    ? {
+                          ...v,
+                          [v.code]: val
+                      }
+                    : v
+            );
+
+            const selected = Object.fromEntries(
+                variants
+                    .map((v) => [v.code, getVariantLabel(v)])
+                    .filter(([_, value]) => !!value)
+            );
+
+            const found = attributes.find((attr) =>
+                Object.entries(selected).every(([code, value]) =>
+                    (attr.variants || []).some(
+                        (v) => v.code === code && getVariantLabel(v) === value
+                    )
+                )
+            );
+
+            return (
+                found ??
+                attributes.find((attr) =>
+                    (attr.variants || []).some(
+                        (v) => v.code === g.code && getVariantLabel(v) === val
+                    )
+                ) ??
+                prev
+            );
+        });
+
+        const firstGroupCode = attrGroups[0]?.code;
+        const mainOpts = firstGroupCode ? getValuesByCode(firstGroupCode) : [];
+
+        setDisabledAttr([
+            ...new Set([
+                ...attributes
+                    .filter((attr) =>
+                        (attr.variants || []).some(
+                            (v) => v.code === g.code && getVariantLabel(v) === val
+                        )
+                    )
+                    .flatMap((attr) =>
+                        (attr.variants || []).map((v) => getVariantLabel(v))
+                    )
+                    .filter(Boolean),
+                ...mainOpts
+            ])
+        ]);
+    };
+
     return (
         <Drawer
             open={open}
@@ -109,16 +194,37 @@ export default function DrawerAttribute({ open, data, setOpen }) {
             onClose={() => setOpen(false)}
             sx={{ '.MuiDrawer-paper': { bgcolor: 'transparent' } }}>
             <Box
-                height={600}
-                bgcolor={'#fff'}
-                p={2}
+                maxHeight={'86vh'}
+                bgcolor={'var(--brand-paper)'}
                 position={'relative'}
                 sx={{
-                    borderTopLeftRadius: 16,
-                    borderTopRightRadius: 16
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderTopLeftRadius: 'var(--brand-radius-lg)',
+                    borderTopRightRadius: 'var(--brand-radius-lg)',
+                    border: '1px solid var(--brand-line)',
+                    overflow: 'hidden'
                 }}>
-                <Typography textAlign={'center'}>Choose Options</Typography>
-                <Box display={'flex'}>
+                <Box
+                    sx={{
+                        px: 2,
+                        py: 1.5,
+                        borderBottom: '1px solid var(--brand-line)'
+                    }}>
+                    <Typography
+                        textAlign={'center'}
+                        fontWeight={800}>
+                        Choose Options
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        overflow: 'auto',
+                        px: 2,
+                        py: 2,
+                        pb: 1
+                    }}>
+                <Box display={'flex'} gap={1.5}>
                     <Box
                         component={'img'}
                         src={`${
@@ -128,13 +234,17 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                         }`}
                         width={100}
                         height={100}
-                        borderRadius={2}
-                        sx={{ objectFit: 'cover' }}
+                        sx={{
+                            objectFit: 'cover',
+                            borderRadius: 'var(--brand-radius-md)',
+                            border: '1px solid var(--brand-line)',
+                            cursor: 'zoom-in'
+                        }}
                         onClick={() => setOpenImage(true)}
                     />
-                    <Box ml={2}>
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
                         <Typography
-                            fontSize={30}
+                            fontSize={26}
                             fontWeight={'bold'}
                             translate={'no'}
                             width={'fit-content'}>
@@ -146,16 +256,18 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                         <Typography fontSize={14}>
                             Choose:{' '}
                             {selectedAttr.variants
-                                ?.map((v) => v[v.code])
+                                ?.map((v) => getVariantLabel(v))
+                                .filter(Boolean)
                                 .join(', ') || 'Default Selection'}
                         </Typography>
                         <Box
                             display={'flex'}
                             alignItems={'center'}
                             justifyContent={'space-around'}
-                            border={'1px solid #ccc'}
-                            borderRadius={2}
-                            width={'fit-content'}>
+                            border={'1px solid var(--brand-line)'}
+                            borderRadius={'var(--brand-radius-md)'}
+                            width={'fit-content'}
+                            mt={1}>
                             <IconButton
                                 size={'small'}
                                 onClick={() =>
@@ -199,7 +311,6 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                 <Box mt={2}>
                     {attrGroups.map((g, index) => {
                         const options = getValuesByCode(g.code);
-                        const mainOpts = getValuesByCode(attrGroups[0].code);
                         
                         return (
                             <Box
@@ -210,214 +321,68 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                                     mb={1}>
                                     {g.name}
                                 </Typography>
-                                <Box
-                                    display={'flex'}
-                                    flexWrap={'wrap'}
-                                    gap={1}>
-                                    {options.map((val, oIdx) => (
-                                        <Typography
-                                            key={`${index}-${oIdx}`}
-                                            sx={{
-                                                color:
-                                                    disabledAttr.length > 0
-                                                        ? disabledAttr.includes(
-                                                              val
-                                                          )
-                                                            ? '#000'
-                                                            : '#c5c5c5'
-                                                        : '#000',
-                                                bgcolor: '#f1f1f7',
-                                                py: 0.5,
-                                                px: 2,
-                                                borderRadius: 2,
-                                                width: 'fit-content',
-                                                cursor: 'pointer',
-                                                border: selectedAttr.variants?.some(
-                                                    (v) =>
-                                                        v.code === g.code &&
-                                                        v[v.code] === val
-                                                )
-                                                    ? '1px solid #1890ff'
-                                                    : '1px solid #f1f1f7',
-                                                ':hover': {
-                                                    border:
-                                                        disabledAttr.length > 0
-                                                            ? disabledAttr.includes(
-                                                                  val
-                                                              )
-                                                                ? '1px solid #1976d2'
-                                                                : '1px solid #f1f1f7'
-                                                            : '1px solid #1976d2'
+                                <ToggleButtonGroup
+                                    exclusive
+                                    value={
+                                        selectedAttr.variants?.find(
+                                            (v) => v.code === g.code
+                                        )?.[g.code] || null
+                                    }
+                                    onChange={(event, nextValue) => {
+                                        if (nextValue === null) return;
+                                        handleSelectOption(g, nextValue);
+                                    }}
+                                    sx={{
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        gap: 1,
+                                        '& .MuiToggleButton-root': {
+                                            border: '1px solid var(--brand-line)',
+                                            borderRadius:
+                                                'var(--brand-radius-md) !important',
+                                            px: 1.5,
+                                            py: 0.75,
+                                            color: 'var(--brand-ink)',
+                                            bgcolor: 'var(--brand-cream)',
+                                            fontWeight: 700,
+                                            textTransform: 'none',
+                                            '&.Mui-selected': {
+                                                color: '#fff',
+                                                bgcolor: 'var(--brand-forest)',
+                                                borderColor: 'var(--brand-forest)',
+                                                '&:hover': {
+                                                    bgcolor: 'var(--brand-forest)'
                                                 }
-                                            }}
-                                            onClick={() => {
-                                                if (
-                                                    disabledAttr.length > 0
-                                                        ? disabledAttr.includes(
-                                                              val
-                                                          )
-                                                            ? false
-                                                            : true
-                                                        : false
-                                                )
-                                                    return;
-
-                                                setSelectedAttr((prev) => {
-                                                    const variants =
-                                                        prev.variants.map((v) =>
-                                                            g.code === v.code
-                                                                ? {
-                                                                      ...v,
-                                                                      [v.code]:
-                                                                          val
-                                                                  }
-                                                                : v
-                                                        );
-
-                                                    // 当前选择的条件（去掉空值）
-                                                    const selected =
-                                                        Object.fromEntries(
-                                                            variants
-                                                                .map((v) => [
-                                                                    v.code,
-                                                                    v[v.code]
-                                                                ])
-                                                                .filter(
-                                                                    ([
-                                                                        _,
-                                                                        val
-                                                                    ]) => !!val
-                                                                )
-                                                        );
-
-                                                    // 精确匹配：找出 variants 里所有 code 都符合 selected 的 attr
-                                                    const found =
-                                                        attributes.find(
-                                                            (attr) =>
-                                                                Object.entries(
-                                                                    selected
-                                                                ).every(
-                                                                    ([
-                                                                        code,
-                                                                        value
-                                                                    ]) =>
-                                                                        attr.variants.some(
-                                                                            (
-                                                                                v
-                                                                            ) =>
-                                                                                v.code ===
-                                                                                    code &&
-                                                                                v[
-                                                                                    v
-                                                                                        .code
-                                                                                ] ===
-                                                                                    value
-                                                                        )
-                                                                )
-                                                        );
-
-                                                    return (
-                                                        found ??
-                                                        attributes.find(
-                                                            (attr) =>
-                                                                attr.variants.some(
-                                                                    (v) =>
-                                                                        v.code ===
-                                                                            g.code &&
-                                                                        v[
-                                                                            v
-                                                                                .code
-                                                                        ] ===
-                                                                            val
-                                                                )
-                                                        )
-                                                    ); // 没找到就查找到匹配的第一个数据
-                                                });
-
-                                                setDisabledAttr([
-                                                    ...new Set([
-                                                        ...attributes
-                                                            .filter((attr) =>
-                                                                attr.variants.some(
-                                                                    (v) =>
-                                                                        v.code ===
-                                                                            g.code &&
-                                                                        v[
-                                                                            v
-                                                                                .code
-                                                                        ] ===
-                                                                            val
-                                                                )
-                                                            )
-                                                            .flatMap((attr) =>
-                                                                attr.variants.map(
-                                                                    (v) =>
-                                                                        v[
-                                                                            v
-                                                                                .code
-                                                                        ]
-                                                                )
-                                                            ),
-                                                        ...mainOpts
-                                                    ])
-                                                ]);
-                                                // setSelected((prev) => {
-                                                //     const isMulti = false;
-
-                                                //     if (isMulti) {
-                                                //         // 多选
-                                                //         const exists = prev.some(
-                                                //             (p) =>
-                                                //                 p.attrIndex === index &&
-                                                //                 p.itemIndex === oIdx
-                                                //         );
-                                                //         if (exists) {
-                                                //             // 如果已存在就删掉（toggle 效果）
-                                                //             return prev.filter(
-                                                //                 (p) =>
-                                                //                     !(
-                                                //                         p.attrIndex ===
-                                                //                             index &&
-                                                //                         p.itemIndex ===
-                                                //                             oIdx
-                                                //                     )
-                                                //             );
-                                                //         }
-                                                //         return [
-                                                //             ...prev,
-                                                //             {
-                                                //                 attrIndex: index,
-                                                //                 itemIndex: oIdx,
-                                                //                 itemPrice: Number(
-                                                //                     item.price
-                                                //                 )
-                                                //             }
-                                                //         ];
-                                                //     } else {
-                                                //         // 单选：清空同 attrIndex 的旧值，加入新的
-                                                //         return [
-                                                //             ...prev.filter(
-                                                //                 (p) => p.attrIndex !== index
-                                                //             ),
-                                                //             {
-                                                //                 attrIndex: index,
-                                                //                 itemIndex: oIdx,
-                                                //                 itemPrice: Number(
-                                                //                     item.price
-                                                //                 )
-                                                //             }
-                                                //         ];
-                                                //     }
-                                                // });
-                                                // setSelectedImage(item.image);
-                                            }}>
+                                            },
+                                            '&.Mui-disabled': {
+                                                color: 'var(--brand-muted)',
+                                                opacity: 0.42
+                                            }
+                                        }
+                                    }}>
+                                    {options.map((val, oIdx) => (
+                                        <ToggleButton
+                                            key={`${index}-${oIdx}`}
+                                            value={val}
+                                            disabled={isOptionDisabled(val)}>
                                             {val}
-                                        </Typography>
+                                        </ToggleButton>
                                     ))}
-                                </Box>
+                                </ToggleButtonGroup>
                             </Box>
                         );
                     })}
+                    {attrGroups.length === 0 ? (
+                        <Typography
+                            sx={{
+                                mt: 2,
+                                color: 'var(--brand-muted)',
+                                fontSize: 13
+                            }}>
+                            This product has no extra options.
+                        </Typography>
+                    ) : null}
+                </Box>
                 </Box>
                 <Button
                     variant={'contained'}
@@ -427,7 +392,8 @@ export default function DrawerAttribute({ open, data, setOpen }) {
                         position: 'sticky',
                         bottom: 0,
                         textTransform: 'capitalize',
-                        mt: 2,
+                        m: 2,
+                        width: 'auto',
                         py: 1.25,
                         borderRadius: 'var(--brand-radius-md)'
                     }}
@@ -448,7 +414,7 @@ export default function DrawerAttribute({ open, data, setOpen }) {
             </Box>
             <ModalViewImage
                 open={openImage}
-                image={selectedAttr.image}
+                image={selectedAttr.image || data?.imageUrl}
                 setOpen={setOpenImage}
             />
         </Drawer>

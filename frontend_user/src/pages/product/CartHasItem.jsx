@@ -36,7 +36,7 @@ const CartHasItem = ({
     return (
         <Card
             elevation={0}
-            sx={{ borderRadius: 5, maxWidth: 360, height: '100%', p: 1 }}>
+            sx={{ borderRadius: 2, height: '100%', p: 1 }}>
             <FormGroup>
                 <FormControlLabel
                     control={

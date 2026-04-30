@@ -1,5 +1,5 @@
 import { CloseRounded } from '@mui/icons-material';
-import { Dialog, IconButton } from '@mui/material';
+import { Box, Dialog, IconButton } from '@mui/material';
 
 const ModalViewImage = ({ image, open, setOpen }) => {
     return (
@@ -20,20 +20,31 @@ const ModalViewImage = ({ image, open, setOpen }) => {
                 onClick={() => setOpen(false)}>
                 <CloseRounded />
             </IconButton>
-            <img
-                src={`${
-                    import.meta.env.VITE_API_BASE_URL
-                }/uploads/images/${image}`}
-                alt={'Preview'}
-                style={{
+            <Box
+                sx={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
-                    backgroundColor: '#000',
-                    cursor: 'pointer'
+                    display: 'grid',
+                    placeItems: 'center',
+                    bgcolor: '#000',
+                    cursor: 'zoom-out',
+                    p: 1
                 }}
-                onClick={() => setOpen(false)}
-            />
+                onClick={() => setOpen(false)}>
+                {image ? (
+                    <img
+                        src={`${
+                            import.meta.env.VITE_API_BASE_URL
+                        }/uploads/images/${image}`}
+                        alt={'Preview'}
+                        style={{
+                            maxWidth: '100%',
+                            maxHeight: '100%',
+                            objectFit: 'contain'
+                        }}
+                    />
+                ) : null}
+            </Box>
         </Dialog>
     );
 };

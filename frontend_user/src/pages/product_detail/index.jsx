@@ -54,9 +54,10 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                 return prev;
             });
             setImageList(
-                res.data.imageList
-                    ? [res.data.imageUrl, ...res.data.imageList.split(',')]
-                    : [res.data.imageUrl]
+                [
+                    res.data.imageUrl,
+                    ...(res.data.imageList ? res.data.imageList.split(',') : [])
+                ].filter(Boolean)
             );
             setCover(res.data.imageUrl);
             setLoading(false);
@@ -121,7 +122,7 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                             navigator.clipboard.writeText(
                                 location.origin + web.productDetail(product?.id)
                             );
-                            enqueueSnackbar('ProdProduct sharing link copied', {
+                            enqueueSnackbar('Product sharing link copied', {
                                 variant: 'success'
                             });
                         }}>
@@ -186,51 +187,77 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                 </Box>
             ) : (
                 <Box sx={{ pb: 2 }}>
-                    <Box sx={{ px: 2, mb: 2 }}>
+                    <Box
+                        sx={{
+                            mx: 2,
+                            mb: 2,
+                            p: 2,
+                            bgcolor: 'var(--brand-paper)',
+                            border: '1px solid var(--brand-line)',
+                            borderRadius: 'var(--brand-radius-lg)',
+                            boxShadow: 'var(--brand-shadow)'
+                        }}>
                         <Typography
                             variant={'h5'}
                             fontWeight={'bold'}
-                            sx={{ userSelect: 'text' }}>
+                            sx={{
+                                userSelect: 'text',
+                                color: 'var(--brand-ink)',
+                                fontFamily: 'var(--font-display)'
+                            }}>
                             {product?.name}
                         </Typography>
 
                         <Chip
-                            label={product?.category.name}
+                            label={product?.category?.name}
                             size={'small'}
                             sx={{ mt: 2 }}
                             onClick={() => {
                                 const params = new URLSearchParams({
-                                    c: product.category?.id
+                                    category: product?.category?.id
                                 });
 
                                 navigate(web.products + '?' + params);
                             }}
                         />
                     </Box>
-                    <img
-                        src={`${
-                            import.meta.env.VITE_API_BASE_URL
-                        }/uploads/images/${cover}`}
-                        alt={product?.name}
-                        style={{
-                            width: '100%',
-                            objectFit: 'contain',
-                            cursor: 'pointer',
-                            padding: 8
-                        }}
-                        onClick={() =>
-                            setOpenImage({
-                                open: true,
-                                data: product?.imageUrl
-                            })
-                        }
-                    />
+                    <Box
+                        sx={{
+                            mx: 2,
+                            overflow: 'hidden',
+                            borderRadius: 'var(--brand-radius-lg)',
+                            bgcolor: 'var(--brand-paper)',
+                            border: '1px solid var(--brand-line)'
+                        }}>
+                        <img
+                            src={`${
+                                import.meta.env.VITE_API_BASE_URL
+                            }/uploads/images/${cover}`}
+                            alt={product?.name}
+                            style={{
+                                width: '100%',
+                                maxHeight: 420,
+                                objectFit: 'contain',
+                                cursor: 'zoom-in',
+                                padding: 8,
+                                display: 'block'
+                            }}
+                            onClick={() =>
+                                setOpenImage({
+                                    open: true,
+                                    data: cover
+                                })
+                            }
+                        />
+                    </Box>
                     {imageList.length > 0 && (
                         <Box
                             display={'flex'}
                             mx={2}
+                            mt={1}
                             gap={1}
-                            overflow={'overlay'}>
+                            overflow={'auto'}
+                            sx={{ pb: 0.5 }}>
                             {imageList.map((img, index) => (
                                 <Box
                                     key={index}
@@ -242,13 +269,14 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                                     height={80}
                                     border={
                                         cover === img
-                                            ? '1px solid #1976d2'
-                                            : '1px solid #0000001a'
+                                            ? '2px solid var(--brand-forest)'
+                                            : '1px solid var(--brand-line)'
                                     }
-                                    borderRadius={2}
+                                    borderRadius={'var(--brand-radius-md)'}
                                     sx={{
                                         objectFit: 'cover',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        bgcolor: 'var(--brand-paper)'
                                     }}
                                     onClick={() => setCover(img)}
                                 />
@@ -264,16 +292,22 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                             sx={{ my: 2 }}>
                             Description
                         </Typography>
-                        <div
-                            style={{
-                                marginLeft: 20,
-                                marginRight: 20,
-                                marginBottom: 50,
+                        <Box
+                            sx={{
+                                p: 2,
+                                bgcolor: 'var(--brand-paper)',
+                                border: '1px solid var(--brand-line)',
+                                borderRadius: 'var(--brand-radius-lg)',
+                                color: 'var(--brand-ink)',
                                 userSelect: 'text',
-                                whiteSpace: 'pre-wrap'
+                                whiteSpace: 'pre-wrap',
+                                '& img': {
+                                    maxWidth: '100%',
+                                    height: 'auto'
+                                }
                             }}
                             dangerouslySetInnerHTML={{
-                                __html: product?.description
+                                __html: product?.description || ''
                             }}
                         />
                     </Box>
@@ -284,12 +318,22 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                             display={'flex'}
                             overflow={'hidden'}
                             sx={{ mt: 4, mb: 10 }}>
+                            <Typography
+                                sx={{
+                                    position: 'absolute',
+                                    top: -28,
+                                    left: 16,
+                                    fontWeight: 800,
+                                    color: 'var(--brand-ink)'
+                                }}>
+                                Recommended products
+                            </Typography>
                             <Box
                                 ref={scrollRef}
                                 // onScroll={handleScroll}
                                 sx={{
                                     display: 'flex',
-                                    overflow: 'overlay',
+                                    overflow: 'auto',
                                     scrollSnapType: 'x mandatory',
                                     scrollBehavior: 'smooth',
                                     whiteSpace: 'nowrap',
@@ -297,8 +341,7 @@ const ProductDetailPage = ({ data, open, setOpen }) => {
                                     px: 2,
                                     transition: '0.6s ease'
                                 }}>
-                                {product &&
-                                    product.similarProducts.map((product) => (
+                                {product?.similarProducts?.map((product) => (
                                         <Box
                                             key={product.id}
                                             size={{ xs: 6 }}

@@ -23,9 +23,7 @@ const DeliveryItem = ({
             sx={{
                 mb: 1,
                 borderRadius: 2,
-                boxShadow: 'rgba(0, 0, 0, 0.1) 0 4px 12px',
-                minHeight: 50,
-                maxHeight: 120
+                boxShadow: 'rgba(0, 0, 0, 0.1) 0 4px 12px'
             }}>
             <CardActionArea
                 sx={{
@@ -33,7 +31,8 @@ const DeliveryItem = ({
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     height: '100%',
-                    px: 2
+                    py: 2,
+                    px: 4
                 }}
                 onClick={() => setOpenDrawer(true)}>
                 <Box>
@@ -61,8 +60,6 @@ const DeliveryItem = ({
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            mt: 0.5,
-                            ml: 1,
                             fontSize: 13
                         }}>
                         {shippingFee.type.charAt(0).toUpperCase() +

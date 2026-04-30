@@ -5,7 +5,7 @@ const CartEmpty = () => {
     return (
         <Card
             elevation={0}
-            sx={{ borderRadius: 5, maxWidth: 360, height: '100%' }}>
+            sx={{ borderRadius: 2, height: '100%' }}>
             <CardContent>
                 <Typography
                     textAlign={'center'}

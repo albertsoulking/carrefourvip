@@ -2,11 +2,11 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import {
     Grid,
     Box,
-    CircularProgress,
     Button,
     Tabs,
     Tab,
-    Skeleton
+    Skeleton,
+    Typography
 } from '@mui/material';
 import api from '../../routes/api';
 import { useSearchParams } from 'react-router-dom';
@@ -48,7 +48,7 @@ const InfiniteProductList = () => {
         async (data) => {
             if (loadingRef.current) return;
 
-            const payload = { ...data, userId: user?.id.toString() };
+            const payload = { ...data, userId: user?.id?.toString() };
 
             loadingRef.current = true;
             setLoading(true);
@@ -58,13 +58,18 @@ const InfiniteProductList = () => {
             // 等一帧渲染 spinner
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            const res = await api.products.getAll(payload); // fetchProducts(offsetRef.current, 10);
-            setProducts((prev) => [...prev, ...res.data.data]);
-            offsetRef.current += 1;
-            loadingRef.current = false;
-            setLoading(false);
+            try {
+                const res = await api.products.getAll(payload); // fetchProducts(offsetRef.current, 10);
+                setProducts((prev) => [...prev, ...(res.data?.data || [])]);
+                offsetRef.current += 1;
+            } catch (error) {
+                console.error('Failed to load products:', error);
+            } finally {
+                loadingRef.current = false;
+                setLoading(false);
+            }
         },
-        [searchParams]
+        [query, category, filter.orderBy, filter.sortBy]
     );
 
     // 监听分类、排序变化时重置
@@ -76,27 +81,13 @@ const InfiniteProductList = () => {
             page: offsetRef.current,
             limit: 20,
             query: query ?? null,
-            categoryId: category ? Number(category) : null,
+            categoryId: category && Number(category) !== 0 ? Number(category) : null,
             orderBy: filter.orderBy ?? 'asc',
             sortBy: filter.sortBy ?? 'name'
         }); // 拉取第一页
 
         loadCategoryData();
-    }, [category, filter.orderBy, searchParams]);
-
-    // 初始化加载第一页
-    useEffect(() => {
-        loadMore({
-            ...(state ? state : searchModal),
-            page: offsetRef.current,
-            limit: 20,
-            query: query ?? null,
-            categoryId: category ? Number(category) : null,
-            orderBy: filter.orderBy ?? 'asc',
-            sortBy: filter.sortBy ?? 'name'
-        });
-        loadCategoryData();
-    }, []);
+    }, [category, query, filter.orderBy, filter.sortBy]);
 
     useEffect(() => {
         loadAllCategoryData();
@@ -112,11 +103,14 @@ const InfiniteProductList = () => {
         };
 
         const cates = await api.categories.getAll(payload);
-        setCategories(cates.data);
+        setCategories(Array.isArray(cates.data) ? cates.data : []);
     };
 
     const loadCategoryData = async () => {
-        if (!category) return;
+        if (!category || Number(category) === 0) {
+            setCategoryData(null);
+            return;
+        }
 
         const res = await api.categories.get({ id: Number(category) });
         setCategoryData(res.data);
@@ -135,7 +129,7 @@ const InfiniteProductList = () => {
                         page: offsetRef.current,
                         limit: 20,
                         query: query ?? null,
-                        categoryId: category ? Number(category) : null,
+                        categoryId: category && Number(category) !== 0 ? Number(category) : null,
                         orderBy: filter.orderBy ?? 'asc',
                         sortBy: filter.sortBy ?? 'name'
                     });
@@ -172,15 +166,6 @@ const InfiniteProductList = () => {
         setProducts([]);
         setSearchParams({
             category: newValue === 0 ? 0 : categories[newValue - 1].id
-        });
-        loadMore({
-            ...(state ? state : searchModal),
-            page: offsetRef.current,
-            limit: 20,
-            query: null,
-            categoryId: newValue === 0 ? 0 : categories[newValue - 1].id,
-            orderBy: filter.orderBy ?? 'asc',
-            sortBy: filter.sortBy ?? 'name'
         });
     };
 
@@ -248,6 +233,19 @@ const InfiniteProductList = () => {
                         setFilter={setFilter}
                     />
                 </Grid>
+                {query ? (
+                    <Grid size={{ xs: 12 }}>
+                        <Typography
+                            sx={{
+                                px: 1,
+                                py: 0.5,
+                                color: 'var(--brand-muted)',
+                                fontSize: 13
+                            }}>
+                            Search results for "{query}"
+                        </Typography>
+                    </Grid>
+                ) : null}
                 {products.map((product, index) => {
                     const isLast = index === products.length - 1;
                     return (
@@ -282,6 +280,22 @@ const InfiniteProductList = () => {
                         ))}
                     </>
                 )}
+                {!loading && products.length === 0 ? (
+                    <Grid size={{ xs: 12 }}>
+                        <Box
+                            sx={{
+                                p: 3,
+                                mt: 2,
+                                textAlign: 'center',
+                                bgcolor: 'var(--brand-paper)',
+                                border: '1px solid var(--brand-line)',
+                                borderRadius: 'var(--brand-radius-lg)',
+                                color: 'var(--brand-muted)'
+                            }}>
+                            No products found.
+                        </Box>
+                    </Grid>
+                ) : null}
             </Grid>
             <BottomNavigator />
             <Button
