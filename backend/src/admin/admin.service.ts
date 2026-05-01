@@ -296,7 +296,7 @@ export class AdminService {
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.parent', 'team')
             .leftJoinAndSelect('team.parent', 'agent')
-            .where('user.id = :id', { id: topUser.userId })
+            .where('user.id = :id', { id: topUser?.userId })
             .getOne();
 
         // 最大团队（成员最多）
@@ -341,7 +341,7 @@ export class AdminService {
                     name: user?.parent?.parent
                         ? user?.parent?.parent?.name
                         : user?.parent?.name,
-                    orderCount: topUser.orderCount
+                    orderCount: topUser?.orderCount || 0
                 }
             },
             team: {
@@ -351,7 +351,7 @@ export class AdminService {
                 top: {
                     id: teamAdmin?.id,
                     name: teamAdmin?.name ?? '-',
-                    userCount: parseInt(topTeam?.userCount, 10)
+                    userCount: parseInt(topTeam?.userCount, 10) || 0
                 }
             },
             support: {
