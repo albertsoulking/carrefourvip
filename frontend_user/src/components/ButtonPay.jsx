@@ -104,15 +104,15 @@ const ButtonPay = ({
             return;
         }
 
-        if (!isAllowed && siteData.deliveryAddressEnabled) {
-            enqueueSnackbar(
-                'This address is not within the delivery service area!',
-                {
-                    variant: 'error'
-                }
-            );
-            return;
-        }
+        // if (!isAllowed && siteData.deliveryAddressEnabled) {
+        //     enqueueSnackbar(
+        //         'This address is not within the delivery service area!',
+        //         {
+        //             variant: 'error'
+        //         }
+        //     );
+        //     return;
+        // }
 
         setLoading(true);
 

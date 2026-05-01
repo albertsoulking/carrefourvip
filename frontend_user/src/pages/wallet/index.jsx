@@ -107,7 +107,7 @@ export default function WalletPage() {
                         variant={'h4'}
                         fontWeight={'bold'}
                         sx={{
-                            color: 'var(--brand-forest)',
+                            color: '#fff',
                             fontFamily: 'var(--font-display)'
                         }}
                         translate={'no'}>

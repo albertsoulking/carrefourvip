@@ -100,7 +100,7 @@ export const themeModes = {
         mode: 'light'
     },
     classic: {
-        label: 'Classic Carrefour',
+        label: 'Classic Retail',
         description: 'Traditional retail, primary blue and white',
         preview: ['#0050a4', '#ffffff', '#e30613'],
         vars: {
