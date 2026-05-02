@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import api from '../../routes/api';
 import { useSearchParams } from 'react-router-dom';
 import ModalTopUp from './ModalTopUp';
+import BankTransferDeposit from './BankTransferDeposit';
 import web from '../../routes/web';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
@@ -136,6 +137,13 @@ export default function WalletPage() {
                         </Button>
                 </Box>
             </Paper>
+
+            <BankTransferDeposit
+                user={user}
+                onOpenOnlineTopUp={() => {
+                    setOpenTopUp(true);
+                }}
+            />
 
             <Box sx={{ width: '100%' }}>
                 <Tabs

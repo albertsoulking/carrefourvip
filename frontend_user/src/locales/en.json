@@ -102,6 +102,51 @@
       "title": "Top Up",
       "amount": "Amount",
       "minimumAmount": "* Minimum amount 10 EUR *"
+    },
+    "bankTransfer": {
+      "sectionTitle": "Bank transfer deposit",
+      "depositAmount": "Deposit amount",
+      "minimumAmount": "Minimum 10 EUR for bank transfer submission.",
+      "amountOnlineHint": "You can enter the amount in the top-up flow.",
+      "paymentMethod": "Payment method",
+      "methodBank": "Bank transfer",
+      "methodOnline": "Online payment (cards & wallets)",
+      "onlineHint": "Use the next step to top up with your saved cards or other online methods.",
+      "openOnlineTopUp": "Continue to online top-up",
+      "referenceHint": "Include in the payment reference: {{reference}} (your registered email and/or user ID).",
+      "bankDetailsTitle": "Bank transfer details",
+      "accountName": "Account name",
+      "iban": "IBAN",
+      "swift": "SWIFT / BIC",
+      "bankAddress": "Bank address",
+      "copiedIban": "IBAN copied",
+      "copiedSwift": "SWIFT / BIC copied",
+      "importantNoticeTitle": "Important notice",
+      "noticeItems": [
+        "Please transfer only from an account under your own name.",
+        "Include your account ID or registered email in the payment reference.",
+        "Deposits are typically credited within 1–3 business days after receipt.",
+        "After completing the transfer, please upload your payment receipt for faster processing."
+      ],
+      "ctaTitle": "Transfer instructions",
+      "ctaSteps": [
+        "Enter the amount you wish to deposit.",
+        "Transfer the funds using the bank details above.",
+        "Use your account email or user ID as the payment reference.",
+        "Upload your transfer receipt.",
+        "Submit your deposit request."
+      ],
+      "balanceNote": "Your balance will be updated once the transfer is verified.",
+      "uploadReceipt": "Upload transfer receipt (JPG or PNG, max 2 MB)",
+      "submitReview": "Submit for review",
+      "loginRequired": "Please log in to submit a deposit request.",
+      "invalidAmount": "Enter a valid amount (minimum 10 EUR).",
+      "receiptRequired": "Please upload your transfer receipt.",
+      "submitSuccess": "Request submitted. We will review your deposit shortly.",
+      "submitError": "Could not submit your request. Please try again.",
+      "notApplicable": "N/A",
+      "ticketSubject": "Wallet deposit request ({{amount}} EUR)",
+      "ticketBody": "Bank transfer deposit submission.\n\nAmount: {{amount}} EUR\nUser ID: {{userId}}\nEmail: {{email}}\nReceipt: {{receiptUrl}}\n\nPlease verify and credit the wallet."
     }
   },
   "address": {

@@ -102,6 +102,51 @@
       "title": "充值",
       "amount": "金额",
       "minimumAmount": "* 最低金额 10 欧元 *"
+    },
+    "bankTransfer": {
+      "sectionTitle": "银行转账充值",
+      "depositAmount": "充值金额",
+      "minimumAmount": "银行转账提交最低 10 欧元。",
+      "amountOnlineHint": "金额可在下一步在线充值流程中填写。",
+      "paymentMethod": "支付方式",
+      "methodBank": "银行转账",
+      "methodOnline": "在线支付（卡包/钱包等）",
+      "onlineHint": "下一步将打开在线充值，可使用银行卡或其他在线方式。",
+      "openOnlineTopUp": "继续在线充值",
+      "referenceHint": "请在转账附言中包含：{{reference}}（注册邮箱和/或用户 ID）。",
+      "bankDetailsTitle": "收款账户信息",
+      "accountName": "账户名称",
+      "iban": "IBAN",
+      "swift": "SWIFT / BIC",
+      "bankAddress": "银行地址",
+      "copiedIban": "已复制 IBAN",
+      "copiedSwift": "已复制 SWIFT / BIC",
+      "importantNoticeTitle": "重要提示",
+      "noticeItems": [
+        "请仅使用本人名下账户汇款。",
+        "请在附言中填写账户 ID 或注册邮箱。",
+        "到账时间通常为收到款项后 1–3 个工作日。",
+        "完成转账后请上传付款凭证以便尽快处理。"
+      ],
+      "ctaTitle": "转账说明",
+      "ctaSteps": [
+        "填写拟充值金额。",
+        "使用上方银行账户信息进行转账。",
+        "在附言中使用注册邮箱或用户 ID。",
+        "上传转账凭证。",
+        "提交充值申请。"
+      ],
+      "balanceNote": "核实入账后，余额将会更新。",
+      "uploadReceipt": "上传转账凭证（JPG 或 PNG，最大 2 MB）",
+      "submitReview": "提交审核",
+      "loginRequired": "请先登录后再提交充值申请。",
+      "invalidAmount": "请输入有效金额（最低 10 欧元）。",
+      "receiptRequired": "请上传转账凭证。",
+      "submitSuccess": "申请已提交，我们会尽快审核您的充值。",
+      "submitError": "提交失败，请稍后重试。",
+      "notApplicable": "无",
+      "ticketSubject": "钱包充值申请（{{amount}} 欧元）",
+      "ticketBody": "银行转账充值申请。\n\n金额：{{amount}} 欧元\n用户 ID：{{userId}}\n邮箱：{{email}}\n凭证：{{receiptUrl}}\n\n请核实并入账。"
     }
   },
   "address": {
