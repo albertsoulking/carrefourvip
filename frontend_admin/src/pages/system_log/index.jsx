@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import getColumns from './columns';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import { enqueueSnackbar } from 'notistack';
 
 const containerVariants = {
@@ -57,8 +56,6 @@ const SystemLogPage = () => {
         userType: 'admin'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
     }, []);
@@ -107,21 +104,10 @@ const SystemLogPage = () => {
                 animate={'visible'}>
                 {/* Actions Bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             searchModal={searchModal}
                             onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
                 {/** Data Grid */}
                 <motion.div variants={itemVariants}>

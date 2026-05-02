@@ -1,10 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { User } from 'src/users/entities/user.entity';
-import { TransactionStatus } from './enum/transactions.enum';
+import {
+    TransactionDirection,
+    TransactionMethod,
+    TransactionStatus,
+    TransactionType
+} from './enum/transactions.enum';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CreateUserDepositDto } from './dto/create-user-deposit.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -15,6 +26,86 @@ export class TransactionsService {
         @InjectRepository(User)
         private userRepo: Repository<User>
     ) {}
+
+    private genTxnNo(prefix: string): string {
+        return `${prefix}${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    async createUserDeposit(
+        userId: number,
+        dto: CreateUserDepositDto
+    ): Promise<Transaction> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const user = await queryRunner.manager
+                .createQueryBuilder(User, 'user')
+                .setLock('pessimistic_write')
+                .where('user.id = :id', { id: userId })
+                .getOne();
+            if (!user) {
+                throw new NotFoundException(`User ID ${userId} not found`);
+            }
+
+            const amountStr = Number(dto.amount).toFixed(2);
+            const before = parseFloat(user.balance).toFixed(2);
+
+            const proofName = dto.proofImage?.trim();
+            if (!proofName) {
+                throw new BadRequestException('Payment proof image is required');
+            }
+
+            const base = (process.env.HOST_BASE_URL || '').replace(/\/$/, '');
+            const proofImageUrl =
+                dto.proofImageUrl?.trim() ||
+                (base ? `${base}/uploads/images/${proofName}` : null);
+            if (!proofImageUrl) {
+                throw new BadRequestException(
+                    'proofImageUrl is required (or configure HOST_BASE_URL on the server)'
+                );
+            }
+
+            const tx = queryRunner.manager.create(Transaction, {
+                user: { id: userId },
+                transactionNumber: this.genTxnNo('DP-'),
+                amount: amountStr,
+                direction: TransactionDirection.IN,
+                method: TransactionMethod.BANK_TRANSFER,
+                hybridMethod: TransactionMethod.BANK_TRANSFER,
+                type: TransactionType.DEPOSIT,
+                status: TransactionStatus.PENDING,
+                postBalance: before,
+                beforeBalance: before,
+                afterBalance: null,
+                reference: dto.reference ?? null,
+                remark: dto.remark ?? null,
+                proofImage: proofName,
+                proofImageUrl,
+                currency: 'EUR'
+            });
+
+            const saved = await queryRunner.manager.save(tx);
+            await queryRunner.commitTransaction();
+            return saved;
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    async findOneMine(userId: number, id: number): Promise<Transaction> {
+        const transaction = await this.transactionRepo.findOne({
+            where: { id, user: { id: userId } },
+            relations: ['user']
+        });
+        if (!transaction) {
+            throw new NotFoundException(`Transaction ${id} not found`);
+        }
+        return transaction;
+    }
 
     async findMyTransactions(
         userId: number,
@@ -38,7 +129,16 @@ export class TransactionsService {
                 'transaction.direction',
                 'transaction.status',
                 'transaction.type',
+                'transaction.method',
                 'transaction.postBalance',
+                'transaction.transactionNumber',
+                'transaction.reference',
+                'transaction.remark',
+                'transaction.proofImage',
+                'transaction.proofImageUrl',
+                'transaction.currency',
+                'transaction.beforeBalance',
+                'transaction.afterBalance',
                 'transaction.createdAt',
                 'user.id',
                 'user.name'
@@ -63,7 +163,6 @@ export class TransactionsService {
                 break;
         }
 
-        // 添加筛选
         if (transactionType.length > 0) {
             query.andWhere('transaction.type IN (:...transactionType)', {
                 transactionType
@@ -110,26 +209,46 @@ export class TransactionsService {
                 );
             }
 
-            if (dto.status === TransactionStatus.COMPLETED &&
+            if (
+                dto.status === TransactionStatus.COMPLETED &&
+                transaction.method === TransactionMethod.BANK_TRANSFER &&
+                transaction.type === TransactionType.DEPOSIT
+            ) {
+                throw new ForbiddenException(
+                    'Bank transfer deposits are approved by administrators only'
+                );
+            }
+
+            if (
+                dto.status === TransactionStatus.COMPLETED &&
                 transaction.status === TransactionStatus.PENDING
             ) {
-                const user = await this.userRepo.findOne({
-                    where: { id: transaction.user.id }
-                });
+                const user = await queryRunner.manager
+                    .createQueryBuilder(User, 'user')
+                    .setLock('pessimistic_write')
+                    .where('user.id = :id', { id: transaction.user.id })
+                    .getOne();
                 if (!user) {
-                    throw new NotFoundException(`User ID ${transaction.user.id} not  found!`);
+                    throw new NotFoundException(
+                        `User ID ${transaction.user.id} not  found!`
+                    );
                 }
+
+                const before = parseFloat(user.balance).toFixed(2);
+                transaction.beforeBalance =
+                    transaction.beforeBalance ?? before;
 
                 user.balance = (
                     parseFloat(user.balance) + parseFloat(transaction.amount)
                 ).toFixed(2);
-                await queryRunner.manager.save(user);
-
-                transaction.status = dto.status;
+                transaction.afterBalance = user.balance;
                 transaction.postBalance = user.balance;
+                transaction.status = dto.status;
+                await queryRunner.manager.save(user);
             }
 
-            if (dto.status === TransactionStatus.CANCELLED &&
+            if (
+                dto.status === TransactionStatus.CANCELLED &&
                 transaction.status === TransactionStatus.PENDING
             ) {
                 transaction.status = dto.status;

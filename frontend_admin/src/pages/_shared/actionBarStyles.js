@@ -1,5 +1,5 @@
 export const actionBarPaperSx = {
-    p: { xs: 1, sm: 2 },
+    p: { xs: 1.5, sm: 2 },
     mb: 2,
     display: 'flex',
     flexDirection: 'column',
@@ -8,7 +8,7 @@ export const actionBarPaperSx = {
     justifyContent: 'space-between',
     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
     borderRadius: 2,
-    gap: 2,
+    gap: { xs: 1.5, sm: 2 },
     '& .action-bar-actions-row': {
         display: 'flex',
         flexWrap: 'wrap',

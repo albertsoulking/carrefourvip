@@ -1,5 +1,4 @@
 import {
-    ExpandLessRounded,
     RefreshRounded,
     SearchRounded
 } from '@mui/icons-material';
@@ -22,8 +21,7 @@ import { actionBarPaperSx } from '../_shared/actionBarStyles';
 const ActionBarExpand = ({
     searchModal,
     onSearch,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
     const items = [{ name: 'logId', label: '日志ID', type: 'number' }];
 
@@ -195,7 +193,6 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -209,23 +206,10 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={
-                                    <ExpandLessRounded fontSize={'inherit'} />
-                                }
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                     </Box>

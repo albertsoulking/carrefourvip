@@ -7,8 +7,8 @@ import getColumns from './columns';
 import { useOutletContext } from 'react-router-dom';
 import api from '../../routes/api';
 import usePageState from '../../hooks/usePageState';
-import ActionBarCollapse from './ActionBarCollapse';
 import ActionBarExpand from './ActionBarExpand';
+import ManualAdjustDialog from './ManualAdjustDialog';
 import { enqueueSnackbar } from 'notistack';
 
 // Animation variants
@@ -57,8 +57,8 @@ const FinanceDepositPage = () => {
         type: 'deposit'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
     const [teamsData, setTeamsData] = useState([]);
+    const [adjustOpen, setAdjustOpen] = useState(false);
 
     useEffect(() => {
         loadData(state ?? searchModal);
@@ -123,22 +123,12 @@ const FinanceDepositPage = () => {
 
                 {/* Search and filter */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             onSearch={loadData}
                             searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                            teamsData={teamsData}
+                            setPaginationModel={setPaginationModel} teamsData={teamsData}
+                            onOpenManualAdjust={() => setAdjustOpen(true)}
                         />
-                    ) : (
-                        <ActionBarCollapse
-                            onSearch={loadData}
-                            searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
                 </motion.div>
 
                 {/* Orders list */}
@@ -178,7 +168,9 @@ const FinanceDepositPage = () => {
                             });
                         }}
                         rows={fetchData?.data}
-                        columns={getColumns({ permissions })}
+                        columns={getColumns({
+                            onRefresh: () => loadData(searchModal)
+                        })}
                         getRowHeight={() => 'auto'}
                         disableColumnFilter
                         disableColumnMenu
@@ -218,6 +210,11 @@ const FinanceDepositPage = () => {
                     />
                 </motion.div>
             </motion.div>
+            <ManualAdjustDialog
+                open={adjustOpen}
+                onClose={() => setAdjustOpen(false)}
+                onSuccess={() => loadData(searchModal)}
+            />
         </Box>
     );
 };

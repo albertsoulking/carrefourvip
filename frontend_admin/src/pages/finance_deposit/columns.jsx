@@ -4,8 +4,9 @@ import RowPayMethod from './RowPayMethod';
 import RowType from './RowType';
 import RowStatus from './RowStatus';
 import RowMode from './RowMode';
+import DepositRowActions from './DepositRowActions';
 
-const getColumns = () => [
+const getColumns = ({ onRefresh }) => [
     {
         field: 'serial',
         headerName: '序号',
@@ -154,6 +155,18 @@ const getColumns = () => [
                 noWrap>
                 {new Date(params.value).toLocaleString()}
             </Typography>
+        )
+    },
+    {
+        field: 'actions',
+        headerName: '操作',
+        width: 160,
+        sortable: false,
+        renderCell: (params) => (
+            <DepositRowActions
+                row={params.row}
+                onRefresh={onRefresh}
+            />
         )
     }
 ];

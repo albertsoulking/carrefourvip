@@ -1,7 +1,8 @@
 import {
     CurrencyExchangeRounded,
     LocalMallRounded,
-    PaidRounded
+    PaidRounded,
+    TuneRounded
 } from '@mui/icons-material';
 import { Chip, Box } from '@mui/material';
 
@@ -23,6 +24,12 @@ const OPTIONS = [
         value: 'refunded',
         color: 'secondary',
         icon: <CurrencyExchangeRounded />
+    },
+    {
+        label: '手工调整',
+        value: 'adjustment',
+        color: 'warning',
+        icon: <TuneRounded />
     }
 ];
 

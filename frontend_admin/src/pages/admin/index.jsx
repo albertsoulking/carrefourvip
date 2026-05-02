@@ -7,7 +7,6 @@ import getColumns from './columns';
 import Overview from './OverView';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import { enqueueSnackbar } from 'notistack';
 import useNotificationSocket from '../../hooks/useNotificationSocket';
 import web from '../../routes/web';
@@ -57,8 +56,6 @@ const AdminListPage = () => {
         sortBy: 'id'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
         fetchAdmins();
@@ -153,22 +150,11 @@ const AdminListPage = () => {
                 </motion.div>
                 {/* Actions Bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             onSearch={loadData}
                             searchModal={searchModal}
                             setPaginationModel={setPaginationModel}
-                            adminsData={adminsData}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            onSearch={loadData}
-                            searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            adminsData={adminsData} />
                 </motion.div>
                 {/** Data Grid */}
                 <motion.div variants={itemVariants}>

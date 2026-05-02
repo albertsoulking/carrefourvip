@@ -1,5 +1,4 @@
 import {
-    ExpandLessRounded,
     RefreshRounded,
     SearchRounded
 } from '@mui/icons-material';
@@ -29,8 +28,7 @@ const STATUS_OPTIONS = [
 const ActionBarExpand = ({
     onSearch,
     searchModal,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState({});
@@ -203,38 +201,30 @@ const ActionBarExpand = ({
                     <Box className='action-bar-actions-row'>
                         <Box className='action-bar-actions-group'>
                             <Button
-                                variant='contained'
+                                variant={'contained'}
                                 onClick={handleSearch}
-                                startIcon={<SearchRounded fontSize='inherit' />}
-                                size='small'
+                                startIcon={
+                                    <SearchRounded fontSize={'inherit'} />
+                                }
+                                size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.search')}
                             </Button>
                             <Button
-                                variant='outlined'
+                                variant={'outlined'}
                                 onClick={handleReset}
-                                startIcon={<RefreshRounded fontSize='inherit' />}
-                                size='small'
+                                startIcon={
+                                    <RefreshRounded fontSize={'inherit'} />
+                                }
+                                size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={<ExpandLessRounded fontSize='inherit' />}
-                                size='small'
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                     </Box>

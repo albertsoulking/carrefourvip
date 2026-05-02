@@ -6,7 +6,6 @@ import getColumns from './columns';
 import api from '../../routes/api';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import { enqueueSnackbar } from 'notistack';
 import useNotificationSocket from '../../hooks/useNotificationSocket';
 import web from '../../routes/web';
@@ -56,8 +55,6 @@ const MessageListPage = () => {
         sortBy: 'id'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
     }, []);
@@ -99,21 +96,10 @@ const MessageListPage = () => {
 
                 {/* Actions bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             searchModal={searchModal}
                             onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
 
                 {/* Data grid */}

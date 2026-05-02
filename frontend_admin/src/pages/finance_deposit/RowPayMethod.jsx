@@ -55,6 +55,11 @@ const OPTIONS = [
         label: 'table.wise',
         value: 'wise',
         color: 'info'
+    },
+    {
+        label: '银行转账',
+        value: 'bank_transfer',
+        color: 'success'
     }
 ];
 

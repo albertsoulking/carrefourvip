@@ -1,5 +1,4 @@
 import {
-    ExpandLessRounded,
     RefreshRounded,
     SearchRounded
 } from '@mui/icons-material';
@@ -19,17 +18,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { actionBarPaperSx } from '../_shared/actionBarStyles';
 import ButtonRecycle from './ButtonRecycle';
-import usePermissionStore from '../../hooks/usePermissionStore';
 import ButtonAdd from './ButtonAdd';
 
 const ActionBarExpand = ({
     onSearch,
     searchModal,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
-    const permissions = usePermissionStore((state) => state.permissions);
-
     const items = [
         { name: 'categoryId', label: '分类ID', type: 'number' },
         { name: 'name', label: '名称' },
@@ -230,8 +225,11 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <SearchRounded fontSize={'inherit'} />
                                 }
-                                sx={{ mr: 2, fontSize: 12, textTransform: 'capitalize' }}
-                                size={'small'}>
+                                size={'small'}
+                                sx={{
+                                    fontSize: 12,
+                                    textTransform: 'capitalize'
+                                }}>
                                 {t('actionBar.search')}
                             </Button>
                             <Button
@@ -241,15 +239,11 @@ const ActionBarExpand = ({
                                     <RefreshRounded fontSize={'inherit'} />
                                 }
                                 size={'small'}
-                                sx={{ mr: 2, fontSize: 12, textTransform: 'capitalize' }}>
+                                sx={{
+                                    fontSize: 12,
+                                    textTransform: 'capitalize'
+                                }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={<ExpandLessRounded fontSize={'inherit'} />}
-                                size={'small'}
-                                sx={{ fontSize: 12, textTransform: 'capitalize' }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                         <Box className={'action-bar-actions-group'}>

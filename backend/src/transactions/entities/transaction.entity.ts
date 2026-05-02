@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Order } from 'src/orders/entities/order.entity';
+import { Admin } from 'src/admin/entities/admin.entity';
 import {
     TransactionDirection,
     TransactionMethod,
@@ -58,6 +59,38 @@ export class Transaction {
 
     @Column({ type: 'enum', enum: TransactionStatus })
     status: TransactionStatus;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    reference: string | null;
+
+    @Column({ type: 'text', nullable: true })
+    remark: string | null;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    proofImage: string | null;
+
+    /** Public URL to the uploaded payment proof image */
+    @Column({ type: 'varchar', length: 512, nullable: true })
+    proofImageUrl: string | null;
+
+    @Column({ type: 'varchar', length: 8, default: 'EUR' })
+    currency: string;
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+    beforeBalance: string | null;
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+    afterBalance: string | null;
+
+    @Column({ type: 'datetime', nullable: true })
+    processedAt: Date | null;
+
+    @ManyToOne(() => Admin, {
+        nullable: true,
+        createForeignKeyConstraints: false
+    })
+    @JoinColumn({ name: 'processedById' })
+    processedBy: Admin | null;
 
     @CreateDateColumn()
     createdAt: Date;

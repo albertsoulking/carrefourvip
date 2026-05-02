@@ -13,6 +13,8 @@ import { FlightBooking } from './entities/flight-booking.entity';
 import { CreateFlightBookingDto } from './dto/create-flight-booking.dto';
 import { FlightBookingStatus } from './enum/flight-booking.enum';
 
+type FlightSearchMarket = 'us' | 'sg' | 'default';
+
 @Injectable()
 export class FlightService {
     constructor(
@@ -24,6 +26,18 @@ export class FlightService {
 
     private token = process.env.TP_TOKEN;
 
+    private readonly pricesForDatesUrl =
+        'https://api.travelpayouts.com/aviasales/v3/prices_for_dates';
+
+    /** Parallel searches: US market, SG market, and API default (no `market` param). */
+    private readonly searchMarketVariants: Array<{
+        key: FlightSearchMarket;
+        /** Omit to leave `market` unset (Travelpayouts default). */
+        marketParam?: string;
+    }> = [
+        { key: 'us', marketParam: 'us' }
+    ];
+
     private generateBookingReference() {
         const now = new Date();
         const stamp = [
@@ -33,6 +47,28 @@ export class FlightService {
         ].join('');
 
         return `FB-${stamp}-${uuidv4().split('-')[0].toUpperCase()}`;
+    }
+
+    private mapPriceItemToFlight(
+        item: Record<string, any>,
+        origin: string,
+        destination: string,
+        market: FlightSearchMarket
+    ) {
+        const link = item.link != null ? String(item.link) : '';
+
+        return {
+            id: `${market}:${link}`,
+            link,
+            market,
+            price: item.price,
+            airlineCode: item.airline,
+            departure: item.departure_at,
+            return: item.return_at,
+            duration: '2h ~ 5h',
+            from: origin,
+            to: destination
+        };
     }
 
     async searchFlights(dto: SearchFlightDto) {
@@ -47,44 +83,57 @@ export class FlightService {
             oneWay
         } = dto;
 
-        try {
-            const params: any = {
-                origin,
-                destination,
-                departure_at: departureDate,
-                currency: 'usd',
-                market: 'us',
-                children,
-                adults,
-                trip_class: tripClass,
-                token: this.token
-            };
+        const baseParams: Record<string, any> = {
+            origin,
+            destination,
+            departure_at: departureDate,
+            currency: 'eur',
+            children,
+            adults,
+            trip_class: tripClass,
+            token: this.token
+        };
 
-            // ✅ 只有往返才加
-            if (!oneWay && returnDate) {
-                params.return_at = returnDate;
+        if (!oneWay && returnDate) {
+            baseParams.return_at = returnDate;
+        }
+
+        const requests = this.searchMarketVariants.map(
+            async ({ key, marketParam }) => {
+                try {
+                    const params = { ...baseParams };
+                    if (marketParam !== undefined) {
+                        params.market = marketParam;
+                    }
+
+                    const res = await axios.get(this.pricesForDatesUrl, {
+                        params
+                    });
+
+                    const data = res.data?.data || [];
+
+                    return (data as Record<string, any>[]).map((item) =>
+                        this.mapPriceItemToFlight(item, origin, destination, key)
+                    );
+                } catch (err) {
+                    const message =
+                        err instanceof Error ? err.message : String(err);
+                    console.error(
+                        `Flight search API error (market=${key}):`,
+                        message
+                    );
+                    return [];
+                }
             }
+        );
 
-            const res = await axios.get(
-                'https://api.travelpayouts.com/aviasales/v3/prices_for_dates',
-                { params }
-            );
-
-            const data = res.data?.data || [];
-            console.log('data', res.data);
-
-            return data.map((item: any) => ({
-                id: item.link,
-                price: item.price,
-                airlineCode: item.airline,
-                departure: item.departure_at,
-                return: item.return_at,
-                duration: '2h ~ 5h',
-                from: origin,
-                to: destination
-            }));
+        try {
+            const batches = await Promise.all(requests);
+            return batches.flat();
         } catch (err) {
-            console.error('API ERROR:', err.message);
+            const message =
+                err instanceof Error ? err.message : String(err);
+            console.error('Flight search API error:', message);
             return [];
         }
     }

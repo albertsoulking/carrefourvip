@@ -1,8 +1,4 @@
-import {
-    RefreshRounded,
-    SearchRounded,
-    ExpandLessRounded
-} from '@mui/icons-material';
+import { RefreshRounded, SearchRounded } from '@mui/icons-material';
 import {
     TextField,
     Button,
@@ -20,13 +16,23 @@ import ButtonRecycle from './ButtonRecycle';
 import ButtonAdd from './ButtonAdd';
 import { useTranslation } from 'react-i18next';
 import { actionBarPaperSx } from '../_shared/actionBarStyles';
+import {
+    ACTION_BAR_ACTIONS_GRID,
+    ACTION_BAR_DATE_GRID,
+    ACTION_BAR_FIELD_GRID,
+    buildSearchPayload,
+    submitOnEnter
+} from '../_shared/actionBarSearchHelpers';
+
+const fieldControlSx = {
+    '& .MuiInputBase-root': { minHeight: 40 }
+};
 
 const ActionBarExpand = ({
     onSearch,
     searchModal,
     teamsData,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
     const items = [
         { name: 'userId', label: 'table.userId', type: 'number' },
@@ -48,37 +54,25 @@ const ActionBarExpand = ({
             name: 'status',
             label: 'table.status.order',
             children: [
-                {
-                    label: '启用',
-                    value: 1
-                },
-                {
-                    label: '禁用',
-                    value: 2
-                }
+                { label: '启用', value: 1 },
+                { label: '禁用', value: 2 }
             ]
         },
         {
             name: 'mode',
             label: 'table.mode',
             children: [
-                {
-                    label: '正式',
-                    value: 'live'
-                },
-                {
-                    label: '试玩',
-                    value: 'test'
-                }
+                { label: '正式', value: 'live' },
+                { label: '试玩', value: 'test' }
             ]
         },
         {
             name: 'parentId',
             label: 'parent.name',
             children: teamsData
-                ? teamsData.map((t) => ({
-                      label: `${t.name} (${t.referralCode})`,
-                      value: t.id
+                ? teamsData.map((tm) => ({
+                      label: `${tm.name} (${tm.referralCode})`,
+                      value: tm.id
                   }))
                 : []
         }
@@ -91,24 +85,21 @@ const ActionBarExpand = ({
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-
         setFormData((prev) => {
             const updated = { ...prev };
-
-            if (value === '') delete updated[name]; // 移除字段
-            else updated[name] = value; // 设置新值
-
+            if (value === '') delete updated[name];
+            else updated[name] = value;
             return updated;
         });
     };
 
     const handleSearch = () => {
-        onSearch({
-            ...searchModal,
-            ...formData,
-            fromDate,
-            toDate
-        });
+        onSearch(
+            buildSearchPayload(searchModal, formData, items, {
+                fromDate,
+                toDate
+            })
+        );
     };
 
     const handleReset = () => {
@@ -117,52 +108,55 @@ const ActionBarExpand = ({
         setToDate(null);
         onSearch({
             page: 1,
-            limit: 10,
-            orderBy: 'desc',
-            sortBy: 'id'
+            limit: searchModal?.limit ?? 10,
+            orderBy: searchModal?.orderBy ?? 'desc',
+            sortBy: searchModal?.sortBy ?? 'id'
         });
-        setPaginationModel({ page: 0, pageSize: 10 });
+        setPaginationModel({
+            page: 0,
+            pageSize: searchModal?.limit ?? 10
+        });
     };
 
+    const onFieldKeyDown = submitOnEnter(handleSearch);
+
     return (
-        <Paper
-            sx={actionBarPaperSx}>
+        <Paper sx={actionBarPaperSx}>
             <Grid
                 container
-                spacing={2}>
+                spacing={2}
+                width={'100%'}>
                 {items.map((item) => (
                     <Grid
-                        size={{ xs: 12, sm: 4, md: 2 }}
+                        size={ACTION_BAR_FIELD_GRID}
                         key={item.name}>
                         {item.children ? (
                             <FormControl
                                 fullWidth
                                 size={'small'}
-                                sx={{
-                                    '& .MuiInputBase-root': {
-                                        height: 34.25
-                                    }
-                                }}>
+                                sx={fieldControlSx}>
                                 <InputLabel sx={{ fontSize: 12 }}>
                                     {t(item.label)}
                                 </InputLabel>
                                 <Select
                                     {...item}
-                                    value={formData[item.name] || ''}
+                                    value={formData[item.name] ?? ''}
                                     onChange={handleInputChange}
                                     sx={{ fontSize: 12 }}>
                                     <MenuItem
                                         value={''}
-                                        key={0}
                                         sx={{ fontSize: 12 }}>
                                         全部
                                     </MenuItem>
                                     {item.children.map((child) => (
                                         <MenuItem
                                             value={child.value}
-                                            key={child.value}
+                                            key={String(child.value)}
                                             sx={{ fontSize: 12 }}>
-                                            {t(child.label)}
+                                            {typeof child.label === 'string' &&
+                                            child.label.startsWith('table.')
+                                                ? t(child.label)
+                                                : child.label}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -170,28 +164,21 @@ const ActionBarExpand = ({
                         ) : (
                             <TextField
                                 {...item}
+                                name={item.name}
                                 label={t(item.label)}
                                 fullWidth
                                 size={'small'}
                                 value={formData[item.name] || ''}
                                 onChange={handleInputChange}
-                                InputProps={{
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                }}
-                                InputLabelProps={{
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                }}
+                                onKeyDown={onFieldKeyDown}
+                                InputProps={{ sx: { fontSize: 12 } }}
+                                InputLabelProps={{ sx: { fontSize: 12 } }}
                             />
                         )}
                     </Grid>
                 ))}
-                <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+                <Grid size={ACTION_BAR_DATE_GRID}>
                     <DatePicker
-                        name={'fromDate'}
                         label={t('table.startDate')}
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
@@ -199,23 +186,15 @@ const ActionBarExpand = ({
                             textField: {
                                 fullWidth: true,
                                 size: 'small',
-                                InputProps: {
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                },
-                                InputLabelProps: {
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                }
+                                onKeyDown: onFieldKeyDown,
+                                InputProps: { sx: { fontSize: 12 } },
+                                InputLabelProps: { sx: { fontSize: 12 } }
                             }
                         }}
                     />
                 </Grid>
-                <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+                <Grid size={ACTION_BAR_DATE_GRID}>
                     <DatePicker
-                        name={'toDate'}
                         label={t('table.endDate')}
                         value={toDate}
                         onChange={(date) => setToDate(date)}
@@ -223,21 +202,14 @@ const ActionBarExpand = ({
                             textField: {
                                 fullWidth: true,
                                 size: 'small',
-                                InputProps: {
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                },
-                                InputLabelProps: {
-                                    sx: {
-                                        fontSize: 12
-                                    }
-                                }
+                                onKeyDown: onFieldKeyDown,
+                                InputProps: { sx: { fontSize: 12 } },
+                                InputLabelProps: { sx: { fontSize: 12 } }
                             }
                         }}
                     />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid size={ACTION_BAR_ACTIONS_GRID}>
                     <Box className={'action-bar-actions-row'}>
                         <Box className={'action-bar-actions-group'}>
                             <Button
@@ -248,7 +220,6 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -262,23 +233,10 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={
-                                    <ExpandLessRounded fontSize={'inherit'} />
-                                }
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                         <Box className={'action-bar-actions-group'}>

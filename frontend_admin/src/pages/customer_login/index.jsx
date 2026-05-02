@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import api from '../../routes/api';
-import ActionBarCollapse from './ActionBarCollapse';
 import ActionBarExpand from './ActionBarExpand';
 import getColumns from './columns';
 import usePageState from '../../hooks/usePageState';
@@ -57,8 +56,6 @@ const CustomerLoginActivityPage = () => {
         roleType: 'customer'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
         fetchTeams();
@@ -115,22 +112,11 @@ const CustomerLoginActivityPage = () => {
                 animate={'visible'}>
                 {/* Actions Bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             searchModal={searchModal}
                             onSearch={loadData}
                             setPaginationModel={setPaginationModel}
-                            teamsData={teamsData}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            teamsData={teamsData} />
                 </motion.div>
 
                 {/* Data Grid */}

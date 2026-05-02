@@ -94,8 +94,10 @@
     },
     "table": {
       "status": "状态",
+      "reference": "参考号",
       "amount": "金额",
       "postBalance": "变更后余额",
+      "balanceAfterCredit": "入账后余额",
       "date": "日期"
     },
     "topUp": {
@@ -137,16 +139,22 @@
         "提交充值申请。"
       ],
       "balanceNote": "核实入账后，余额将会更新。",
-      "uploadReceipt": "上传转账凭证（JPG 或 PNG，最大 2 MB）",
+      "uploadReceipt": "上传转账凭证（必填，JPG 或 PNG，最大 2 MB）",
       "submitReview": "提交审核",
       "loginRequired": "请先登录后再提交充值申请。",
       "invalidAmount": "请输入有效金额（最低 10 欧元）。",
       "receiptRequired": "请上传转账凭证。",
-      "submitSuccess": "申请已提交，我们会尽快审核您的充值。",
+      "uploadFailed": "凭证上传失败，请重试。",
+      "submitSuccess": "充值申请已提交。",
       "submitError": "提交失败，请稍后重试。",
       "notApplicable": "无",
-      "ticketSubject": "钱包充值申请（{{amount}} 欧元）",
-      "ticketBody": "银行转账充值申请。\n\n金额：{{amount}} 欧元\n用户 ID：{{userId}}\n邮箱：{{email}}\n凭证：{{receiptUrl}}\n\n请核实并入账。"
+      "pendingNotice": "该笔充值待审核，批准前钱包余额不会变化。",
+      "referenceNo": "参考号",
+      "copiedRef": "已复制参考号",
+      "submittedAmount": "提交金额（欧元）",
+      "statusPending": "待处理",
+      "estimatedProcessing": "确认收款后通常 1–3 个工作日内处理。",
+      "doneClose": "关闭"
     }
   },
   "address": {

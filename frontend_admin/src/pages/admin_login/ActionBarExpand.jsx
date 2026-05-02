@@ -1,5 +1,4 @@
 import {
-    ExpandLessRounded,
     RefreshRounded,
     SearchRounded
 } from '@mui/icons-material';
@@ -23,8 +22,7 @@ const ActionBarExpand = ({
     onSearch,
     searchModal,
     adminsData,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
     const items = [
         { name: 'adminId', label: '代理ID', type: 'number' },
@@ -99,7 +97,7 @@ const ActionBarExpand = ({
             orderBy: 'desc',
             sortBy: 'id',
             userType: 'admin',
-            roleType: 'agent'
+            roleType: 'admin'
         });
         setPaginationModel({ page: 0, pageSize: 10 });
     };
@@ -225,10 +223,8 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <SearchRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -240,26 +236,12 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <RefreshRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={
-                                    <ExpandLessRounded fontSize={'inherit'} />
-                                }
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                     </Box>

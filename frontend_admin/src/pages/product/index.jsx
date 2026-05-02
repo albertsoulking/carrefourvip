@@ -8,7 +8,6 @@ import api from '../../routes/api';
 import Overview from './OverView';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import { enqueueSnackbar } from 'notistack';
 import useNotificationSocket from '../../hooks/useNotificationSocket';
 import web from '../../routes/web';
@@ -61,8 +60,6 @@ const ProductListPage = () => {
         sortBy: 'id'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
         loadCategory();
@@ -114,22 +111,11 @@ const ProductListPage = () => {
 
                 {/* Actions bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             onSearch={loadData}
                             searchModal={searchModal}
                             categoriesData={categoriesData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            onSearch={loadData}
-                            searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
 
                 {/* Data grid */}

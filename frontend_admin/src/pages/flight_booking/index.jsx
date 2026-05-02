@@ -5,7 +5,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import api from '../../routes/api';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import getColumns from './columns';
 import { enqueueSnackbar } from 'notistack';
 import web from '../../routes/web';
@@ -57,8 +56,6 @@ const FlightBookingListPage = () => {
         sortBy: 'createdAt'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
     }, []);
@@ -117,21 +114,10 @@ const FlightBookingListPage = () => {
                 initial='hidden'
                 animate='visible'>
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             searchModal={searchModal}
                             onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
 
                 <motion.div variants={itemVariants}>

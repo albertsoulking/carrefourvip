@@ -1,5 +1,5 @@
 import {
-    ExpandLessRounded,
+    AccountBalanceWalletRounded,
     RefreshRounded,
     SearchRounded
 } from '@mui/icons-material';
@@ -24,7 +24,7 @@ const ActionBarExpand = ({
     searchModal,
     teamsData,
     setPaginationModel,
-    setIsExpand
+    onOpenManualAdjust
 }) => {
     const items = [
         { name: 'transactionId', label: '交易ID', type: 'number' },
@@ -116,6 +116,10 @@ const ActionBarExpand = ({
                 {
                     label: 'table.wise',
                     value: 'wise'
+                },
+                {
+                    label: '银行转账',
+                    value: 'bank_transfer'
                 }
             ]
         },
@@ -309,10 +313,8 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <SearchRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -324,27 +326,31 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <RefreshRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
                             </Button>
-                            <Button
-                                startIcon={
-                                    <ExpandLessRounded fontSize={'inherit'} />
-                                }
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
-                            </Button>
+                            {onOpenManualAdjust && (
+                                <Button
+                                    variant={'outlined'}
+                                    startIcon={
+                                        <AccountBalanceWalletRounded
+                                            fontSize={'inherit'}
+                                        />
+                                    }
+                                    size={'small'}
+                                    sx={{
+                                        fontSize: 12,
+                                        textTransform: 'none',
+                                        ml: 1
+                                    }}
+                                    onClick={onOpenManualAdjust}>
+                                    手工调账
+                                </Button>
+                            )}
                         </Box>
                     </Box>
                 </Grid>

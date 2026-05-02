@@ -32,9 +32,9 @@ const airportsByIata = Object.values(airportsData || {}).reduce(
     {}
 );
 
-const priceFormatter = new Intl.NumberFormat('en-US', {
+const priceFormatter = new Intl.NumberFormat('de-DE', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
     maximumFractionDigits: 0
 });
 
@@ -379,8 +379,8 @@ export default function FlightResults({
                         cheapestFlight,
                         earliestFlight
                     );
-                    const dealUrl = buildDealUrl(flight.id);
-
+                    const dealUrl = buildDealUrl(flight.link || flight.id);
+                    
                     return (
                         <Card
                             key={flight.id || `${airlineCode}-${index}`}
@@ -426,12 +426,14 @@ export default function FlightResults({
                                             <Box>
                                                 <Typography
                                                     variant='h6'
-                                                    fontWeight={700}>
+                                                    fontWeight={700}
+                                                    translate='no'>
                                                     {airlineName}
                                                 </Typography>
                                                 <Typography
                                                     variant='body2'
-                                                    color='text.secondary'>
+                                                    color='text.secondary'
+                                                    translate='no'>
                                                     {airlineCode ||
                                                         'Partner fare'}{' '}
                                                     on {routeLabel}
@@ -472,12 +474,14 @@ export default function FlightResults({
                                         <Box>
                                             <Typography
                                                 variant='overline'
-                                                color='text.secondary'>
+                                                color='text.secondary'
+                                                translate='no'>
                                                 From
                                             </Typography>
                                             <Typography
                                                 variant='h4'
-                                                fontWeight={800}>
+                                                fontWeight={800}
+                                                translate='no'>
                                                 {origin.code}
                                             </Typography>
                                             <Typography fontWeight={600}>
@@ -527,12 +531,14 @@ export default function FlightResults({
                                             }}>
                                             <Typography
                                                 variant='overline'
-                                                color='text.secondary'>
+                                                color='text.secondary'
+                                                translate='no'>
                                                 To
                                             </Typography>
                                             <Typography
                                                 variant='h4'
-                                                fontWeight={800}>
+                                                fontWeight={800}
+                                                translate='no'>
                                                 {destination.code}
                                             </Typography>
                                             <Typography fontWeight={600}>

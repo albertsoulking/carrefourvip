@@ -1,20 +1,23 @@
 import {
+    BadRequestException,
     Injectable,
     NotFoundException,
     UnauthorizedException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
-import { In, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { RoleType } from 'src/role/enum/role.enum';
 import { User } from 'src/users/entities/user.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import {
     TransactionDirection,
+    TransactionMethod,
     TransactionStatus,
     TransactionType
 } from './enum/transactions.enum';
+import { AdjustBalanceDto } from './dto/adjust-balance.dto';
 import { UserMode } from 'src/users/enum/user.enum';
 import { SearchTransactionDto } from './dto/search-transaction.dto';
 
@@ -26,7 +29,8 @@ export class AdminTransactionService {
         @InjectRepository(Admin)
         private readonly adminRepo: Repository<Admin>,
         @InjectRepository(User)
-        private readonly userRepo: Repository<User>
+        private readonly userRepo: Repository<User>,
+        private readonly dataSource: DataSource
     ) {}
 
     async getOverviewData(type: TransactionType) {
@@ -140,6 +144,14 @@ export class AdminTransactionService {
                 'transaction.status',
                 'transaction.postBalance',
                 'transaction.transactionNumber',
+                'transaction.reference',
+                'transaction.remark',
+                'transaction.proofImage',
+                'transaction.proofImageUrl',
+                'transaction.currency',
+                'transaction.beforeBalance',
+                'transaction.afterBalance',
+                'transaction.processedAt',
                 'transaction.createdAt',
                 'order.id',
                 'user.id',
@@ -289,15 +301,181 @@ export class AdminTransactionService {
             throw new NotFoundException(`User ID ${dto.userId} not found`);
         }
 
+        const before = parseFloat(user.balance).toFixed(2);
+        const transactionNumber =
+            dto.transactionNumber ??
+            `ST-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
         const transaction = this.transactionRepo.create({
             user: { id: dto.userId },
             amount: dto.amount,
             direction: TransactionDirection.IN,
             type: TransactionType.DEPOSIT,
             status: TransactionStatus.PENDING,
-            postBalance: user.balance
+            postBalance: user.balance,
+            beforeBalance: before,
+            method: TransactionMethod.STRIPE,
+            hybridMethod: TransactionMethod.STRIPE,
+            transactionNumber,
+            currency: 'EUR'
         });
 
         return await this.transactionRepo.save(transaction);
     }
+
+    async approveBankDeposit(
+        adminId: number,
+        transactionId: number
+    ): Promise<Transaction> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const transaction = await queryRunner.manager.findOne(Transaction, {
+                where: { id: transactionId },
+                relations: ['user']
+            });
+            if (!transaction) {
+                throw new NotFoundException(
+                    `Transaction ${transactionId} not found`
+                );
+            }
+            if (transaction.status !== TransactionStatus.PENDING) {
+                throw new BadRequestException('Transaction is not pending');
+            }
+            if (transaction.type !== TransactionType.DEPOSIT) {
+                throw new BadRequestException('Not a deposit transaction');
+            }
+            if (transaction.method !== TransactionMethod.BANK_TRANSFER) {
+                throw new BadRequestException(
+                    'Only bank transfer deposits can be approved here'
+                );
+            }
+
+            const user = await queryRunner.manager
+                .createQueryBuilder(User, 'user')
+                .setLock('pessimistic_write')
+                .where('user.id = :id', { id: transaction.user.id })
+                .getOne();
+            if (!user) {
+                throw new NotFoundException(`User not found`);
+            }
+
+            const before = parseFloat(user.balance).toFixed(2);
+            transaction.beforeBalance = transaction.beforeBalance ?? before;
+            user.balance = (
+                parseFloat(user.balance) + parseFloat(transaction.amount)
+            ).toFixed(2);
+            transaction.afterBalance = user.balance;
+            transaction.postBalance = user.balance;
+            transaction.status = TransactionStatus.COMPLETED;
+            transaction.processedAt = new Date();
+            transaction.processedBy = { id: adminId } as Admin;
+
+            await queryRunner.manager.save(user);
+            await queryRunner.manager.save(transaction);
+            await queryRunner.commitTransaction();
+            return transaction;
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    async rejectBankDeposit(
+        adminId: number,
+        transactionId: number,
+        reason?: string
+    ): Promise<Transaction> {
+        const transaction = await this.transactionRepo.findOne({
+            where: { id: transactionId },
+            relations: ['user']
+        });
+        if (!transaction) {
+            throw new NotFoundException(`Transaction ${transactionId} not found`);
+        }
+        if (transaction.status !== TransactionStatus.PENDING) {
+            throw new BadRequestException('Transaction is not pending');
+        }
+        if (transaction.method !== TransactionMethod.BANK_TRANSFER) {
+            throw new BadRequestException(
+                'Only bank transfer deposits can be rejected here'
+            );
+        }
+
+        transaction.status = TransactionStatus.CANCELLED;
+        transaction.processedAt = new Date();
+        transaction.processedBy = { id: adminId } as Admin;
+        if (reason) {
+            transaction.remark = transaction.remark
+                ? `${transaction.remark}\n[Rejected] ${reason}`
+                : `[Rejected] ${reason}`;
+        }
+        return this.transactionRepo.save(transaction);
+    }
+
+    async adjustBalance(
+        adminId: number,
+        dto: AdjustBalanceDto
+    ): Promise<Transaction> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const user = await queryRunner.manager
+                .createQueryBuilder(User, 'user')
+                .setLock('pessimistic_write')
+                .where('user.id = :id', { id: dto.userId })
+                .getOne();
+            if (!user) {
+                throw new NotFoundException(`User ID ${dto.userId} not found`);
+            }
+
+            const amt = Number(dto.amount).toFixed(2);
+            const before = parseFloat(user.balance).toFixed(2);
+            let after: string;
+
+            if (dto.direction === TransactionDirection.IN) {
+                after = (parseFloat(user.balance) + parseFloat(amt)).toFixed(2);
+                user.balance = after;
+            } else {
+                if (parseFloat(user.balance) < parseFloat(amt)) {
+                    throw new BadRequestException('Insufficient balance');
+                }
+                after = (parseFloat(user.balance) - parseFloat(amt)).toFixed(2);
+                user.balance = after;
+            }
+
+            const tx = queryRunner.manager.create(Transaction, {
+                user: { id: dto.userId },
+                transactionNumber: `ADJ-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                amount: amt,
+                direction: dto.direction,
+                method: TransactionMethod.BALANCE,
+                hybridMethod: TransactionMethod.BALANCE,
+                type: TransactionType.ADJUSTMENT,
+                status: TransactionStatus.COMPLETED,
+                postBalance: after,
+                beforeBalance: before,
+                afterBalance: after,
+                remark: dto.remark,
+                currency: 'EUR',
+                processedAt: new Date(),
+                processedBy: { id: adminId } as Admin
+            });
+
+            await queryRunner.manager.save(user);
+            await queryRunner.manager.save(tx);
+            await queryRunner.commitTransaction();
+            return tx;
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
+        } finally {
+            await queryRunner.release();
+        }
+    }
 }
+

@@ -1,9 +1,4 @@
-import {
-    DeleteRounded,
-    ExpandLessRounded,
-    RefreshRounded,
-    SearchRounded
-} from '@mui/icons-material';
+import { RefreshRounded, SearchRounded } from '@mui/icons-material';
 import {
     TextField,
     Button,
@@ -17,8 +12,6 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
-import web from '../../routes/web';
-import useSmartNavigate from '../../hooks/useSmartNavigate';
 import { useTranslation } from 'react-i18next';
 import { actionBarPaperSx } from '../_shared/actionBarStyles';
 import ButtonRecycle from './ButtonRecycle';
@@ -27,8 +20,7 @@ const ActionBarExpand = ({
     onSearch,
     searchModal,
     teamsData,
-    setPaginationModel,
-    setIsExpand
+    setPaginationModel
 }) => {
     const items = [
         { name: 'ticketId', label: '工单ID', type: 'number' },
@@ -76,7 +68,6 @@ const ActionBarExpand = ({
     ];
 
     const { t } = useTranslation();
-    const navigate = useSmartNavigate();
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [formData, setFormData] = useState({});
@@ -240,10 +231,8 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <SearchRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -255,26 +244,12 @@ const ActionBarExpand = ({
                                 startIcon={
                                     <RefreshRounded fontSize={'inherit'} />
                                 }
-                                fullWidth
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={
-                                    <ExpandLessRounded fontSize={'inherit'} />
-                                }
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                         <Box className={'action-bar-actions-group'}>

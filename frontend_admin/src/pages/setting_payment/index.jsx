@@ -9,7 +9,6 @@ import ModalCreatePayment from './ModalCreatePayment';
 import usePageState from '../../hooks/usePageState';
 import ModalDeleteCategory from './ModalDeleteCategory';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import ModalDetailPayment from './ModalDetailPayment';
 import { enqueueSnackbar } from 'notistack';
 
@@ -73,8 +72,6 @@ const PaymentListPage = () => {
         sortBy: 'id'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
     }, []);
@@ -149,25 +146,12 @@ const PaymentListPage = () => {
                 animate={'visible'}>
                 {/* Actions bar */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             setOpen={setOpenCreateModal}
                             permissions={permissions}
                             searchModal={searchModal}
                             onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            setOpen={setOpenCreateModal}
-                            permissions={permissions}
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
 
                 {/* Data grid */}

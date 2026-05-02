@@ -17,7 +17,6 @@ import { useEffect, useState } from 'react';
 import api from '../../routes/api';
 import { useSearchParams } from 'react-router-dom';
 import ModalTopUp from './ModalTopUp';
-import BankTransferDeposit from './BankTransferDeposit';
 import web from '../../routes/web';
 import useStyledLocaleString from '../../hooks/useStyledLocaleString';
 import { useSmartNavigate } from '../../hooks/useSmartNavigate';
@@ -49,8 +48,14 @@ export default function WalletPage() {
 
     useEffect(() => {
         loadUserData();
-        loadTransData(page ?? 1, limit ?? 12, type ?? 0);
-        setTab(type ? Number(type) : 0);
+        const lim = Number(limit) || 12;
+        const pg = Math.max(1, Number(page) || 1);
+        const ty =
+            type !== null && type !== undefined && type !== ''
+                ? Number(type)
+                : 0;
+        loadTransData(pg, lim, ty);
+        setTab(ty);
     }, [searchParams]);
 
     const loadUserData = async () => {
@@ -74,7 +79,59 @@ export default function WalletPage() {
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
-        loadTransData(1, limit ?? 12, newValue);
+        const lim = Number(limit) || 12;
+        loadTransData(1, lim, newValue);
+    };
+
+    const limitNum = Number(limit) || 12;
+    const pageNum = Math.max(1, Number(page) || 1);
+    const typeNum = type !== null && type !== undefined && type !== ''
+        ? Number(type)
+        : 0;
+
+    const postBalanceLabel =
+        tab === 1
+            ? t('wallet.table.balanceAfterCredit')
+            : t('wallet.table.postBalance');
+
+    const formatPostBalanceCell = (row) => {
+        if (row.status === 'completed') {
+            const bal = row.afterBalance ?? row.postBalance;
+            return bal
+                ? useStyledLocaleString(bal, user?.geoInfo)
+                : '—';
+        }
+        if (row.status === 'pending') {
+            return '—';
+        }
+        if (row.status === 'cancelled') {
+            return '—';
+        }
+        return row.postBalance
+            ? useStyledLocaleString(row.postBalance, user?.geoInfo)
+            : '—';
+    };
+
+    const formatAmountCell = (row) => {
+        const pendingIn =
+            row.status === 'pending' &&
+            row.direction === 'in' &&
+            row.type === 'deposit';
+        const sign =
+            pendingIn || row.direction === 'in'
+                ? '+'
+                : row.direction === 'out'
+                  ? '-'
+                  : '';
+        const color =
+            row.status === 'pending'
+                ? pendingIn
+                    ? 'green'
+                    : 'gray'
+                : row.direction === 'in'
+                  ? 'green'
+                  : 'red';
+        return { sign, color };
     };
 
     return (
@@ -138,13 +195,6 @@ export default function WalletPage() {
                 </Box>
             </Paper>
 
-            <BankTransferDeposit
-                user={user}
-                onOpenOnlineTopUp={() => {
-                    setOpenTopUp(true);
-                }}
-            />
-
             <Box sx={{ width: '100%' }}>
                 <Tabs
                     value={tab}
@@ -184,10 +234,13 @@ export default function WalletPage() {
                                     {t('wallet.table.status')}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
+                                    {t('wallet.table.reference')}
+                                </TableCell>
+                                <TableCell sx={{ fontSize: 14 }}>
                                     {t('wallet.table.amount')}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
-                                    {t('wallet.table.postBalance')}
+                                    {postBalanceLabel}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: 14 }}>
                                     {t('wallet.table.date')}
@@ -195,62 +248,56 @@ export default function WalletPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {transactionData.data.map((t) => (
-                                <TableRow key={t.id}>
+                            {transactionData.data.map((row) => {
+                                const amtFmt = formatAmountCell(row);
+                                return (
+                                <TableRow key={row.id}>
                                     <TableCell
                                         sx={{
                                             color:
-                                                t.status === 'completed'
+                                                row.status === 'completed'
                                                     ? 'royalblue'
-                                                    : t.status === 'cancelled'
+                                                    : row.status === 'cancelled'
                                                     ? 'red'
-                                                    : t.status === 'refunded'
+                                                    : row.status === 'refunded'
                                                     ? 'purple'
                                                     : 'gray',
                                             fontSize: 12
                                         }}>
-                                        {t.status}
+                                        {row.status}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontSize: 12 }}
+                                        translate={'no'}>
+                                        {row.transactionNumber || '—'}
                                     </TableCell>
                                     <TableCell
                                         sx={{
-                                            color:
-                                                t.status === 'pending'
-                                                    ? 'gray'
-                                                    : t.direction === 'in'
-                                                    ? 'green'
-                                                    : 'red',
+                                            color: amtFmt.color,
                                             fontSize: 12
                                         }}
                                         translate={'no'}>
-                                        {t.status === 'pending'
-                                            ? ''
-                                            : t.direction === 'in'
-                                            ? '+'
-                                            : '-'}
+                                        {amtFmt.sign}
                                         {useStyledLocaleString(
-                                            Math.abs(t.amount),
+                                            Math.abs(row.amount),
                                             user?.geoInfo
                                         )}
                                     </TableCell>
                                     <TableCell
                                         sx={{ fontSize: 12 }}
                                         translate={'no'}>
-                                        {t.postBalance
-                                            ? useStyledLocaleString(
-                                                  t.postBalance,
-                                                  user?.geoInfo
-                                              )
-                                            : '--'}
+                                        {formatPostBalanceCell(row)}
                                     </TableCell>
                                     <TableCell
                                         sx={{ fontSize: 12 }}
                                         translate={'no'}>
                                         {new Date(
-                                            t.createdAt
+                                            row.createdAt
                                         ).toLocaleDateString()}
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            );
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -261,10 +308,10 @@ export default function WalletPage() {
                 justifyContent={'center'}
                 translate={'no'}>
                 <Pagination
-                    count={transactionData.lastPage}
-                    page={Number(page)}
+                    count={transactionData.lastPage || 1}
+                    page={pageNum}
                     onChange={(e, newPage) => {
-                        loadTransData(newPage, limit, type);
+                        loadTransData(newPage, limitNum, typeNum);
                     }}
                 />
             </Box>
@@ -272,6 +319,12 @@ export default function WalletPage() {
             <ModalTopUp
                 open={openTopUp}
                 setOpen={setOpenTopUp}
+                user={user}
+                onDepositCreated={() => {
+                    setTab(1);
+                    loadTransData(1, limitNum, 1);
+                    loadUserData();
+                }}
             />
         </Box>
     );

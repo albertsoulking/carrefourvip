@@ -55,7 +55,7 @@ export default function ModalPaymentCheckout({
         setTimeout(() => {
             setLoading(false);
             setOpen({ open: false, data: null });
-            navigate(web.orderDetail(data?.id));
+            // navigate(web.orderDetail(data?.id));
         }, 500);
     };
 

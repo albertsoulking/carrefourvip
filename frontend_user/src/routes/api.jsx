@@ -146,7 +146,10 @@ const transaction = {
     getMyTransaction: (payload) =>
         route.post('/transactions/get-my-transactions', payload),
     updateOne: (payload) =>
-        route.post('/transactions/update-one-transaction', payload)
+        route.post('/transactions/update-one-transaction', payload),
+    createDeposit: (payload) =>
+        route.post('/transactions/create-deposit', payload),
+    getOneMine: (id) => route.get(`/transactions/mine/${id}`)
 };
 
 const settings = {

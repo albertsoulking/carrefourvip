@@ -7,7 +7,6 @@ import getColumns from './columns';
 import { useOutletContext } from 'react-router-dom';
 import api from '../../routes/api';
 import usePageState from '../../hooks/usePageState';
-import ActionBarCollapse from './ActionBarCollapse';
 import ActionBarExpand from './ActionBarExpand';
 import { enqueueSnackbar } from 'notistack';
 
@@ -57,7 +56,6 @@ const FinanceOrderPage = () => {
         type: 'order_payment'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
     const [teamsData, setTeamsData] = useState([]);
 
     useEffect(() => {
@@ -123,22 +121,11 @@ const FinanceOrderPage = () => {
 
                 {/* Search and filter */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             onSearch={loadData}
                             searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                            teamsData={teamsData}
+                            setPaginationModel={setPaginationModel} teamsData={teamsData}
                         />
-                    ) : (
-                        <ActionBarCollapse
-                            onSearch={loadData}
-                            searchModal={searchModal}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
                 </motion.div>
 
                 {/* Orders list */}

@@ -1,5 +1,5 @@
-import { IsNumber, IsString, IsPositive, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsString, IsPositive, IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -10,13 +10,13 @@ export class CreateTransactionDto {
   @IsNumber()
   orderId: number
 
-  @ApiProperty({
-    description: 'Unique transaction number',
+  @ApiPropertyOptional({
+    description: 'Unique transaction number (auto-generated if omitted)',
     example: 'TXN-123456789',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  transactionNumber: string;
+  transactionNumber?: string;
 
   @ApiProperty({
     description: 'ID of the user associated with the transaction',

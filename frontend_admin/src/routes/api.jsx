@@ -163,7 +163,13 @@ const flightBooking = {
 
 const transactions = {
     getAll: (payload) =>
-        route.post('/admin/transactions/get-all-transactions', payload)
+        route.post('/admin/transactions/get-all-transactions', payload),
+    approveBankDeposit: (payload) =>
+        route.post('/admin/transactions/approve-bank-deposit', payload),
+    rejectBankDeposit: (payload) =>
+        route.post('/admin/transactions/reject-bank-deposit', payload),
+    adjustBalance: (payload) =>
+        route.post('/admin/transactions/adjust-balance', payload)
 };
 
 const settings = {

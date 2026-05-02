@@ -7,7 +7,6 @@ import getColumns from './columns';
 import api from '../../routes/api';
 import usePageState from '../../hooks/usePageState';
 import ActionBarExpand from './ActionBarExpand';
-import ActionBarCollapse from './ActionBarCollapse';
 import { enqueueSnackbar } from 'notistack';
 import useNotificationSocket from '../../hooks/useNotificationSocket';
 import web from '../../routes/web';
@@ -56,8 +55,6 @@ const OrderListPage = () => {
         sortBy: 'id'
     });
     const [state, setState] = usePageState(searchModal);
-    const [isExpand, setIsExpand] = useState(false);
-
     useEffect(() => {
         loadData(state ?? searchModal);
         fetchTeams();
@@ -144,22 +141,11 @@ const OrderListPage = () => {
 
                 {/* Search and filter */}
                 <motion.div variants={itemVariants}>
-                    {isExpand ? (
-                        <ActionBarExpand
+                    <ActionBarExpand
                             searchModal={searchModal}
                             teamsData={teamsData}
                             onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    ) : (
-                        <ActionBarCollapse
-                            searchModal={searchModal}
-                            onSearch={loadData}
-                            setPaginationModel={setPaginationModel}
-                            setIsExpand={setIsExpand}
-                        />
-                    )}
+                            setPaginationModel={setPaginationModel} />
                 </motion.div>
 
                 {/* Orders list */}

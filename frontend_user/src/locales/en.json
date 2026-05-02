@@ -94,8 +94,10 @@
     },
     "table": {
       "status": "Status",
+      "reference": "Reference no.",
       "amount": "Amount",
       "postBalance": "Post Balance",
+      "balanceAfterCredit": "Balance after credit",
       "date": "Date"
     },
     "topUp": {
@@ -137,16 +139,22 @@
         "Submit your deposit request."
       ],
       "balanceNote": "Your balance will be updated once the transfer is verified.",
-      "uploadReceipt": "Upload transfer receipt (JPG or PNG, max 2 MB)",
+      "uploadReceipt": "Upload transfer receipt (required, JPG or PNG, max 2 MB)",
       "submitReview": "Submit for review",
       "loginRequired": "Please log in to submit a deposit request.",
       "invalidAmount": "Enter a valid amount (minimum 10 EUR).",
-      "receiptRequired": "Please upload your transfer receipt.",
-      "submitSuccess": "Request submitted. We will review your deposit shortly.",
+      "receiptRequired": "Please upload your payment receipt.",
+      "uploadFailed": "Could not upload the receipt. Please try again.",
+      "submitSuccess": "Deposit request submitted.",
       "submitError": "Could not submit your request. Please try again.",
       "notApplicable": "N/A",
-      "ticketSubject": "Wallet deposit request ({{amount}} EUR)",
-      "ticketBody": "Bank transfer deposit submission.\n\nAmount: {{amount}} EUR\nUser ID: {{userId}}\nEmail: {{email}}\nReceipt: {{receiptUrl}}\n\nPlease verify and credit the wallet."
+      "pendingNotice": "Your deposit is pending review. Your wallet balance will not change until it is approved.",
+      "referenceNo": "Reference number",
+      "copiedRef": "Reference copied",
+      "submittedAmount": "Submitted amount (EUR)",
+      "statusPending": "Pending",
+      "estimatedProcessing": "Processing usually takes 1–3 business days after we receive your transfer.",
+      "doneClose": "Close"
     }
   },
   "address": {

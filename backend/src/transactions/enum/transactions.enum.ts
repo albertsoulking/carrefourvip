@@ -6,7 +6,8 @@ export enum TransactionDirection {
 export enum TransactionType {
     DEPOSIT = 'deposit',
     WITHDRAWAL = 'withdrawal',
-    ORDER_PAYMENT  = 'order_payment'
+    ORDER_PAYMENT = 'order_payment',
+    ADJUSTMENT = 'adjustment'
 }
 
 export enum TransactionStatus {
@@ -27,5 +28,6 @@ export enum TransactionMethod {
     BEHALF = 'behalf',
     STARPAY = 'starpay',
     FAF = 'faf',
-    WISE = 'wise'
+    WISE = 'wise',
+    BANK_TRANSFER = 'bank_transfer'
 }

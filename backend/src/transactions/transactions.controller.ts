@@ -4,7 +4,10 @@ import {
     HttpStatus,
     Req,
     Post,
-    Body
+    Body,
+    Get,
+    Param,
+    ParseIntPipe
 } from '@nestjs/common';
 import {
     ApiTags,
@@ -17,6 +20,7 @@ import { TransactionsService } from './transactions.service';
 import { Transaction } from './entities/transaction.entity';
 import { Request } from 'express';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CreateUserDepositDto } from './dto/create-user-deposit.dto';
 
 @ApiTags('transactions')
 @ApiBearerAuth('JWT-auth')
@@ -51,6 +55,28 @@ export class TransactionsController {
             limit,
             type
         );
+    }
+
+    @Post('create-deposit')
+    @ApiOperation({ summary: 'Create a pending bank deposit (no balance change)' })
+    @ApiResponse({ status: HttpStatus.CREATED, type: Transaction })
+    async createDeposit(
+        @Req() req: Request,
+        @Body() body: CreateUserDepositDto
+    ) {
+        const userId = (req as any)?.user?.id;
+        return this.transactionsService.createUserDeposit(userId, body);
+    }
+
+    @Get('mine/:id')
+    @ApiOperation({ summary: 'Get one transaction for the current user' })
+    @ApiResponse({ status: HttpStatus.OK, type: Transaction })
+    async getOneMine(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        const userId = (req as any)?.user?.id;
+        return this.transactionsService.findOneMine(userId, id);
     }
 
     @Post('update-one-transaction')

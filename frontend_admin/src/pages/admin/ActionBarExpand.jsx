@@ -1,7 +1,6 @@
 import {
     RefreshRounded,
-    SearchRounded,
-    ExpandLessRounded
+    SearchRounded
 } from '@mui/icons-material';
 import {
     TextField,
@@ -25,8 +24,7 @@ const ActionBarExpand = ({
     onSearch,
     searchModal,
     setPaginationModel,
-    adminsData,
-    setIsExpand
+    adminsData
 }) => {
     const items = [
         { name: 'adminId', label: '代理ID', type: 'number' },
@@ -249,7 +247,6 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
@@ -263,21 +260,10 @@ const ActionBarExpand = ({
                                 }
                                 size={'small'}
                                 sx={{
-                                    mr: 2,
                                     fontSize: 12,
                                     textTransform: 'capitalize'
                                 }}>
                                 {t('actionBar.refresh')}
-                            </Button>
-                            <Button
-                                startIcon={<ExpandLessRounded />}
-                                size={'small'}
-                                sx={{
-                                    fontSize: 12,
-                                    textTransform: 'capitalize'
-                                }}
-                                onClick={() => setIsExpand(false)}>
-                                {t('actionBar.collapse')}
                             </Button>
                         </Box>
                         <Box className={'action-bar-actions-group'}>
