@@ -10,7 +10,8 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Pagination
+    Pagination,
+    Button
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../routes/api';
@@ -120,19 +121,19 @@ export default function WalletPage() {
                     display={'flex'}
                     flexDirection={'column'}
                     gap={2}>
-                    {/* <Button
+                    <Button
                             variant={'contained'}
                             color={'warning'}
                             size={'small'}
                             onClick={() => setOpenTopUp(true)}>
                             Top up
-                        </Button> */}
-                    {/* <Button
+                        </Button>
+                    <Button
                             variant={'text'}
                             color={'warning'}
                             size={'small'}>
                             Set password
-                        </Button> */}
+                        </Button>
                 </Box>
             </Paper>
 
