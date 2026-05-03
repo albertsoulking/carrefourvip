@@ -3,19 +3,24 @@ import {
     Alert,
     Box,
     Button,
+    CircularProgress,
     Dialog,
     DialogContent,
     DialogTitle,
     Divider,
+    FormControl,
     IconButton,
+    InputLabel,
     List,
     ListItem,
     ListItemText,
+    MenuItem,
+    Select,
     TextField,
     Typography
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { enqueueSnackbar } from 'notistack';
 import api from '../../routes/api';
@@ -35,26 +40,89 @@ const BANK = {
     ]
 };
 
+const DEPOSIT_GATEWAY_CODES = new Set(['card', 'wise']);
+
 export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
     const { t } = useTranslation();
-    const noticeItemsRaw = t('wallet.bankTransfer.noticeItems', {
-        returnObjects: true
-    });
     const ctaStepsRaw = t('wallet.bankTransfer.ctaSteps', {
         returnObjects: true
     });
-    const noticeItems = Array.isArray(noticeItemsRaw) ? noticeItemsRaw : [];
     const ctaSteps = Array.isArray(ctaStepsRaw) ? ctaStepsRaw : [];
     const fileInputRef = useRef(null);
     const [amount, setAmount] = useState('');
     const [receiptFile, setReceiptFile] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(null);
+    const [gatewaysLoading, setGatewaysLoading] = useState(false);
+    const [depositGateways, setDepositGateways] = useState([]);
+    const [selectedGatewayCode, setSelectedGatewayCode] = useState('');
+
+    const selectedGateway = depositGateways.find(
+        (gateway) => gateway.provider?.code === selectedGatewayCode
+    );
+    const gatewayConfig = selectedGateway?.config || {};
+    const bankDetails = {
+        accountName: gatewayConfig.accountName || BANK.accountName,
+        ibanDisplay:
+            gatewayConfig.iban || gatewayConfig.accountNumber || BANK.ibanDisplay,
+        ibanCopy:
+            gatewayConfig.iban || gatewayConfig.accountNumber || BANK.ibanCopy,
+        swift: gatewayConfig.swiftCode || BANK.swift,
+        bankAddressLines: (gatewayConfig.bankAddress || '')
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean)
+            .length
+            ? (gatewayConfig.bankAddress || '')
+                  .split('\n')
+                  .map((line) => line.trim())
+                  .filter(Boolean)
+            : BANK.bankAddressLines
+    };
+
+    useEffect(() => {
+        if (!open) return;
+        if (!user?.id) return;
+
+        const loadDepositGateways = async () => {
+            setGatewaysLoading(true);
+            try {
+                const res = await api.gateway.getAll();
+                const available = (res.data || []).filter((gateway) => {
+                    const code = gateway.provider?.code;
+                    if (!DEPOSIT_GATEWAY_CODES.has(code)) return false;
+                    if (gateway.status !== 'active') return false;
+
+                    const blackList = Array.isArray(gateway.blackList)
+                        ? gateway.blackList
+                        : [];
+                    return !blackList.includes(String(user.id));
+                });
+
+                setDepositGateways(available);
+                setSelectedGatewayCode(available[0]?.provider?.code || '');
+            } catch (error) {
+                setDepositGateways([]);
+                setSelectedGatewayCode('');
+                enqueueSnackbar(
+                    Array.isArray(error.response?.data?.message)
+                        ? error.response.data.message[0]
+                        : error.response?.data?.message || error.message,
+                    { variant: 'error' }
+                );
+            } finally {
+                setGatewaysLoading(false);
+            }
+        };
+
+        loadDepositGateways();
+    }, [open, user?.id]);
 
     const resetForm = () => {
         setAmount('');
         setReceiptFile(null);
         setSubmitted(null);
+        setSelectedGatewayCode('');
         if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
@@ -95,6 +163,12 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
             });
             return;
         }
+        if (!selectedGatewayCode) {
+            enqueueSnackbar(t('payment.gatewayUnavailable'), {
+                variant: 'error'
+            });
+            return;
+        }
 
         setSubmitting(true);
         try {
@@ -123,6 +197,7 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
             const res = await api.transaction.createDeposit({
                 amount: amountNum,
                 reference,
+                payMethod: selectedGatewayCode,
                 proofImage,
                 proofImageUrl
             });
@@ -227,6 +302,55 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                     </Box>
                 ) : (
                     <>
+                        {gatewaysLoading ? (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    mb: 2
+                                }}>
+                                <CircularProgress size={22} />
+                            </Box>
+                        ) : (
+                            <>
+                                {depositGateways.length > 0 ? (
+                                    <FormControl
+                                        fullWidth
+                                        size={'small'}
+                                        sx={{ mb: 2 }}>
+                                        <InputLabel id={'deposit-gateway-label'}>
+                                            Payment Method
+                                        </InputLabel>
+                                        <Select
+                                            labelId={'deposit-gateway-label'}
+                                            value={selectedGatewayCode}
+                                            label={'Payment Method'}
+                                            onChange={(e) =>
+                                                setSelectedGatewayCode(
+                                                    e.target.value
+                                                )
+                                            }>
+                                            {depositGateways.map((gateway) => (
+                                                <MenuItem
+                                                    key={gateway.id}
+                                                    value={
+                                                        gateway.provider?.code
+                                                    }>
+                                                    {gateway.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                ) : (
+                                    <Alert
+                                        severity={'warning'}
+                                        sx={{ mb: 2 }}>
+                                        {t('payment.gatewayUnavailable')}
+                                    </Alert>
+                                )}
+                            </>
+                        )}
+
                         <TextField
                             value={amount}
                             type={'number'}
@@ -238,18 +362,6 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                             onChange={(e) => setAmount(e.target.value)}
                             inputProps={{ min: MIN_DEPOSIT, step: '0.01' }}
                         />
-
-                        <Typography
-                            variant={'subtitle2'}
-                            color={'text.secondary'}
-                            sx={{ mb: 1 }}>
-                            {t('wallet.bankTransfer.referenceHint', {
-                                reference:
-                                    [user?.email, user?.id]
-                                        .filter((x) => x != null && x !== '')
-                                        .join(' / ') || '—'
-                            })}
-                        </Typography>
 
                         <Box
                             sx={{
@@ -270,14 +382,14 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                                 <strong>
                                     {t('wallet.bankTransfer.accountName')}:{' '}
                                 </strong>
-                                {BANK.accountName}
+                                <span translate='no'>{bankDetails.accountName}</span>
                             </Typography>
 
                             <Typography
                                 fontSize={13}
                                 sx={{ mb: 1, wordBreak: 'break-all' }}>
                                 <strong>{t('wallet.bankTransfer.iban')}: </strong>
-                                {BANK.ibanDisplay}
+                                <span translate='no'>{bankDetails.ibanDisplay}</span>
                                 <CopyAllRounded
                                     fontSize={'small'}
                                     sx={{
@@ -287,7 +399,7 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                                     }}
                                     onClick={() =>
                                         copyText(
-                                            BANK.ibanCopy,
+                                            bankDetails.ibanCopy,
                                             'wallet.bankTransfer.copiedIban'
                                         )
                                     }
@@ -298,7 +410,7 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                                 fontSize={13}
                                 sx={{ mb: 1 }}>
                                 <strong>{t('wallet.bankTransfer.swift')}: </strong>
-                                {BANK.swift}
+                                <span translate='no'>{bankDetails.swift}</span>
                                 <CopyAllRounded
                                     fontSize={'small'}
                                     sx={{
@@ -308,7 +420,7 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                                     }}
                                     onClick={() =>
                                         copyText(
-                                            BANK.swift,
+                                            bankDetails.swift,
                                             'wallet.bankTransfer.copiedSwift'
                                         )
                                     }
@@ -319,33 +431,14 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                                 <strong>
                                     {t('wallet.bankTransfer.bankAddress')}:{' '}
                                 </strong>
-                                {BANK.bankAddressLines.map((line, i) => (
-                                    <span key={line}>
+                                {bankDetails.bankAddressLines.map((line, i) => (
+                                    <span key={line} translate='no'>
                                         {i > 0 && <br />}
                                         {line}
                                     </span>
                                 ))}
                             </Typography>
                         </Box>
-
-                        <Typography
-                            variant={'subtitle2'}
-                            gutterBottom>
-                            {t('wallet.bankTransfer.importantNoticeTitle')}
-                        </Typography>
-                        <List
-                            dense
-                            disablePadding
-                            sx={{ mb: 2, pl: 0 }}>
-                            {noticeItems.map((item, idx) => (
-                                <ListItem
-                                    key={idx}
-                                    disableGutters
-                                    sx={{ py: 0.25 }}>
-                                    <ListItemText primary={item} />
-                                </ListItem>
-                            ))}
-                        </List>
 
                         <Divider sx={{ my: 2 }} />
 
@@ -387,11 +480,12 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                             mb={2}>
                             <Button
                                 variant={'outlined'}
-                                size={'small'}
                                 sx={{
                                     alignSelf: 'flex-start',
                                     textTransform: 'none'
                                 }}
+                                fullWidth
+                                size={'small'}
                                 onClick={() => fileInputRef.current?.click()}>
                                 {t('wallet.bankTransfer.uploadReceipt')}
                             </Button>
@@ -407,8 +501,12 @@ export default function ModalTopUp({ open, setOpen, user, onDepositCreated }) {
                         <LoadingButton
                             variant={'contained'}
                             fullWidth
+                            disabled={
+                                gatewaysLoading || depositGateways.length === 0
+                            }
                             loading={submitting}
-                            onClick={handleSubmit}>
+                            onClick={handleSubmit}
+                            size={'small'}>
                             {t('wallet.bankTransfer.submitReview')}
                         </LoadingButton>
                     </>

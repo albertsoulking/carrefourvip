@@ -39,7 +39,7 @@ const App = () => {
                     dense>
                     <BrowserRouter>
                         <Router />
-                        <ThemeSwitcher />
+                        {/* <ThemeSwitcher /> */}
                     </BrowserRouter>
                 </SnackbarProvider>
             </ThemeProvider>

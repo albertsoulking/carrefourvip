@@ -146,16 +146,16 @@ export default function CardCheckout({ orderId, setOpen, config }) {
                 </Typography>
             </Box>
             <Typography
-                fontSize={14}
+                fontSize={12}
                 mt={3}>
                 {config.note}
             </Typography>
-            <Box>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                     variant={'outlined'}
                     size={'small'}
                     loading={loading}
-                    sx={{ textTransform: 'capitalize' }}
+                    sx={{ textTransform: 'capitalize', mr: 2 }}
                     onClick={handleOnPayLater}>
                     {t('payment.payLater')}
                 </Button>

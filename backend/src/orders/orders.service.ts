@@ -245,7 +245,7 @@ export class OrdersService {
 
         // 读取配送时间设置
         const raw = JSON.parse(setting.value || '{}');
-        const deliSetting = JSON.parse(raw.deliveryRules || '[]');
+        const deliSetting = raw.deliveryRules || [];
         const deliMethod = deliSetting.find(
             (item: any) => item.code === order.deliveryMethod
         );
@@ -385,274 +385,298 @@ export class OrdersService {
         req: Request,
         dto: UpdateOrderStatusDto
     ): Promise<{ status: OrderStatus; paymentStatus: PaymentStatus }> {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+        const MAX_RETRY = 3;
+        const RETRY_WAIT_MS = 80;
+        const isRetryableLockError = (error: any) => {
+            const code = error?.code;
+            const errno = Number(error?.errno);
+            return (
+                code === 'ER_LOCK_DEADLOCK' ||
+                code === 'ER_LOCK_WAIT_TIMEOUT' ||
+                errno === 1213 ||
+                errno === 1205
+            );
+        };
+        const sleep = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
 
-        try {
-            let order = await this.orderRepo.findOne({
-                where: { id: dto.id },
-                relations: ['user']
-            });
-            if (!order) {
-                throw new NotFoundException('Order not found');
-            }
+        let lastError: any;
 
-            const user = await this.usersRepo.findOne({
-                where: { id: order.user.id }
-            });
-            if (!user) {
-                throw new NotFoundException('User not found');
-            }
+        for (let attempt = 1; attempt <= MAX_RETRY; attempt += 1) {
+            const queryRunner = this.dataSource.createQueryRunner();
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
 
+            let order: Order | null = null;
+            let user: User | null = null;
             const now = new Date();
+            let shouldSchedule = false;
+            let shouldUpdateLastLogin = false;
+            const postCommitNotifications: Array<{
+                title: string;
+                content: string;
+                enableNoti: 0 | 1;
+            }> = [];
+            const postCommitLogs: Array<{
+                action: string;
+                description: string;
+            }> = [];
 
-            // --- 状态分支处理 ---
-            // --- 支付成功（仅更新支付状态，保持订单状态pending） ---
-            // order: pending -> pending
-            // payment: pending -> paid
-
-            if (
-                order.status === OrderStatus.PENDING &&
-                order.paymentStatus === PaymentStatus.PENDING &&
-                dto.status === OrderStatus.PENDING &&
-                dto.paymentStatus === PaymentStatus.PAID
-            ) {
-                // 更新支付状态为已支付
-                order.paymentStatus = PaymentStatus.PAID;
-                if (!order.paidAt) order.paidAt = now;
-
-                // 添加自动执行队列
-                order = await this.scheduleOrderStatus(now, order, req);
-
-                // 更新客户余额
-                const balance = parseFloat(user.balance || '0');
-                const deduct = parseFloat(order.balanceDeduct || '0');
-
-                const newBalance = balance - deduct;
-
-                if (isNaN(newBalance) || newBalance < 0) {
-                    throw new BadRequestException('Insufficient balance!');
+            try {
+                order = await queryRunner.manager.findOne(Order, {
+                    where: { id: dto.id },
+                    relations: ['user'],
+                    lock: { mode: 'pessimistic_write' }
+                });
+                if (!order) {
+                    throw new NotFoundException('Order not found');
                 }
 
-                user.balance = newBalance.toFixed(2);
+                user = await queryRunner.manager.findOne(User, {
+                    where: { id: order.user.id },
+                    lock: { mode: 'pessimistic_write' }
+                });
+                if (!user) {
+                    throw new NotFoundException('User not found');
+                }
 
-                await queryRunner.manager.save(user);
+                // 支付成功：pending/pending -> pending/paid
+                if (
+                    order.status === OrderStatus.PENDING &&
+                    order.paymentStatus === PaymentStatus.PENDING &&
+                    dto.status === OrderStatus.PENDING &&
+                    dto.paymentStatus === PaymentStatus.PAID
+                ) {
+                    order.paymentStatus = PaymentStatus.PAID;
+                    if (!order.paidAt) order.paidAt = now;
+                    shouldSchedule = true;
 
-                // 记录支付交易（避免重复）
-                const inTransaction = await this.transactionRepo.findOne({
-                    where: {
-                        user: { id: order.user.id },
-                        order: { id: order.id },
-                        direction: TransactionDirection.OUT,
-                        status: TransactionStatus.PENDING
+                    const balance = parseFloat(user.balance || '0');
+                    const deduct = parseFloat(order.balanceDeduct || '0');
+                    const newBalance = balance - deduct;
+
+                    if (Number.isNaN(newBalance) || newBalance < 0) {
+                        throw new BadRequestException('Insufficient balance!');
                     }
-                });
-                if (inTransaction) {
-                    inTransaction.postBalance = user.balance;
-                    inTransaction.status = TransactionStatus.COMPLETED;
-                    inTransaction.transactionNumber =
-                        dto.transactionNumber ??
-                        inTransaction.transactionNumber;
 
-                    await queryRunner.manager.save(inTransaction);
-                }
+                    user.balance = newBalance.toFixed(2);
+                    await queryRunner.manager.save(user);
 
-                await this.userService.updateLastLogin(user.id);
-                await this.notiService.sendNotification({
-                    title: 'Pay the order/已支付订单',
-                    content: `客户[ID: ${order.user.id}/${order.user.name}]支付了价格为 ${order.payAmount} 的订单 #${order.id}`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 1
-                });
-                await this.logService.logAdminAction(req, {
-                    userId: user.id,
-                    userType: UserType.USER,
-                    action: '支付订单',
-                    targetType: '订单',
-                    targetId: order.id,
-                    description: `客户 [${user.name}] 支付了价值 ${order.payAmount} 的订单。`
-                });
-            }
-
-            // 支付失败
-            // order: pending -> cacelled
-            // payment: pending -> cancelled
-            if (
-                order.status === OrderStatus.PENDING &&
-                order.paymentStatus === PaymentStatus.PENDING &&
-                dto.status === OrderStatus.CANCELLED &&
-                dto.paymentStatus === PaymentStatus.CANCELLED
-            ) {
-                order.status = OrderStatus.CANCELLED;
-                order.paymentStatus = PaymentStatus.CANCELLED;
-                order.cancelledAt ??= now;
-
-                // 更新取消账单
-                const inTransaction = await this.transactionRepo.findOne({
-                    where: {
-                        user: { id: order.user.id },
-                        order: { id: order.id },
-                        direction: TransactionDirection.OUT,
-                        status: TransactionStatus.PENDING
+                    const outTransaction = await queryRunner.manager.findOne(
+                        Transaction,
+                        {
+                            where: {
+                                user: { id: order.user.id },
+                                order: { id: order.id },
+                                direction: TransactionDirection.OUT,
+                                status: TransactionStatus.PENDING
+                            },
+                            lock: { mode: 'pessimistic_write' }
+                        }
+                    );
+                    if (outTransaction) {
+                        outTransaction.postBalance = user.balance;
+                        outTransaction.status = TransactionStatus.COMPLETED;
+                        outTransaction.transactionNumber =
+                            dto.transactionNumber ??
+                            outTransaction.transactionNumber;
+                        await queryRunner.manager.save(outTransaction);
                     }
-                });
-                if (inTransaction) {
-                    inTransaction.status = TransactionStatus.CANCELLED;
 
-                    await queryRunner.manager.save(inTransaction);
+                    shouldUpdateLastLogin = true;
+                    postCommitNotifications.push({
+                        title: 'Pay the order/已支付订单',
+                        content: `客户[ID: ${order.user.id}/${order.user.name}]支付了价格为 ${order.payAmount} 的订单 #${order.id}`,
+                        enableNoti: 1
+                    });
+                    postCommitLogs.push({
+                        action: '支付订单',
+                        description: `客户 [${user.name}] 支付了价值 ${order.payAmount} 的订单。`
+                    });
                 }
 
-                await this.userService.updateLastLogin(user.id);
-                await this.notiService.sendNotification({
-                    title: 'Cancel Order/取消订单',
-                    content: `客户[ID: ${order.user.id}/${order.user.name}]取消了价格为 ${order.payAmount} 的订单 #${order.id}`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 1
-                });
-                await this.logService.logAdminAction(req, {
-                    userId: user.id,
-                    userType: UserType.USER,
-                    action: '取消订单',
-                    targetType: '订单',
-                    targetId: order.id,
-                    description: `客户 [${user.name}] 取消了价值 ${order.payAmount} 的订单。`
-                });
+                // 支付失败：pending/pending -> cancelled/cancelled
+                if (
+                    order.status === OrderStatus.PENDING &&
+                    order.paymentStatus === PaymentStatus.PENDING &&
+                    dto.status === OrderStatus.CANCELLED &&
+                    dto.paymentStatus === PaymentStatus.CANCELLED
+                ) {
+                    order.status = OrderStatus.CANCELLED;
+                    order.paymentStatus = PaymentStatus.CANCELLED;
+                    order.cancelledAt ??= now;
+
+                    const outTransaction = await queryRunner.manager.findOne(
+                        Transaction,
+                        {
+                            where: {
+                                user: { id: order.user.id },
+                                order: { id: order.id },
+                                direction: TransactionDirection.OUT,
+                                status: TransactionStatus.PENDING
+                            },
+                            lock: { mode: 'pessimistic_write' }
+                        }
+                    );
+                    if (outTransaction) {
+                        outTransaction.status = TransactionStatus.CANCELLED;
+                        await queryRunner.manager.save(outTransaction);
+                    }
+
+                    shouldUpdateLastLogin = true;
+                    postCommitNotifications.push({
+                        title: 'Cancel Order/取消订单',
+                        content: `客户[ID: ${order.user.id}/${order.user.name}]取消了价格为 ${order.payAmount} 的订单 #${order.id}`,
+                        enableNoti: 1
+                    });
+                    postCommitLogs.push({
+                        action: '取消订单',
+                        description: `客户 [${user.name}] 取消了价值 ${order.payAmount} 的订单。`
+                    });
+                }
+
+                // 备货中
+                if (
+                    order.status === OrderStatus.PENDING &&
+                    order.paymentStatus === PaymentStatus.PAID &&
+                    dto.status === OrderStatus.PROCESSING &&
+                    dto.paymentStatus === PaymentStatus.PAID
+                ) {
+                    order.processingAt ??= now;
+                    postCommitNotifications.push({
+                        title: '更新订单',
+                        content: `订单#${order.id}状态已更新为 备货中`,
+                        enableNoti: 0
+                    });
+                }
+
+                // 送货中
+                if (
+                    order.status === OrderStatus.PROCESSING &&
+                    order.paymentStatus === PaymentStatus.PAID &&
+                    dto.status === OrderStatus.SHIPPED &&
+                    dto.paymentStatus === PaymentStatus.PAID
+                ) {
+                    order.shippedAt ??= now;
+                    postCommitNotifications.push({
+                        title: '更新订单',
+                        content: `订单#${order.id}状态已更新为 发货中`,
+                        enableNoti: 0
+                    });
+                }
+
+                // 已送达
+                if (
+                    order.status === OrderStatus.SHIPPED &&
+                    order.paymentStatus === PaymentStatus.PAID &&
+                    dto.status === OrderStatus.DELIVERED &&
+                    dto.paymentStatus === PaymentStatus.PAID
+                ) {
+                    order.deliveredAt ??= now;
+                    postCommitNotifications.push({
+                        title: '更新订单',
+                        content: `订单#${order.id}状态已更新为 已送达`,
+                        enableNoti: 0
+                    });
+                }
+
+                // 已退款
+                if (
+                    (order.status === OrderStatus.PROCESSING ||
+                        order.status === OrderStatus.SHIPPED) &&
+                    order.paymentStatus === PaymentStatus.PAID &&
+                    dto.status === OrderStatus.CANCELLED &&
+                    dto.paymentStatus === PaymentStatus.REFUNDED
+                ) {
+                    order.status = OrderStatus.REFUNDED;
+                    order.paymentStatus = PaymentStatus.REFUNDED;
+                    order.refundedAt ??= now;
+                    shouldUpdateLastLogin = true;
+                    postCommitNotifications.push({
+                        title: '更新订单',
+                        content: `订单#${order.id}状态已更新为 已退款`,
+                        enableNoti: 0
+                    });
+                }
+
+                const terminalStatuses = [
+                    OrderStatus.CANCELLED,
+                    OrderStatus.REFUNDED,
+                    OrderStatus.DELIVERED
+                ];
+                if (
+                    !terminalStatuses.includes(order.status) &&
+                    dto.status !== order.status
+                ) {
+                    order.status = dto.status;
+                }
+
+                order.paypalResponseRaw =
+                    dto.paypalResponseRaw ?? order.paypalResponseRaw;
+
+                await queryRunner.manager.save(order);
+                await queryRunner.commitTransaction();
+
+                if (shouldSchedule) {
+                    try {
+                        await this.scheduleOrderStatus(now, order, req);
+                    } catch (error) {
+                        console.error(
+                            `scheduleOrderStatus failed for order #${order.id}:`,
+                            error?.message || error
+                        );
+                    }
+                }
+
+                if (shouldUpdateLastLogin) {
+                    await this.userService.updateLastLogin(user.id);
+                }
+
+                for (const item of postCommitNotifications) {
+                    await this.notiService.sendNotification({
+                        title: item.title,
+                        content: item.content,
+                        type: NotificationType.ORDER,
+                        path: '/orders',
+                        createdAt: new Date(),
+                        userId: user.id,
+                        targetId: order.id,
+                        userType: UserType.ADMIN,
+                        enableNoti: item.enableNoti
+                    });
+                }
+
+                for (const log of postCommitLogs) {
+                    await this.logService.logAdminAction(req, {
+                        userId: user.id,
+                        userType: UserType.USER,
+                        action: log.action,
+                        targetType: '订单',
+                        targetId: order.id,
+                        description: log.description
+                    });
+                }
+
+                return {
+                    status: order.status,
+                    paymentStatus: order.paymentStatus
+                };
+            } catch (error) {
+                await queryRunner.rollbackTransaction();
+                lastError = error;
+
+                if (isRetryableLockError(error) && attempt < MAX_RETRY) {
+                    await sleep(RETRY_WAIT_MS * attempt);
+                    continue;
+                }
+
+                throw error;
+            } finally {
+                await queryRunner.release();
             }
-
-            // 备货中
-            // order: pending -> processing
-            // payment: paid
-            if (
-                order.status === OrderStatus.PENDING &&
-                order.paymentStatus === PaymentStatus.PAID &&
-                dto.status === OrderStatus.PROCESSING &&
-                dto.paymentStatus === PaymentStatus.PAID
-            ) {
-                order.processingAt ??= now;
-                await this.notiService.sendNotification({
-                    title: '更新订单',
-                    content: `订单#${order.id}状态已更新为 备货中`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 0
-                });
-            }
-
-            // 送货中
-            // order: processing -> shipped
-            // payment: paid
-            if (
-                order.status === OrderStatus.PROCESSING &&
-                order.paymentStatus === PaymentStatus.PAID &&
-                dto.status === OrderStatus.SHIPPED &&
-                dto.paymentStatus === PaymentStatus.PAID
-            ) {
-                order.shippedAt ??= now;
-                await this.notiService.sendNotification({
-                    title: '更新订单',
-                    content: `订单#${order.id}状态已更新为 发货中`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 0
-                });
-            }
-
-            // 已送达
-            // order: shipped -> delivered
-            // payment: paid
-            if (
-                order.status === OrderStatus.SHIPPED &&
-                order.paymentStatus === PaymentStatus.PAID &&
-                dto.status === OrderStatus.DELIVERED &&
-                dto.paymentStatus === PaymentStatus.PAID
-            ) {
-                order.deliveredAt ??= now;
-                await this.notiService.sendNotification({
-                    title: '更新订单',
-                    content: `订单#${order.id}状态已更新为 已送达`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 0
-                });
-            }
-
-            // 已退款
-            // order: [processing, shipped]-> refunded
-            // payment: paid -> refunded
-            if (
-                (order.status === OrderStatus.PROCESSING ||
-                    order.status === OrderStatus.SHIPPED) &&
-                order.paymentStatus === PaymentStatus.PAID &&
-                dto.status === OrderStatus.CANCELLED &&
-                dto.paymentStatus === PaymentStatus.REFUNDED
-            ) {
-                order.status = OrderStatus.REFUNDED;
-                order.paymentStatus = PaymentStatus.REFUNDED;
-                order.refundedAt ??= now;
-
-                await this.userService.updateLastLogin(user.id);
-                await this.notiService.sendNotification({
-                    title: '更新订单',
-                    content: `订单#${order.id}状态已更新为 已退款`,
-                    type: NotificationType.ORDER,
-                    path: '/orders',
-                    createdAt: new Date(),
-                    userId: user.id,
-                    targetId: order.id,
-                    userType: UserType.ADMIN,
-                    enableNoti: 0
-                });
-            }
-
-            // 安全地更新订单状态（防止“已完成”订单被误取消）
-            const terminalStatuses = [
-                OrderStatus.CANCELLED,
-                OrderStatus.REFUNDED,
-                OrderStatus.DELIVERED
-            ];
-            if (
-                !terminalStatuses.includes(order.status) && // 当前不是终态
-                dto.status !== order.status
-            ) {
-                order.status = dto.status;
-            }
-
-            order.paypalResponseRaw =
-                dto.paypalResponseRaw ?? order.paypalResponseRaw;
-
-            await queryRunner.manager.save(order);
-            await queryRunner.commitTransaction();
-
-            return { status: order.status, paymentStatus: order.paymentStatus };
-        } catch (error) {
-            await queryRunner.rollbackTransaction();
-            throw error;
-        } finally {
-            await queryRunner.release();
         }
+
+        throw lastError;
     }
 
     async getOrderById(orderId: number, userId: number): Promise<Order | null> {

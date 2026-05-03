@@ -4,6 +4,7 @@ import { PaymentProvider } from './entities/payment-provider.entity';
 import { Repository } from 'typeorm';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { PaymentGatewayType } from './enum/payment-gateways.enum';
+import { PaymentGatewayAdminService } from './payment-gateways.admin.service';
 
 @Injectable()
 export class PaymentProviderAdminService {
@@ -11,7 +12,8 @@ export class PaymentProviderAdminService {
         @InjectRepository(PaymentProvider)
         private readonly providerRepo: Repository<PaymentProvider>,
         @InjectRepository(Admin)
-        private readonly adminRepo: Repository<Admin>
+        private readonly adminRepo: Repository<Admin>,
+        private readonly gatewayAdminService: PaymentGatewayAdminService
     ) {}
 
     async getAll(adminId: number) {
@@ -48,6 +50,7 @@ export class PaymentProviderAdminService {
         const providerEntities = this.providerRepo.create(defaultProviders);
         await this.providerRepo.save(providerEntities);
 
+        await this.gatewayAdminService.reset();
         return { message: 'Payment providers reset to default successfully' };
     }
 }

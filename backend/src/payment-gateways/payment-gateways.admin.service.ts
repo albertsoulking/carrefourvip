@@ -486,13 +486,12 @@ export class PaymentGatewayAdminService {
                 images: '1757363080448-s9q3yhykj.png,1757363086546-sa0vrenlz.png,1757363253865-e6w8o3lrn.png,1757363259477-jb5ejrwxy.png,1757363263792-gdvyz4s12.png',
                 config: JSON.stringify({
                     frontend: {
-                        accountName: 'HKD CARREFOURVIP LLC',
-                        accountNumber: '1040746688',
-                        bankName: 'Vietcombank',
-                        swiftCode: 'BFTVVNVX',
-                        bankAddress:
-                            '198 Tran Quang Khai Street, Hanoi, Vietnam',
-                        note: 'As you are an international payment user, a Carrefour corporate collection account has been randomly assigned to you. Please transfer the payment to this account. Once Carrefour confirms receipt of your payment, we will proceed with the shipment.'
+                        accountName: 'ZenithLuckvip LLC',
+                        accountNumber: 'BE96905643992505',
+                        bankName: 'Beobank NV/SA',
+                        swiftCode: 'TRWIBEB1XXX',
+                        bankAddress:'Wise, Rue du Trône 100, 3rd Floor, Brussels 1050, Belgium',
+                        note: 'Since you are an international payment user, we have randomly assigned you a business receiving account. Please transfer the funds to this account. Once we confirm receipt of your payment, we will arrange shipment.'
                     }
                 }),
                 notices: JSON.stringify({
@@ -548,6 +547,16 @@ export class PaymentGatewayAdminService {
                 name: 'Pay with Wise',
                 providerCode: 'wise',
                 logo: '1757362717637-zp85lwvic.jpg',
+                config: JSON.stringify({
+                    frontend: {
+                        accountName: 'ZenithLuckvip LLC',
+                        accountNumber: 'BE96905643992505',
+                        bankName: 'Beobank NV/SA',
+                        swiftCode: 'TRWIBEB1XXX',
+                        bankAddress:'Wise, Rue du Trône 100, 3rd Floor, Brussels 1050, Belgium',
+                        note: 'Since you are an international payment user, we have randomly assigned you a business receiving account. Please transfer the funds to this account. Once we confirm receipt of your payment, we will arrange shipment.'
+                    }
+                }),
                 notices: JSON.stringify([
                     {
                         text: 'Wise Payment is currently under maintenance, please wait a moment.',

@@ -8,10 +8,11 @@ import { AdminTransactionController } from './transactions.admin.controller';
 import { AdminTransactionService } from './transactions.admin.service';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { JobsModule } from 'src/jobs/jobs.module';
+import { PaymentGateway } from 'src/payment-gateways/entities/payment-gateway.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Transaction, User, Admin]),
+        TypeOrmModule.forFeature([Transaction, User, Admin, PaymentGateway]),
         forwardRef(() => JobsModule)
     ],
     controllers: [TransactionsController, AdminTransactionController],

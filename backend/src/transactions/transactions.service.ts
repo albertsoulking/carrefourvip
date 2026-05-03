@@ -16,6 +16,8 @@ import {
 } from './enum/transactions.enum';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { CreateUserDepositDto } from './dto/create-user-deposit.dto';
+import { PaymentGateway } from 'src/payment-gateways/entities/payment-gateway.entity';
+import { PaymentGatewayStatus } from 'src/payment-gateways/enum/payment-gateways.enum';
 
 @Injectable()
 export class TransactionsService {
@@ -24,7 +26,9 @@ export class TransactionsService {
         private transactionRepo: Repository<Transaction>,
         private dataSource: DataSource,
         @InjectRepository(User)
-        private userRepo: Repository<User>
+        private userRepo: Repository<User>,
+        @InjectRepository(PaymentGateway)
+        private gatewayRepo: Repository<PaymentGateway>
     ) {}
 
     private genTxnNo(prefix: string): string {
@@ -50,10 +54,41 @@ export class TransactionsService {
 
             const amountStr = Number(dto.amount).toFixed(2);
             const before = parseFloat(user.balance).toFixed(2);
+            const payMethod = (dto.payMethod || 'bank_transfer')
+                .trim()
+                .toLowerCase();
 
             const proofName = dto.proofImage?.trim();
             if (!proofName) {
                 throw new BadRequestException('Payment proof image is required');
+            }
+
+            const gateway = await this.gatewayRepo.findOne({
+                where: {
+                    provider: { code: payMethod },
+                    visible: 1,
+                    status: PaymentGatewayStatus.ACTIVE
+                },
+                relations: ['provider'],
+                select: {
+                    id: true,
+                    blackList: true,
+                    provider: { id: true, code: true }
+                }
+            });
+
+            if (!gateway) {
+                throw new BadRequestException('Selected deposit gateway is unavailable');
+            }
+
+            const blackList = gateway.blackList
+                ? gateway.blackList
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean)
+                : [];
+            if (blackList.includes(String(userId))) {
+                throw new ForbiddenException('Selected deposit gateway is unavailable');
             }
 
             const base = (process.env.HOST_BASE_URL || '').replace(/\/$/, '');
@@ -72,7 +107,11 @@ export class TransactionsService {
                 amount: amountStr,
                 direction: TransactionDirection.IN,
                 method: TransactionMethod.BANK_TRANSFER,
-                hybridMethod: TransactionMethod.BANK_TRANSFER,
+                hybridMethod: Object.values(TransactionMethod).includes(
+                    payMethod as TransactionMethod
+                )
+                    ? (payMethod as TransactionMethod)
+                    : TransactionMethod.BANK_TRANSFER,
                 type: TransactionType.DEPOSIT,
                 status: TransactionStatus.PENDING,
                 postBalance: before,

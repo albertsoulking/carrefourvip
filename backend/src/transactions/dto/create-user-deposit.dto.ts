@@ -20,6 +20,14 @@ export class CreateUserDepositDto {
     @MaxLength(255)
     reference?: string;
 
+    @ApiPropertyOptional({
+        description: 'Payment gateway provider code for this deposit flow'
+    })
+    @IsOptional()
+    @IsString()
+    @MaxLength(50)
+    payMethod?: string;
+
     @ApiPropertyOptional()
     @IsOptional()
     @IsString()

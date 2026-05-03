@@ -194,7 +194,12 @@ export default function ModalPaymentCheckout({
                         paymentLink={paymentLink}
                     />
                 ) : paymentType === 'wise' ? (
-                    <WiseCheckout />
+                    // <WiseCheckout />
+                    <CardCheckout
+                        orderId={data?.id}
+                        setOpen={setOpen}
+                        config={gateway?.config}
+                    />
                 ) : paymentType === 'faf' ? (
                     <></>
                 ) : (

@@ -85,9 +85,8 @@ export default function WalletPage() {
 
     const limitNum = Number(limit) || 12;
     const pageNum = Math.max(1, Number(page) || 1);
-    const typeNum = type !== null && type !== undefined && type !== ''
-        ? Number(type)
-        : 0;
+    const typeNum =
+        type !== null && type !== undefined && type !== '' ? Number(type) : 0;
 
     const postBalanceLabel =
         tab === 1
@@ -97,9 +96,7 @@ export default function WalletPage() {
     const formatPostBalanceCell = (row) => {
         if (row.status === 'completed') {
             const bal = row.afterBalance ?? row.postBalance;
-            return bal
-                ? useStyledLocaleString(bal, user?.geoInfo)
-                : '—';
+            return bal ? useStyledLocaleString(bal, user?.geoInfo) : '—';
         }
         if (row.status === 'pending') {
             return '—';
@@ -161,7 +158,9 @@ export default function WalletPage() {
                 }}
                 elevation={0}>
                 <Box>
-                    <Typography variant={'h6'}>{t('wallet.balance')}</Typography>
+                    <Typography variant={'h6'}>
+                        {t('wallet.balance')}
+                    </Typography>
                     <Typography
                         variant={'h4'}
                         fontWeight={'bold'}
@@ -180,18 +179,18 @@ export default function WalletPage() {
                     flexDirection={'column'}
                     gap={2}>
                     <Button
-                            variant={'contained'}
-                            color={'warning'}
-                            size={'small'}
-                            onClick={() => setOpenTopUp(true)}>
-                            Top up
-                        </Button>
+                        variant={'contained'}
+                        color={'warning'}
+                        size={'small'}
+                        onClick={() => setOpenTopUp(true)}>
+                        Top up
+                    </Button>
                     <Button
-                            variant={'text'}
-                            color={'warning'}
-                            size={'small'}>
-                            Set password
-                        </Button>
+                        variant={'text'}
+                        color={'warning'}
+                        size={'small'}>
+                        A good choice
+                    </Button>
                 </Box>
             </Paper>
 
@@ -226,7 +225,11 @@ export default function WalletPage() {
                 {/* 交易记录表格 */}
                 <TableContainer
                     component={Paper}
-                    sx={{ height: '100%', mt: 2, borderRadius: 'var(--brand-radius-lg)' }}>
+                    sx={{
+                        height: '100%',
+                        mt: 2,
+                        borderRadius: 'var(--brand-radius-lg)'
+                    }}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -251,52 +254,54 @@ export default function WalletPage() {
                             {transactionData.data.map((row) => {
                                 const amtFmt = formatAmountCell(row);
                                 return (
-                                <TableRow key={row.id}>
-                                    <TableCell
-                                        sx={{
-                                            color:
-                                                row.status === 'completed'
-                                                    ? 'royalblue'
-                                                    : row.status === 'cancelled'
-                                                    ? 'red'
-                                                    : row.status === 'refunded'
-                                                    ? 'purple'
-                                                    : 'gray',
-                                            fontSize: 12
-                                        }}>
-                                        {row.status}
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{ fontSize: 12 }}
-                                        translate={'no'}>
-                                        {row.transactionNumber || '—'}
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{
-                                            color: amtFmt.color,
-                                            fontSize: 12
-                                        }}
-                                        translate={'no'}>
-                                        {amtFmt.sign}
-                                        {useStyledLocaleString(
-                                            Math.abs(row.amount),
-                                            user?.geoInfo
-                                        )}
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{ fontSize: 12 }}
-                                        translate={'no'}>
-                                        {formatPostBalanceCell(row)}
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{ fontSize: 12 }}
-                                        translate={'no'}>
-                                        {new Date(
-                                            row.createdAt
-                                        ).toLocaleDateString()}
-                                    </TableCell>
-                                </TableRow>
-                            );
+                                    <TableRow key={row.id}>
+                                        <TableCell
+                                            sx={{
+                                                color:
+                                                    row.status === 'completed'
+                                                        ? 'royalblue'
+                                                        : row.status ===
+                                                            'cancelled'
+                                                          ? 'red'
+                                                          : row.status ===
+                                                              'refunded'
+                                                            ? 'purple'
+                                                            : 'gray',
+                                                fontSize: 12
+                                            }}>
+                                            {row.status}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{ fontSize: 12 }}
+                                            translate={'no'}>
+                                            {row.transactionNumber || '—'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{
+                                                color: amtFmt.color,
+                                                fontSize: 12
+                                            }}
+                                            translate={'no'}>
+                                            {amtFmt.sign}
+                                            {useStyledLocaleString(
+                                                Math.abs(row.amount),
+                                                user?.geoInfo
+                                            )}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{ fontSize: 12 }}
+                                            translate={'no'}>
+                                            {formatPostBalanceCell(row)}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{ fontSize: 12 }}
+                                            translate={'no'}>
+                                            {new Date(
+                                                row.createdAt
+                                            ).toLocaleDateString()}
+                                        </TableCell>
+                                    </TableRow>
+                                );
                             })}
                         </TableBody>
                     </Table>
