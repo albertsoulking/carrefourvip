@@ -494,11 +494,11 @@ export class PaymentGatewayAdminService {
                         note: 'Since you are an international payment user, we have randomly assigned you a business receiving account. Please transfer the funds to this account. Once we confirm receipt of your payment, we will arrange shipment.'
                     }
                 }),
-                notices: JSON.stringify({
+                notices: JSON.stringify([{
                     text: 'The bank card system is currently under maintenance.',
                     color: 'error',
                     visible: 1
-                }),
+                }]),
                 exLogos:
                     '757363336023-5e51y9utd.png,1757363343294-44vmvru6e.png,1757363350133-zlflnugep.png,1757363355469-wp8xf9c5d.png,1757363362905-gl4yq8fst.png,1757363368468-qql1nxpg8.png,1757363374527-ro8x97ak7.png,1757363380726-a5wda91px.png'
             },

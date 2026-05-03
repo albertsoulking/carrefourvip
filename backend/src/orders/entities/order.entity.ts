@@ -163,4 +163,8 @@ export class Order {
 
     @Column({ type: 'text', nullable: true })
     paypalResponseRaw: string;
+
+    /** User-uploaded payment transfer proof (file name under uploads/images/) */
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    paymentProofImage: string | null;
 }

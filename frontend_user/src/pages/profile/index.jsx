@@ -216,7 +216,7 @@ export default function ProfilePage() {
                             </label>
                         </Box>
                     </Box>
-                    <Box>
+                    <Box translate={'no'}>
                         <Typography
                             fontSize={18}
                             fontWeight={600}>

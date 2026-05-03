@@ -7,6 +7,7 @@ import RowPayMethod from './RowPayMethod';
 import RowDeliveryMethod from './RowDeliveryMethod';
 import RowMode from './RowMode';
 import RowAvatar from './RowAvatar';
+import RowPaymentProof from './RowPaymentProof';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import usePermissionStore from '../../hooks/usePermissionStore';
@@ -181,6 +182,15 @@ const getColumns = ({
                         updateData({ ...params.row, payMethod: newStatus })
                     }
                 />
+            )
+        },
+        {
+            field: 'paymentProofImage',
+            headerName: '支付凭证',
+            width: 70,
+            sortable: false,
+            renderCell: (params) => (
+                <RowPaymentProof filename={params.value} />
             )
         },
         {

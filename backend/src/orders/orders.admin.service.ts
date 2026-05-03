@@ -482,6 +482,7 @@ export class AdminOrderService {
                 'order.estimatedShippedAt',
                 'order.estimatedDeliveredAt',
                 'order.deliveryProofImages',
+                'order.paymentProofImage',
                 'items.id',
                 'items.productImage',
                 'items.productName',

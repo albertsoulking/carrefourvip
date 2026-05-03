@@ -71,6 +71,8 @@ const header = {
 const orders = {
     getOne: (payload) => route.post('/orders/get-one-order', payload),
     updateOne: (payload) => route.post(`/orders/update-order`, payload),
+    updatePaymentProof: (payload) =>
+        route.post('/orders/update-payment-proof', payload),
     updateStatus: (payload) => route.post('/orders/update-status', payload),
     createOne: (payload) => route.post('/orders/create-one', payload),
     getMyOrders: (payload) => route.post(`/orders/get-my-orders`, payload),

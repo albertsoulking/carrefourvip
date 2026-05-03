@@ -29,6 +29,7 @@ import { Request } from 'express';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { OrderStatus, PaymentStatus } from './enums/order.enum';
 import { SearchOrderDto } from './dto/search-order.dto';
+import { UpdateOrderPaymentProofDto } from './dto/update-order-payment-proof.dto';
 
 @ApiTags('orders')
 @Controller('orders')
@@ -164,5 +165,22 @@ export class OrdersController {
         @Body('image') image: string
     ) {
         return this.orderService.updateOrder(orderId, image, req);
+    }
+
+    @ApiBearerAuth('JWT-auth')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Post('update-payment-proof')
+    @HttpCode(HttpStatus.OK)
+    updatePaymentProof(
+        @Req() req: Request,
+        @Body() body: UpdateOrderPaymentProofDto
+    ) {
+        const userId = (req as any)?.user?.id;
+        return this.orderService.updateOrderPaymentProof(
+            userId,
+            body.orderId,
+            body.paymentProofImage,
+            req
+        );
     }
 }

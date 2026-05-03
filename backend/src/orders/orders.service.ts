@@ -1,7 +1,8 @@
 import {
     Injectable,
     NotFoundException,
-    BadRequestException
+    BadRequestException,
+    ForbiddenException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In } from 'typeorm';
@@ -720,11 +721,52 @@ export class OrdersService {
                 cancelledAt: true,
                 refundedAt: true,
                 deliveryProofImages: true,
+                paymentProofImage: true,
                 payMethod: true,
                 hybridMethod: true,
                 deliveryMethod: true
             }
         });
+
+        return order;
+    }
+
+    async updateOrderPaymentProof(
+        userId: number,
+        orderId: number,
+        paymentProofImage: string,
+        req: Request
+    ): Promise<Order> {
+        const order = await this.orderRepo.findOne({
+            where: { id: orderId },
+            relations: ['user']
+        });
+        if (!order) {
+            throw new NotFoundException(`Order ID ${orderId} not found`);
+        }
+        if (order.user?.id !== userId) {
+            throw new ForbiddenException('You cannot update this order');
+        }
+
+        const name = paymentProofImage.trim();
+        if (!name) {
+            throw new BadRequestException('paymentProofImage is required');
+        }
+
+        order.paymentProofImage = name;
+        await this.orderRepo.save(order);
+
+        const user = await this.usersRepo.findOne({ where: { id: userId } });
+        if (user) {
+            await this.logService.logAdminAction(req, {
+                userId: user.id,
+                userType: UserType.USER,
+                action: '上传支付凭证',
+                targetType: '订单',
+                targetId: order.id,
+                description: `客户上传订单 #${order.id} 支付凭证`
+            });
+        }
 
         return order;
     }
